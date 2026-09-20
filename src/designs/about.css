@@ -1,0 +1,60 @@
+/* About section: magazine-style spread. Uses the .cv tokens from canvas.css. */
+
+.ab {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(40px, 6vw, 96px);
+  align-items: start;
+}
+
+.ab-art {
+  position: sticky;
+  top: 32px;
+  aspect-ratio: 4 / 5;
+  background-color: var(--linen-deep);
+  background-size: 250%;
+  background-position: 86% 16%;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 24px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.ab-question {
+  margin-top: 16px;
+  font-size: clamp(36px, 5vw, 76px);
+  font-weight: 300;
+  color: var(--brick);
+}
+
+.ab-essay {
+  margin-top: 48px;
+  font-size: clamp(17px, 1.45vw, 20px);
+  line-height: 1.55;
+  max-width: 36em;
+}
+
+.ab-essay p + p { margin-top: 1.1em; }
+
+.ab-essay p:first-child::first-letter {
+  font-family: var(--slab);
+  font-size: 3.6em;
+  float: left;
+  line-height: 0.82;
+  padding: 0.08em 0.1em 0 0;
+  color: var(--brick);
+}
+
+.ab-pull {
+  margin-top: 56px;
+  font-size: clamp(19px, 1.9vw, 26px);
+  line-height: 1.62;
+  max-width: 30em;
+}
+
+@media (max-width: 900px) {
+  .ab { grid-template-columns: 1fr; }
+  .ab-art { position: static; aspect-ratio: 16 / 10; background-size: 190%; }
+}

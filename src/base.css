@@ -1,0 +1,88 @@
+/* Shared foundations: fonts and reset.
+   Type pairing follows socius.org: GeneralSans body + Montagu Slab display. */
+
+@font-face {
+  font-family: 'GeneralSans';
+  src: url('/fonts/GeneralSans-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GeneralSans';
+  src: url('/fonts/GeneralSans-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --sans: 'GeneralSans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --slab: 'Montagu Slab', Georgia, 'Times New Roman', serif;
+  --ink: #1c1c1e;
+  --offwhite: #f1f0ef;
+  --fog: #b9b4b0;
+  --line: #e6e4e2;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--sans);
+  font-weight: 400;
+  color: var(--ink);
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+[id] {
+  scroll-margin-top: 96px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
