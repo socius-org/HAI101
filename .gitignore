@@ -6,5 +6,7 @@ Thumbs.db
 .env.*
 # source decks stay local (large, unpublished material)
 *.pptx
+# private correspondence and visa paperwork: never publish
+Akshay visa/
 .vscode/
 .idea/

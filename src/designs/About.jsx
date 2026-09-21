@@ -12,7 +12,7 @@ export default function About() {
         <p className="cv-kicker">About the series</p>
         <h2 className="ab-question">{series.question}</h2>
         <div className="ab-essay">
-          {intro.map((p) => <p key={p.slice(0, 24)}>{p}</p>)}
+          {intro.map((p) => <p key={p.slice(0, 40)}>{p}</p>)}
         </div>
         <p className="ab-pull">
           <span className="cv-mark">{summary}</span>

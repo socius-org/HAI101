@@ -50,6 +50,46 @@ function Talk({ talk }) {
   );
 }
 
+// Pop-up with a session's abstract, opened from the + on a schedule slot.
+function TalkDialog({ talk, onClose, onSpeaker }) {
+  const ref = useRef(null);
+  useEffect(() => {
+    if (talk && !ref.current.open) ref.current.showModal();
+  }, [talk]);
+  const sp = talk?.speaker ? speakerById[talk.speaker] : null;
+
+  return (
+    <dialog
+      ref={ref}
+      className="cv-dialog"
+      aria-labelledby="cv-dialog-title"
+      onClose={onClose}
+      onClick={(e) => e.target === ref.current && ref.current.close()}
+    >
+      {talk && (
+        <div className="cv-dialog-inner">
+          <button type="button" className="cv-dialog-close" aria-label="Close" onClick={() => ref.current.close()} />
+          <p className="cv-kicker">
+            {talk.dateLong} · {fmtTime(talk.start)}–{fmtTime(talk.end)}
+          </p>
+          <h3 id="cv-dialog-title" className={talk.title ? '' : 'cv-tbc'}>{talk.title || 'Title TBC'}</h3>
+          <p className="cv-dialog-who">
+            {sp ? sp.name : 'Speaker TBC'} <span>· {sp ? sp.affiliation : 'Affiliation TBC'}</span>
+          </p>
+          <p className={talk.abstract ? 'cv-dialog-abstract' : 'cv-dialog-abstract cv-tbc'}>
+            {talk.abstract || 'Abstract to be announced.'}
+          </p>
+          {sp && (
+            <button type="button" className="cv-dialog-link" onClick={() => { ref.current.close(); onSpeaker(sp.id); }}>
+              About the speaker
+            </button>
+          )}
+        </div>
+      )}
+    </dialog>
+  );
+}
+
 function Detail({ s }) {
   return (
     <div className="cv-detail" aria-live="polite">
@@ -93,10 +133,25 @@ function Detail({ s }) {
 }
 
 export default function Canvas() {
-  const roster = [...speakers, TBC_SPEAKER];
+  // The placeholder card only appears while some session still has no speaker.
+  const roster = TALKS.tbc ? [...speakers, TBC_SPEAKER] : speakers;
   const [activeId, setActiveId] = useState(roster[0].id);
   const active = roster.find((s) => s.id === activeId);
   const detailRef = useRef(null);
+  // ?talk=<speaker id> opens that talk's pop-up on load, so a talk can be linked to directly.
+  const [openTalk, setOpenTalk] = useState(() => {
+    const id = new URLSearchParams(window.location.search).get('talk');
+    for (const d of days) {
+      const s = d.sessions.find((x) => id && x.speaker === id);
+      if (s) return { ...s, dateLong: d.dateLong };
+    }
+    return null;
+  });
+
+  const showSpeaker = (id) => {
+    setActiveId(id);
+    requestAnimationFrame(() => document.getElementById('speakers')?.scrollIntoView());
+  };
 
   // Luma's checkout script turns the register links into an in-page overlay; without it they
   // still work as plain links to the event page.
@@ -151,7 +206,7 @@ export default function Canvas() {
 
       <section className="cv-dark" id="speakers">
         <div className="cv-wrap">
-          <p className="cv-kicker">Confirmed so far</p>
+          <p className="cv-kicker">The line-up</p>
           <h2 className="cv-h2">Speakers</h2>
           <div className="cv-speakers">
             <div className="cv-cards">
@@ -216,13 +271,21 @@ export default function Canvas() {
                 );
               }
               return (
-                <div key={d.id + s.start} className="cv-slot" style={style}>
+                <button
+                  key={d.id + s.start}
+                  type="button"
+                  className="cv-slot"
+                  style={style}
+                  aria-haspopup="dialog"
+                  onClick={() => setOpenTalk({ ...s, dateLong: d.dateLong })}
+                >
+                  <span className="cv-plus" aria-hidden="true" />
                   <time>{fmtTime(s.start)}–{fmtTime(s.end)}</time>
-                  <p className={s.title ? 'cv-slot-title' : 'cv-slot-title cv-tbc'}>{s.title || 'Title TBC'}</p>
-                  <p className="cv-slot-who">
+                  <span className={s.title ? 'cv-slot-title' : 'cv-slot-title cv-tbc'}>{s.title || 'Title TBC'}</span>
+                  <span className="cv-slot-who">
                     {sp ? sp.name : 'Speaker TBC'} <span>· {sp ? sp.affiliation : 'Affiliation TBC'}</span>
-                  </p>
-                </div>
+                  </span>
+                </button>
               );
             })
           )}
@@ -244,12 +307,20 @@ export default function Canvas() {
                       {s.kind === 'lunch' ? (
                         <p>Lunch break</p>
                       ) : (
-                        <div>
-                          <p className={s.title ? 'cv-slot-title' : 'cv-slot-title cv-tbc'}>{s.title || 'Title TBC'}</p>
-                          <p className="cv-slot-who">
-                            {sp ? sp.name : 'Speaker TBC'} <span>· {sp ? sp.affiliation : 'Affiliation TBC'}</span>
-                          </p>
-                        </div>
+                        <button
+                          type="button"
+                          className="cv-list-open"
+                          aria-haspopup="dialog"
+                          onClick={() => setOpenTalk({ ...s, dateLong: d.dateLong })}
+                        >
+                          <span>
+                            <span className={s.title ? 'cv-slot-title' : 'cv-slot-title cv-tbc'}>{s.title || 'Title TBC'}</span>
+                            <span className="cv-slot-who">
+                              {sp ? sp.name : 'Speaker TBC'} <span>· {sp ? sp.affiliation : 'Affiliation TBC'}</span>
+                            </span>
+                          </span>
+                          <span className="cv-plus" aria-hidden="true" />
+                        </button>
                       )}
                     </li>
                   );
@@ -269,7 +340,6 @@ export default function Canvas() {
             <h2 className="cv-h2">{series.location}</h2>
           </div>
           <div>
-            <p>{series.formatNote}</p>
             <p>{series.registration}</p>
           </div>
         </div>
@@ -316,6 +386,8 @@ export default function Canvas() {
           <a href="https://socius.org" target="_blank" rel="noreferrer">socius labs</a>
         </p>
       </footer>
+
+      <TalkDialog talk={openTalk} onClose={() => setOpenTalk(null)} onSpeaker={showSpeaker} />
     </div>
   );
 }
