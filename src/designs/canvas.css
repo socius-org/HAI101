@@ -541,15 +541,6 @@
   border-top: 1px solid rgba(28, 28, 30, 0.2);
 }
 
-.cv-detail-talk-body a {
-  display: inline-block;
-  margin-top: 12px;
-  font-size: 13px;
-  font-weight: 500;
-}
-
-.cv-detail-talk-body a:hover { color: var(--brick); }
-
 .cv-detail-block {
   margin-top: 24px;
   padding-top: 16px;
@@ -583,6 +574,55 @@
 
 .cv-attend-head p + p { margin-top: 0.6em; }
 .cv-attend-head div:last-child { font-size: clamp(18px, 1.7vw, 22px); line-height: 1.35; }
+.cv-attend-head a:hover { color: var(--brick); }
+
+/* ---------- maps: campus plan (SVG) beside Google Maps ---------- */
+.cv-maps {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 56px;
+}
+
+.cv-map { min-width: 0; }
+
+.cv-map-campus {
+  position: relative;
+  border: 1.5px solid var(--ink);
+  background: #fff;
+}
+
+.cv-map-campus img { display: block; width: 100%; height: auto; }
+
+/* Ring around the LAK label; left/top come from venue.mapPin in data.js */
+.cv-map-pin {
+  position: absolute;
+  width: 11%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border: 3px solid var(--brick);
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.85);
+  pointer-events: none;
+}
+
+.cv-map iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 490 / 412;
+  border: 1.5px solid var(--ink);
+  background: var(--linen-deep);
+  filter: saturate(0.85);
+}
+
+.cv-map figcaption {
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.45;
+  opacity: 0.8;
+}
+
+.cv-map figcaption a:hover { color: var(--brick); }
 
 .cv-register {
   margin-top: 64px;
@@ -640,6 +680,10 @@
 
 .cv-footer-host { display: flex; align-items: center; gap: 16px; }
 .cv-footer-host img { width: 56px; }
+.cv-footer-org { display: flex; align-items: center; gap: 14px; }
+.cv-footer-org a { display: block; }
+.cv-footer-org img { display: block; height: 22px; width: auto; }
+.cv-footer-org a:hover img { opacity: 0.7; }
 .cv-footer a:hover { color: var(--brick); }
 
 /* ---------- responsive ---------- */
@@ -685,9 +729,24 @@
   .cv-detail-holder { position: static; max-height: none; overflow: visible; }
   .cv-attend { padding-top: 80px; padding-bottom: 80px; }
   .cv-attend-head { grid-template-columns: 1fr; gap: 24px; }
+  .cv-maps { grid-template-columns: 1fr; gap: 40px; margin-top: 40px; }
+  .cv-map iframe { aspect-ratio: 4 / 3; }
   .cv-register { margin-top: 40px; }
   .cv-register li { grid-template-columns: 1fr; gap: 8px; justify-items: start; }
   .cv-register-btn { margin-top: 8px; }
+
+  /* .cv-wrap's shorthand above zeroes the footer's vertical padding; restore it */
+  .cv-footer {
+    margin: 0 20px;
+    padding: 0 0 64px;
+    border-top: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 28px;
+  }
+  .cv-footer-host { align-items: flex-start; }
+  .cv-footer-host img { width: 48px; }
+  .cv-footer-org img { height: 20px; }
 }
 
 @media (max-width: 520px) {

@@ -10,12 +10,26 @@ export const series = {
   question: 'Can “thinking” be mechanised?',
   host: 'Centre for Philosophy of Natural and Social Science (CPNSS)',
   hostShort: 'LSE CPNSS',
+  hostUrl: 'https://www.lse.ac.uk/cpnss',
   institution: 'London School of Economics and Political Science',
   dates: 'Fridays · 23 Oct, 6 Nov & 13 Nov 2026',
   datesShort: '23 Oct · 6 Nov · 13 Nov 2026',
-  location: 'Location to be announced',
+  location: 'LSE, London',
   format: 'Hybrid',
   registration: 'Registration will open on Luma.',
+};
+
+// Confirmed venue for 6 & 13 Nov; 23 Oct is still to be confirmed (days[].venue below).
+// mapPin is the LAK label's position on img/lse-campus-map.svg, as % of its width/height.
+export const venue = {
+  name: 'Lakatos Building',
+  code: 'LAK',
+  room: 'LAK 2.06',
+  address: '7 Portugal Street, London WC2A 2HJ',
+  mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Lakatos+Building%2C+7+Portugal+Street%2C+London+WC2A+2HJ',
+  mapsEmbedUrl: 'https://www.google.com/maps?q=Lakatos+Building%2C+7+Portugal+Street%2C+London+WC2A+2HJ&z=17&output=embed',
+  campusMap: 'lse-campus-map.svg',
+  mapPin: { x: 50.2, y: 54.5 },
 };
 
 export const intro = [
@@ -167,9 +181,9 @@ export const speakers = [
       'MSc, Computational Neuroscience, University of Tübingen; Max Planck Institute for Biological Cybernetics',
     ],
     interests: [
-      'Using machine learning and AI methods to discover universal laws of behaviour',
-      'Meta-learning and behaviour-conditioned program synthesis for modelling human behaviour',
-      'Agentic AI discovery harnesses that work alongside behavioural datasets spanning tasks, domains, and populations',
+      'Characterising determinants of human behaviour using meta-learning',
+      'Discovering mechanisms underlying human behaviour using behaviour-conditioned symbolic program synthesis',
+      'Uncovering universal laws of behaviour using agentic AI harnesses in conjunction with large-scale behavioural datasets',
     ],
   },
   {
@@ -214,6 +228,7 @@ export const initials = (name) =>
 
 // Registration runs on Luma, one event per day. Set `lumaUrl` (the public event link) and `lumaEventId`
 // (evt-..., from the event's embed settings) to switch that day's button from "opens soon" to live.
+// venue: true means the day is at `venue` above; null renders as "Venue TBC".
 // title: null renders as "Title TBC"; speaker: null renders as "Speaker TBC".
 // Add `abstract: '...'` to a session to fill the + panel under the talk title in the
 // speaker bio; without it the panel reads "Abstract to be announced."
@@ -223,6 +238,7 @@ export const days = [
     label: 'Session Day 1',
     date: 'Fri 23 Oct',
     dateLong: 'Friday 23 October 2026',
+    venue: null,
     lumaUrl: null,
     lumaEventId: null,
     sessions: [
@@ -242,6 +258,7 @@ export const days = [
     label: 'Session Day 2',
     date: 'Fri 6 Nov',
     dateLong: 'Friday 6 November 2026',
+    venue: true,
     lumaUrl: null,
     lumaEventId: null,
     sessions: [
@@ -264,6 +281,7 @@ export const days = [
     label: 'Session Day 3',
     date: 'Fri 13 Nov',
     dateLong: 'Friday 13 November 2026',
+    venue: true,
     lumaUrl: null,
     lumaEventId: null,
     sessions: [

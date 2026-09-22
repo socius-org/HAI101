@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import './canvas.css';
 import About from './About.jsx';
 import {
-  series, speakers, speakerById, days, scheduleNote,
+  series, venue, speakers, speakerById, days, scheduleNote,
   img, photo, logo, initials, fmtTime,
 } from '../data.js';
 
@@ -42,9 +42,7 @@ function Talk({ talk }) {
       </button>
       {open && (
         <div className="cv-detail-talk-body">
-          <p className={talk.abstract ? '' : 'cv-tbc'}>{talk.abstract || 'Abstract to be announced.'}</p>
-          <a href="#schedule">See it in the schedule</a>
-        </div>
+          <p className={talk.abstract ? '' : 'cv-tbc'}>{talk.abstract || 'Abstract to be announced.'}</p>        </div>
       )}
     </div>
   );
@@ -148,9 +146,13 @@ export default function Canvas() {
     return null;
   });
 
+  // On narrow screens the bio sits below the photo grid, so go straight to it.
   const showSpeaker = (id) => {
     setActiveId(id);
-    requestAnimationFrame(() => document.getElementById('speakers')?.scrollIntoView());
+    const target = window.matchMedia('(max-width: 900px)').matches
+      ? detailRef.current
+      : document.getElementById('speakers');
+    requestAnimationFrame(() => target?.scrollIntoView({ block: 'start' }));
   };
 
   // Luma's checkout script turns the register links into an in-page overlay; without it they
@@ -337,12 +339,43 @@ export default function Canvas() {
         <div className="cv-attend-head">
           <div>
             <p className="cv-kicker">Attend</p>
-            <h2 className="cv-h2">{series.location}</h2>
+            <h2 className="cv-h2">{venue.name}</h2>
           </div>
           <div>
+            <p>
+              Room {venue.room} · {venue.address}
+              <br />
+              <a href={venue.mapsUrl} target="_blank" rel="noreferrer">Open in Google Maps →</a>
+            </p>
             <p>{series.registration}</p>
           </div>
         </div>
+
+        <div className="cv-maps">
+          <figure className="cv-map">
+            <div className="cv-map-campus">
+              <img src={img(venue.campusMap)} alt="LSE campus map with the Lakatos Building (LAK) on Portugal Street marked" />
+              <span className="cv-map-pin" style={{ left: `${venue.mapPin.x}%`, top: `${venue.mapPin.y}%` }} aria-hidden="true" />
+            </div>
+            <figcaption>
+              LSE campus. The Lakatos Building ({venue.code}) is circled, on Portugal Street.
+            </figcaption>
+          </figure>
+          <figure className="cv-map">
+            <iframe
+              src={venue.mapsEmbedUrl}
+              title={`${venue.name} on Google Maps`}
+              loading="lazy"
+              allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+            <figcaption>
+              <a href={venue.mapsUrl} target="_blank" rel="noreferrer">Open in Google Maps</a>
+              {' '}for directions.
+            </figcaption>
+          </figure>
+        </div>
+
         <ol className="cv-register">
           {days.map((d) => {
             const talks = d.sessions.filter((s) => s.kind !== 'lunch');
@@ -351,6 +384,12 @@ export default function Canvas() {
                 <h3>{d.dateLong}</h3>
                 <p>
                   {talks.length} talks · {fmtTime(talks[0].start)}–{fmtTime(talks[talks.length - 1].end)}
+                  <br />
+                  {d.venue ? (
+                    `${venue.name}, room ${venue.room}`
+                  ) : (
+                    <span className="cv-tbc">Venue TBC</span>
+                  )}
                 </p>
                 {d.lumaUrl ? (
                   <a
@@ -376,14 +415,17 @@ export default function Canvas() {
         <div className="cv-footer-host">
           <img src={img('lse.png')} alt="LSE" />
           <p>
-            Hosted by the {series.host}
+            Hosted by the{' '}
+            <a href={series.hostUrl} target="_blank" rel="noreferrer">{series.host}</a>
             <br />
             {series.institution}
           </p>
         </div>
-        <p>
-          Organised with{' '}
-          <a href="https://socius.org" target="_blank" rel="noreferrer">socius labs</a>
+        <p className="cv-footer-org">
+          Organised with
+          <a href="https://socius.org" target="_blank" rel="noreferrer">
+            <img src={img('logos/socius_labs.png')} alt="socius labs" />
+          </a>
         </p>
       </footer>
 

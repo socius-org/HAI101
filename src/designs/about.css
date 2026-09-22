@@ -11,15 +11,9 @@
   position: sticky;
   top: 32px;
   aspect-ratio: 4 / 5;
-  background-color: var(--linen-deep);
-  background-size: 250%;
-  background-position: 86% 16%;
-  display: flex;
-  align-items: flex-end;
-  padding-bottom: 24px;
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
+  background-color: #f5f2e9;
+  background-size: cover;
+  background-position: 50% 30%;
 }
 
 .ab-question {
@@ -56,5 +50,5 @@
 
 @media (max-width: 900px) {
   .ab { grid-template-columns: 1fr; }
-  .ab-art { position: static; aspect-ratio: 16 / 10; background-size: 190%; }
+  .ab-art { position: static; aspect-ratio: 1 / 1; background-position: 50% 0%; }
 }
