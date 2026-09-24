@@ -10,3 +10,6 @@ Thumbs.db
 Akshay visa/
 .vscode/
 .idea/
+
+# poster build scratch (treated headshots, previews)
+poster/build/_tmp/

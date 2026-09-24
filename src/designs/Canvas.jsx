@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import './canvas.css';
 import About from './About.jsx';
 import {
-  series, venue, speakers, speakerById, days, scheduleNote,
+  series, venues, campus, speakers, speakerById, days, scheduleNote,
   img, photo, logo, initials, fmtTime,
 } from '../data.js';
 
@@ -19,8 +19,24 @@ const HOURS = Array.from({ length: (DAY_END - DAY_START) / 60 + 1 }, (_, i) => 9
 // Each speaker's slot, so the bio panel can show what they are speaking on and when.
 const TALKS = {};
 days.forEach((d) => d.sessions.forEach((s) => {
-  if (s.kind !== 'lunch') TALKS[s.speaker || 'tbc'] = { ...s, date: d.date };
+  if (!s.kind) TALKS[s.speaker || 'tbc'] = { ...s, date: d.date };
 }));
+
+// Internal: tick on slots whose speaker has confirmed the time (sessions[].confirmed). Dev server only.
+const SHOW_CONFIRMED = import.meta.env.DEV;
+const Confirmed = ({ s }) =>
+  SHOW_CONFIRMED && s.confirmed ? <span className="cv-ok" title="Time confirmed by speaker" aria-label="Time confirmed by speaker">✓</span> : null;
+
+// Abstracts are plain strings; any http(s) URL in them is rendered as a link.
+const URL_RE = /(https?:\/\/[^\s)]+)/g;
+const linkify = (text) =>
+  text.split(URL_RE).map((part, i) =>
+    i % 2 === 1 ? (   // odd parts are the captured URLs
+      <a key={i} href={part} target="_blank" rel="noreferrer">{part.replace(/^https?:\/\//, '')}</a>
+    ) : (
+      part
+    )
+  );
 
 const TBC_SPEAKER = { id: 'tbc', name: 'Speaker TBC', role: 'To be announced', affiliation: 'Affiliation TBC', noPhoto: true };
 
@@ -42,7 +58,7 @@ function Talk({ talk }) {
       </button>
       {open && (
         <div className="cv-detail-talk-body">
-          <p className={talk.abstract ? '' : 'cv-tbc'}>{talk.abstract || 'Abstract to be announced.'}</p>        </div>
+          <p className={talk.abstract ? '' : 'cv-tbc'}>{talk.abstract ? linkify(talk.abstract) : 'Abstract to be announced.'}</p>        </div>
       )}
     </div>
   );
@@ -75,7 +91,7 @@ function TalkDialog({ talk, onClose, onSpeaker }) {
             {sp ? sp.name : 'Speaker TBC'} <span>· {sp ? sp.affiliation : 'Affiliation TBC'}</span>
           </p>
           <p className={talk.abstract ? 'cv-dialog-abstract' : 'cv-dialog-abstract cv-tbc'}>
-            {talk.abstract || 'Abstract to be announced.'}
+            {talk.abstract ? linkify(talk.abstract) : 'Abstract to be announced.'}
           </p>
           {sp && (
             <button type="button" className="cv-dialog-link" onClick={() => { ref.current.close(); onSpeaker(sp.id); }}>
@@ -246,6 +262,9 @@ export default function Canvas() {
       <section className="cv-wrap" id="schedule">
         <p className="cv-kicker">Preliminary schedule</p>
         <h2 className="cv-h2">Three Fridays</h2>
+        {SHOW_CONFIRMED && (
+          <p className="cv-ok-note"><span className="cv-ok">✓</span> time confirmed by the speaker · internal, dev server only</p>
+        )}
 
         {/* desktop: timetable */}
         <div className="cv-table" role="table" aria-label="Timetable">
@@ -272,6 +291,14 @@ export default function Canvas() {
                   </div>
                 );
               }
+              if (s.kind === 'intro') {
+                return (
+                  <div key={d.id + s.start} className="cv-slot cv-slot-intro" style={style}>
+                    <time>{fmtTime(s.start)}–{fmtTime(s.end)} <Confirmed s={s} /></time>
+                    <span className="cv-slot-title">{s.title}</span>
+                  </div>
+                );
+              }
               return (
                 <button
                   key={d.id + s.start}
@@ -282,7 +309,7 @@ export default function Canvas() {
                   onClick={() => setOpenTalk({ ...s, dateLong: d.dateLong })}
                 >
                   <span className="cv-plus" aria-hidden="true" />
-                  <time>{fmtTime(s.start)}–{fmtTime(s.end)}</time>
+                  <time>{fmtTime(s.start)}–{fmtTime(s.end)} <Confirmed s={s} /></time>
                   <span className={s.title ? 'cv-slot-title' : 'cv-slot-title cv-tbc'}>{s.title || 'Title TBC'}</span>
                   <span className="cv-slot-who">
                     {sp ? sp.name : 'Speaker TBC'} <span>· {sp ? sp.affiliation : 'Affiliation TBC'}</span>
@@ -305,9 +332,14 @@ export default function Canvas() {
                   const sp = s.speaker ? speakerById[s.speaker] : null;
                   return (
                     <li key={s.start} className={s.kind === 'lunch' ? 'cv-list-break' : ''}>
-                      <time>{fmtTime(s.start)}–{fmtTime(s.end)}</time>
+                      <time>{fmtTime(s.start)}–{fmtTime(s.end)} <Confirmed s={s} /></time>
                       {s.kind === 'lunch' ? (
                         <p>Lunch break</p>
+                      ) : s.kind === 'intro' ? (
+                        <p>
+                          <span className="cv-slot-title">{s.title}</span>
+                          <span className="cv-slot-who">{sp ? sp.name : 'Speaker TBC'}</span>
+                        </p>
                       ) : (
                         <button
                           type="button"
@@ -339,14 +371,21 @@ export default function Canvas() {
         <div className="cv-attend-head">
           <div>
             <p className="cv-kicker">Attend</p>
-            <h2 className="cv-h2">{venue.name}</h2>
+            <h2 className="cv-h2">On the LSE campus</h2>
           </div>
           <div>
-            <p>
-              Room {venue.room} · {venue.address}
-              <br />
-              <a href={venue.mapsUrl} target="_blank" rel="noreferrer">Open in Google Maps →</a>
-            </p>
+            <ul className="cv-venues">
+              {Object.entries(venues).map(([key, v]) => {
+                const when = days.filter((d) => d.venue === key).map((d) => d.date.replace(/^Fri /, ''));
+                return (
+                  <li key={key}>
+                    <strong>{v.name}, room {v.room}</strong> · {when.join(' & ')}
+                    <br />
+                    {v.address} · <a href={v.mapsUrl} target="_blank" rel="noreferrer">Google Maps →</a>
+                  </li>
+                );
+              })}
+            </ul>
             <p>{series.registration}</p>
           </div>
         </div>
@@ -354,39 +393,43 @@ export default function Canvas() {
         <div className="cv-maps">
           <figure className="cv-map">
             <div className="cv-map-campus">
-              <img src={img(venue.campusMap)} alt="LSE campus map with the Lakatos Building (LAK) on Portugal Street marked" />
-              <span className="cv-map-pin" style={{ left: `${venue.mapPin.x}%`, top: `${venue.mapPin.y}%` }} aria-hidden="true" />
+              <img src={img(campus.map)} alt="LSE campus map with the Marshall Building (MAR) and the Lakatos Building (LAK) marked" />
+              {Object.values(venues).map((v) => (
+                <span key={v.code} className="cv-map-pin" style={{ left: `${v.mapPin.x}%`, top: `${v.mapPin.y}%` }} aria-hidden="true" />
+              ))}
             </div>
             <figcaption>
-              LSE campus. The Lakatos Building ({venue.code}) is circled, on Portugal Street.
+              LSE campus map. The Marshall Building (MAR) on Lincoln's Inn Fields and the Lakatos Building (LAK) on Portugal Street are circled.
             </figcaption>
           </figure>
-          <figure className="cv-map">
-            <iframe
-              src={venue.mapsEmbedUrl}
-              title={`${venue.name} on Google Maps`}
-              loading="lazy"
-              allowFullScreen
-              referrerPolicy="no-referrer-when-downgrade"
-            />
-            <figcaption>
-              <a href={venue.mapsUrl} target="_blank" rel="noreferrer">Open in Google Maps</a>
-              {' '}for directions.
-            </figcaption>
-          </figure>
+          {Object.values(venues).map((v) => (
+            <figure key={v.code} className="cv-map">
+              <iframe
+                src={v.mapsEmbedUrl}
+                title={`${v.name} on Google Maps`}
+                loading="lazy"
+                allowFullScreen
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+              <figcaption>
+                {v.name}, {v.address}. <a href={v.mapsUrl} target="_blank" rel="noreferrer">Open in Google Maps</a>.
+              </figcaption>
+            </figure>
+          ))}
         </div>
 
         <ol className="cv-register">
           {days.map((d) => {
-            const talks = d.sessions.filter((s) => s.kind !== 'lunch');
+            const talks = d.sessions.filter((s) => !s.kind);
+            const first = d.sessions.find((s) => s.kind !== 'lunch');
             return (
               <li key={d.id}>
                 <h3>{d.dateLong}</h3>
                 <p>
-                  {talks.length} talks · {fmtTime(talks[0].start)}–{fmtTime(talks[talks.length - 1].end)}
+                  {talks.length} talks · {fmtTime(first.start)}–{fmtTime(talks[talks.length - 1].end)}
                   <br />
                   {d.venue ? (
-                    `${venue.name}, room ${venue.room}`
+                    `${venues[d.venue].name}, room ${venues[d.venue].room}`
                   ) : (
                     <span className="cv-tbc">Venue TBC</span>
                   )}
