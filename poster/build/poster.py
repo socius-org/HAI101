@@ -115,24 +115,15 @@ for s_, meta_size in meta_lines:
 # ---------------------------------------------------------------- question
 y = BAND + 104
 tw(M, y, "ABOUT THE SERIES", SANS_M, 22, BRICK, tracking=0.14 * 22)
-q_size = 106
+q_size = 118
 Q_LINES = ["What can machines", "teach us about minds?"]
-q_max = W - M - 560 - 48 - M          # keep clear of the summary column
+q_max = CW                            # full content width
 while max(SLAB_L.text_length(l, fontsize=q_size) for l in Q_LINES) > q_max and q_size > 80:
     q_size -= 1
 y += 122
 tw(M, y, Q_LINES[0], SLAB_L, q_size, BRICK)
 y += q_size * 1.0
 tw(M, y, Q_LINES[1], SLAB_L, q_size, BRICK)
-
-# summary, right of the question
-sum_lines = wrap("HAI101 brings together the social, behavioural and cognitive sciences, philosophy and artificial "
-                 "intelligence to ask how we model minds, how minds shape machines, and what happens when machines "
-                 "begin to model people, reason about the world and produce knowledge themselves.", SANS, 25, 560)
-sx = W - M - 560
-sy = BAND + 104 + 122 - q_size * 0.72 + 25 * SANS.ascender
-for ln in sum_lines:
-    tw(sx, sy, ln, SANS, 25, INK); sy += 25 * 1.48
 
 # ---------------------------------------------------------------- programme: three days
 VENUES = {
@@ -216,8 +207,8 @@ ah = 100
 rect(M, ay0, W - M, ay0 + ah, INK)
 px = M + 44
 tw(px, ay0 + 42, "Hybrid, in person and online  ·  free to attend  ·  all welcome", SANS_M, 24, PAPER)
-tw(px, ay0 + 74, "Full programme, abstracts and speaker bios at socius-org.github.io/HAI101", SANS, 21, hexc("#c9c5c1"))
-URL = "https://socius-org.github.io/HAI101/"
+tw(px, ay0 + 74, "Full programme, abstracts and speaker bios at socialscience.ai", SANS, 21, hexc("#c9c5c1"))
+URL = "https://socialscience.ai/"
 sq = 68
 qr_draw(W - M - 24 - sq - 16, ay0 + (ah - sq - 16) / 2, sq, URL, pad=8)
 

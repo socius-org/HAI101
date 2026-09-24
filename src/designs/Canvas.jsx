@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import './canvas.css';
 import About from './About.jsx';
 import {
-  series, venues, campus, speakers, speakerById, days, scheduleNote,
+  series, venues, campus, speakers, speakerById, days,
   img, photo, logo, initials, fmtTime,
 } from '../data.js';
 
@@ -21,11 +21,6 @@ const TALKS = {};
 days.forEach((d) => d.sessions.forEach((s) => {
   if (!s.kind) TALKS[s.speaker || 'tbc'] = { ...s, date: d.date };
 }));
-
-// Internal: tick on slots whose speaker has confirmed the time (sessions[].confirmed). Dev server only.
-const SHOW_CONFIRMED = import.meta.env.DEV;
-const Confirmed = ({ s }) =>
-  SHOW_CONFIRMED && s.confirmed ? <span className="cv-ok" title="Time confirmed by speaker" aria-label="Time confirmed by speaker">✓</span> : null;
 
 // Abstracts are plain strings; any http(s) URL in them is rendered as a link.
 const URL_RE = /(https?:\/\/[^\s)]+)/g;
@@ -260,11 +255,8 @@ export default function Canvas() {
       </section>
 
       <section className="cv-wrap" id="schedule">
-        <p className="cv-kicker">Preliminary schedule</p>
+        <p className="cv-kicker">Schedule</p>
         <h2 className="cv-h2">Three Fridays</h2>
-        {SHOW_CONFIRMED && (
-          <p className="cv-ok-note"><span className="cv-ok">✓</span> time confirmed by the speaker · internal, dev server only</p>
-        )}
 
         {/* desktop: timetable */}
         <div className="cv-table" role="table" aria-label="Timetable">
@@ -294,7 +286,7 @@ export default function Canvas() {
               if (s.kind === 'intro') {
                 return (
                   <div key={d.id + s.start} className="cv-slot cv-slot-intro" style={style}>
-                    <time>{fmtTime(s.start)}–{fmtTime(s.end)} <Confirmed s={s} /></time>
+                    <time>{fmtTime(s.start)}–{fmtTime(s.end)}</time>
                     <span className="cv-slot-title">{s.title}</span>
                   </div>
                 );
@@ -309,7 +301,7 @@ export default function Canvas() {
                   onClick={() => setOpenTalk({ ...s, dateLong: d.dateLong })}
                 >
                   <span className="cv-plus" aria-hidden="true" />
-                  <time>{fmtTime(s.start)}–{fmtTime(s.end)} <Confirmed s={s} /></time>
+                  <time>{fmtTime(s.start)}–{fmtTime(s.end)}</time>
                   <span className={s.title ? 'cv-slot-title' : 'cv-slot-title cv-tbc'}>{s.title || 'Title TBC'}</span>
                   <span className="cv-slot-who">
                     {sp ? sp.name : 'Speaker TBC'} <span>· {sp ? sp.affiliation : 'Affiliation TBC'}</span>
@@ -332,7 +324,7 @@ export default function Canvas() {
                   const sp = s.speaker ? speakerById[s.speaker] : null;
                   return (
                     <li key={s.start} className={s.kind === 'lunch' ? 'cv-list-break' : ''}>
-                      <time>{fmtTime(s.start)}–{fmtTime(s.end)} <Confirmed s={s} /></time>
+                      <time>{fmtTime(s.start)}–{fmtTime(s.end)}</time>
                       {s.kind === 'lunch' ? (
                         <p>Lunch break</p>
                       ) : s.kind === 'intro' ? (
@@ -364,7 +356,7 @@ export default function Canvas() {
           ))}
         </div>
 
-        <p className="cv-note">{scheduleNote}</p>
+        <p className="cv-note">All times are UK time.</p>
       </section>
 
       <section className="cv-wrap cv-attend" id="attend">

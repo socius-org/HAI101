@@ -570,29 +570,6 @@
 
 .cv-detail-block li + li { margin-top: 6px; }
 
-/* internal: confirmed-time tick (dev server only, see Canvas.jsx) */
-.cv-ok {
-  display: inline-grid;
-  place-items: center;
-  width: 1.5em;
-  height: 1.5em;
-  margin-left: 4px;
-  border-radius: 50%;
-  background: var(--moss);
-  color: var(--paper);
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 1;
-  vertical-align: middle;
-  opacity: 1;
-}
-
-.cv-ok-note {
-  margin-top: 16px;
-  font-size: 14px;
-  opacity: 0.75;
-}
-
 /* ---------- attend + footer ---------- */
 .cv-attend {
   padding-top: 110px;

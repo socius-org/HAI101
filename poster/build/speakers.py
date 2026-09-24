@@ -68,13 +68,16 @@ def img(path, r):
 
 # Per-speaker reframing: (zoom, top_bias). zoom > 1 crops in; top_bias 1.0 takes all the cropped height off
 # the top (face moves up, clear of the name card), 0.0 off the bottom, 0.5 from both. zoom < 1 zooms out onto a
-# blurred extension of the photo, with top_bias 1.0 keeping the photo at the top of the frame.
+# blurred extension of the photo, with top_bias 1.0 keeping the photo at the top of the frame (above 1.0 nudges it up).
 FOCUS = {
-    "noichl": (0.94, 1.0),
+    "noichl": (0.94, 1.5),
+    "oh": (0.96, 1.0),
+    "feng": (0.96, 1.0),
+    "jin": (0.96, 0.75),
     "gobet": (0.965, 1.0),
     "manning": (0.88, 1.0),
     "jagadish": (0.88, 1.0),
-    "liu": (0.88, 1.0),
+    "liu": (0.96, 1.0),
 }
 
 def treated_photo(sid, ratio=None):
@@ -261,7 +264,7 @@ tw(px, ay0 + 40, "ATTEND", SANS_M, 19, BRICK, tracking=0.13 * 19)
 tw(px, ay0 + 76, "Marshall Building, room MAR 2.06  ·  Fri 23 Oct", SLAB, 28, INK)
 tw(px, ay0 + 108, "Lakatos Building, room LAK 2.06  ·  Fri 6 & 13 Nov", SLAB, 28, INK)
 tw(px, ay0 + 136, "44 Lincoln’s Inn Fields  ·  7 Portugal Street  ·  hybrid, in person and online  ·  free to attend  ·  registration opens on Luma", SANS, 19, INK)
-URL = "https://socius-org.github.io/HAI101/"
+URL = "https://socialscience.ai/"
 qr = QRCode(None, QRErrorCorrectLevel.M); qr.addData(URL); qr.make()
 n = len(qr.modules)
 qs = 128; qp = 10
@@ -272,7 +275,7 @@ for r in range(n):
     for c in range(n):
         if qr.modules[r][c]:
             rect(qx0 + qp + c * cell, qy0 + qp + r * cell, qx0 + qp + (c + 1) * cell + 0.3, qy0 + qp + (r + 1) * cell + 0.3, INK)
-twr(qx0 - 28, ay0 + ah / 2 - 4, "socius-org.github.io/HAI101", SANS_M, 20, INK)
+twr(qx0 - 28, ay0 + ah / 2 - 4, "socialscience.ai", SANS_M, 20, INK)
 twr(qx0 - 28, ay0 + ah / 2 + 24, "Scan for programme & registration", SANS, 17, hexc("#5a5550"))
 
 # ---------------------------------------------------------------- footer
