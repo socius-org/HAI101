@@ -61,7 +61,6 @@ export const speakers = [
     previously: [
       'MSc Data Science and Artificial Intelligence, University of London',
       'BSc Politics and Economics, London School of Economics',
-      'Ministry of National Defence, Numen Capital',
     ],
     interests: [
       'Neural networks, from RNNs to LLMs, as cognitive proxies',
