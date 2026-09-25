@@ -120,7 +120,7 @@ def paper_logo(path):
 
 # speakers in session order: (id, name, logo, date line)
 TITLES = {
-    "oh": "Small Foundation Models of Human Cognition and Behaviour",
+    "oh": "Neural Networks as Behavioural and Cognitive Proxy",
     "feng": "The Developing Language Model: How Experience Shapes Learning and Failure",
     "gobet": "Impact of AI on Human Expertise: Canaries in the Coalmine",
     "manning": "Predicting and Understanding Human Behaviour with AI Simulations",

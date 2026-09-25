@@ -61,11 +61,12 @@ export const speakers = [
     previously: [
       'MSc Data Science and Artificial Intelligence, University of London',
       'BSc Politics and Economics, London School of Economics',
+      'Ministry of National Defence, Numen Capital',
     ],
     interests: [
       'Neural networks, from RNNs to LLMs, as cognitive proxies',
       'Testing social-scientific theories at scales impossible with human subjects',
-      'Latent-space reasoning; measuring and steering “feelings” and “beliefs” in machines',
+      'Latent-space representation; measuring and steering “feelings” and “beliefs” in machines',
     ],
   },
   {
@@ -295,8 +296,8 @@ export const days = [
       },
       { start: '11:30', end: '12:30', kind: 'lunch' },
       {
-        start: '12:30', end: '13:30', speaker: 'oh', title: 'Small Foundation Models of Human Cognition and Behaviour',
-        abstract: "Large language models fine-tuned on human behavioural data have become general-purpose cognitive proxies, but two questions remain open. How many parameters does it take to predict a human? And do these models process the task, or exploit short-cuts in the sequence of choices? To answer them, we fine-tuned fourteen models, from 135M to 14B parameters, on 10.7 million choices from 160 psychology experiments. On the first question, scale barely matters for familiar kinds of experiments: models of 0.6B to 1B parameters match a 70B baseline, and the apparent need for larger models reflects how they were fine-tuned rather than the difficulty of the task. Where scale does matter is on novel task structure, where larger models pull clearly ahead. Size buys transfer, not fit. On the second, hiding the content of stimuli and feedback destroys three quarters of what the models learned, while shuffling trial order matters only where order carries information. The models use what participants saw, not the shape of the prompt. Fine-tuning on behaviour also reshapes other abilities, and, surprisingly, ethical judgement improves substantially. Small cognitively fine-tuned models therefore offer a cheap estimate of how predictable behaviour in an experiment can be, within the paradigms they were trained on.",
+        start: '12:30', end: '13:30', speaker: 'oh', title: 'Neural Networks as Behavioural and Cognitive Proxy',
+        abstract: "Neural networks trained on human behavioural data have become instruments of cognitive science. They tell us how much of behaviour is predictable at all, they show where our interpretable models fall short, and lately they have been proposed as general models of cognition. I will first trace how this came about: from networks fitted to a single kind of behaviour, such as gambles, chess moves, reward learning or reading times, to models that imitate individual players or participants, to language models fine-tuned on data from many experiments at once and offered as general-purpose models of cognition. Along the way I will point to the questions the field is still working out, including what such a model has to get right before it counts as a model of the mind. I will then present one recent example from my own work, in which we fine-tuned fourteen language models, from 135M to 14B parameters, on ten million choices from 160 psychology experiments. The results suggest that on familiar tasks scale barely matters, that size buys transfer to novel tasks, and that the models rely on what participants saw rather than on the shape of the prompt.",
       },
       {
         start: '13:45', end: '14:45', speaker: 'gobet', title: 'Impact of AI on Human Expertise: Canaries in the Coalmine',
