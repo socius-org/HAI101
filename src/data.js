@@ -49,7 +49,7 @@ export const intro = [
 ];
 
 export const summary =
-  'HAI101 brings twelve researchers from the social, behavioural and cognitive sciences, philosophy and AI to ask what machines that stand in for people can teach us about minds, and what the study of minds can teach the machines.';
+  'HAI101 brings together twelve researchers working at the intersection of the social, behavioural and cognitive sciences, philosophy and AI, to ask what machines can teach us about minds, and what the study of minds can teach the machines.';
 
 export const speakers = [
   {
