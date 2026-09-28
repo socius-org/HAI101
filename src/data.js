@@ -53,22 +53,6 @@ export const summary =
 
 export const speakers = [
   {
-    id: 'oh',
-    name: 'Nick Oh',
-    role: 'Researcher, CPNSS',
-    affiliation: 'London School of Economics',
-    lab: 'Advisor: Prof. Fernand Gobet',
-    previously: [
-      'MSc Data Science and Artificial Intelligence, University of London',
-      'BSc Politics and Economics, London School of Economics',
-    ],
-    interests: [
-      'Neural networks, from RNNs to LLMs, as cognitive proxies',
-      'Testing social-scientific theories at scales impossible with human subjects',
-      'Latent-space representation; measuring and steering “feelings” and “beliefs” in machines',
-    ],
-  },
-  {
     id: 'feng',
     name: 'Steven Feng',
     role: 'PhD Candidate, Dept. of Computer Science',
@@ -84,6 +68,22 @@ export const speakers = [
       'Data-centric scaling laws for reasoning and generalisation',
       'Efficient reasoning in SLMs and data-limited regimes',
       'Human and cognitively-inspired learning signals and evaluation for foundation models',
+    ],
+  },
+  {
+    id: 'oh',
+    name: 'Nick Oh',
+    role: 'Researcher, CPNSS',
+    affiliation: 'London School of Economics',
+    lab: 'Advisor: Prof. Fernand Gobet',
+    previously: [
+      'MSc Data Science and Artificial Intelligence, University of London',
+      'BSc Politics and Economics, London School of Economics',
+    ],
+    interests: [
+      'Neural networks, from RNNs to LLMs, as cognitive proxies',
+      'Testing social-scientific theories at scales impossible with human subjects',
+      'Latent-space representation; measuring and steering “feelings” and “beliefs” in machines',
     ],
   },
   {

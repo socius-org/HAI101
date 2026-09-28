@@ -239,7 +239,12 @@ export default function Canvas() {
                         {s.id === 'tbc' ? '?' : initials(s.name)}
                       </span>
                     )}
-                    <span className="cv-card-name">{s.name}</span>
+                    <span className="cv-card-name">
+                      {s.name}
+                      {TALKS[s.id] && (
+                        <span className="cv-card-when">{TALKS[s.id].date} · {fmtTime(TALKS[s.id].start)}</span>
+                      )}
+                    </span>
                   </span>
                   <span className="cv-card-school">
                     {logo(s) ? <img src={logo(s)} alt={s.affiliation} loading="lazy" /> : <span>{s.affiliation}</span>}

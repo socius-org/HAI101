@@ -150,8 +150,8 @@ def qr_draw(x, y, size, data, pad=10):
 
 DAYS = [
     ("Session Day 1", "Friday 23 October", "4 talks · 10:00–16:00", [
-        ("Nick Oh", "London School of Economics"),
         ("Steven Feng", "Stanford University"),
+        ("Nick Oh", "London School of Economics"),
         ("Prof. Fernand Gobet", "London School of Economics"),
         ("Benjamin Manning", "Massachusetts Institute of Technology"),
     ]),

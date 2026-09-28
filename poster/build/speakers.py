@@ -135,8 +135,8 @@ TITLES = {
 }
 
 SPEAKERS = [
-    ("oh", "Nick Oh", "lse", "Fri 23 Oct · 12:30"),
     ("feng", "Steven Feng", "stanford", "Fri 23 Oct · 10:30"),
+    ("oh", "Nick Oh", "lse", "Fri 23 Oct · 12:30"),
     ("gobet", "Prof. Fernand Gobet", "lse", "Fri 23 Oct · 13:45"),
     ("manning", "Benjamin Manning", "mit", "Fri 23 Oct · 15:00"),
     ("jin", "Helen Jin", "penn", "Fri 6 Nov · 9:15"),
