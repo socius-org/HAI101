@@ -45,7 +45,8 @@ export const venues = {
 export const campus = { map: 'lse-campus-map.svg' };
 
 export const intro = [
-  'Machines have become good enough at imitating people that researchers now use them as stand-ins: to run an experiment before recruiting a single participant, to predict how a group will behave, or to test a theory at a scale no human study could reach. At the same time, the machines have become something to study in their own right. They learn in ways that resemble ours, they explain themselves and assess their own answers, and they have started to do science. And the questions we once asked only of people are now being asked of machines.',
+  'Machines have become good enough at imitating people that researchers now use them as proxies: to run an experiment before recruiting a single participant, to predict how a group will behave, or to test a theory at a scale no human study could reach.',
+  'At the same time, the machines have become something to study in their own right: they learn in ways that resemble ours, they explain themselves and assess their own answers, and they have started to do science. And the questions we once asked only of people are now being asked of machines.',
 ];
 
 export const summary =
@@ -321,7 +322,10 @@ export const days = [
         start: '09:15', end: '10:15', speaker: 'jin', title: 'Beyond the Right Answer: Measuring Machine and Human Understanding',
         abstract: "What does it mean to truly understand something, rather than simply produce the right answer? As AI systems become increasingly capable of explaining, reasoning, and producing and evaluating knowledge, that distinction is becoming both harder and more important to make. This talk asks what should count as evidence of understanding in an age of increasingly capable AI. It considers how we evaluate the explanations and reasoning produced by machines, before turning the question back on us: when AI can produce the essays, solutions, and code we once used to judge human understanding, how should we assess what a person actually knows?",
       },
-      { start: '10:30', end: '11:30', speaker: 'peters', title: 'Testing for Consciousness in Artificial Minds' },
+      {
+        start: '10:30', end: '11:30', speaker: 'peters', title: 'Testing for Consciousness in Artificial Minds',
+        abstract: "How can we figure out what kinds of entities have consciousness? Theory-light and theory-heavy indicator frameworks, tests for consciousness, and vibes-based “it seems like someone is in there” approaches are dominating the discussion, in the literature and also in the general media. Not a day goes by without some headline about how AI consciousness is just around the corner, if it isn’t here already. But what, exactly, would we base those inferences on? In this talk I argue that standard indicator-based approaches are highly inadequate, even if they rely on the best theories or empirical research available, for one simple reason: those indicators, markers, or tests cannot be assumed to “mean the same thing” in systems on which they were not validated. Instead, I propose an extension to the iterative natural kinds strategy and lay out what would be required to undertake such a research programme: a combined philosophical, empirical, and computational-epistemological approach to discovering and describing the natural kind of consciousness and what kinds of entities may possess it.",
+      },
       { start: '11:30', end: '12:30', kind: 'lunch' },
       {
         start: '12:30', end: '13:30', speaker: 'noichl', title: 'Uncovering the general structure of model transfer between sciences',
