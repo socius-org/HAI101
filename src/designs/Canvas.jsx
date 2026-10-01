@@ -59,6 +59,12 @@ function Talk({ talk }) {
   );
 }
 
+// Speakers joining by video (sessions[].remote in data.js) are screened in the room; nothing is streamed.
+function OnScreen() {
+  return <span className="cv-onscreen">On screen</span>;
+}
+const onScreenNote = (where) => `Speaker joins live by video, shown on screen in ${where}. No live stream or public link.`;
+
 // Pop-up with a session's abstract, opened from the + on a schedule slot.
 function TalkDialog({ talk, onClose, onSpeaker }) {
   const ref = useRef(null);
@@ -85,6 +91,11 @@ function TalkDialog({ talk, onClose, onSpeaker }) {
           <p className="cv-dialog-who">
             {sp ? sp.name : 'Speaker TBC'} <span>· {sp ? sp.affiliation : 'Affiliation TBC'}</span>
           </p>
+          {talk.remote && (
+            <p className="cv-dialog-onscreen">
+              <OnScreen /> {onScreenNote(talk.room || 'the room')}
+            </p>
+          )}
           <p className={talk.abstract ? 'cv-dialog-abstract' : 'cv-dialog-abstract cv-tbc'}>
             {talk.abstract ? linkify(talk.abstract) : 'Abstract to be announced.'}
           </p>
@@ -303,10 +314,13 @@ export default function Canvas() {
                   className="cv-slot"
                   style={style}
                   aria-haspopup="dialog"
-                  onClick={() => setOpenTalk({ ...s, dateLong: d.dateLong })}
+                  onClick={() => setOpenTalk({ ...s, dateLong: d.dateLong, room: venues[d.venue]?.room })}
                 >
                   <span className="cv-plus" aria-hidden="true" />
-                  <time>{fmtTime(s.start)}–{fmtTime(s.end)}</time>
+                  <span className="cv-slot-meta">
+                    <time>{fmtTime(s.start)}–{fmtTime(s.end)}</time>
+                    {s.remote && <OnScreen />}
+                  </span>
                   <span className={s.title ? 'cv-slot-title' : 'cv-slot-title cv-tbc'}>{s.title || 'Title TBC'}</span>
                   <span className="cv-slot-who">
                     {sp ? sp.name : 'Speaker TBC'} <span>· {sp ? sp.affiliation : 'Affiliation TBC'}</span>
@@ -342,13 +356,14 @@ export default function Canvas() {
                           type="button"
                           className="cv-list-open"
                           aria-haspopup="dialog"
-                          onClick={() => setOpenTalk({ ...s, dateLong: d.dateLong })}
+                          onClick={() => setOpenTalk({ ...s, dateLong: d.dateLong, room: venues[d.venue]?.room })}
                         >
                           <span>
                             <span className={s.title ? 'cv-slot-title' : 'cv-slot-title cv-tbc'}>{s.title || 'Title TBC'}</span>
                             <span className="cv-slot-who">
                               {sp ? sp.name : 'Speaker TBC'} <span>· {sp ? sp.affiliation : 'Affiliation TBC'}</span>
                             </span>
+                            {s.remote && <OnScreen />}
                           </span>
                           <span className="cv-plus" aria-hidden="true" />
                         </button>
@@ -362,6 +377,11 @@ export default function Canvas() {
         </div>
 
         <p className="cv-note">All times are UK time.</p>
+        {days.some((d) => d.sessions.some((s) => s.remote)) && (
+          <p className="cv-note cv-note-onscreen">
+            <OnScreen /> {onScreenNote('the room')}
+          </p>
+        )}
       </section>
 
       <section className="cv-wrap cv-attend" id="attend">

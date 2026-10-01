@@ -255,7 +255,7 @@ for s in sessions:
 # key for the on-screen label, under the programme
 if any_remote:
     on_screen_label(M, yy + 18, 150)
-    tw(M + 170, yy + 18 + 24, f"Speaker joins live by video, shown on screen in {venue['room']} only.  No livestream or public link.", SANS, 24, INK)
+    tw(M + 170, yy + 18 + 24, f"Speaker joins live by video, shown on screen in {venue['room']} only.  No live stream or public link.", SANS, 24, INK)
     yy += 18 + 34
 
 ay0 = max(yy, PY1) + 44

@@ -209,7 +209,34 @@
 .cv-slot-intro time { padding-right: 0; white-space: nowrap; }
 .cv-slot-intro .cv-slot-title { font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-.cv-slot time { padding-right: 24px; }
+.cv-slot-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  padding-right: 24px;
+}
+
+/* speaker joining by video, screened in the room: the posters' ochre ON SCREEN bar */
+.cv-onscreen {
+  display: inline-block;
+  padding: 2px 6px;
+  background: var(--ochre);
+  color: var(--ink);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  vertical-align: 0.15em;
+  white-space: nowrap;
+}
+
+.cv-list .cv-onscreen { margin-top: 8px; }
+.cv-note-onscreen { margin-top: 8px; max-width: none; opacity: 1; }
+.cv-note-onscreen .cv-onscreen { margin-right: 6px; }
+.cv-dialog-onscreen { margin-top: 10px; font-size: 15px; }
+.cv-dialog-onscreen .cv-onscreen { margin-right: 6px; }
 .cv-slot .cv-plus { position: absolute; top: 12px; right: 12px; }
 
 /* small + drawn in the current text colour */
