@@ -15,7 +15,7 @@ export const series = {
   dates: 'Fridays · 23 Oct, 6 Nov & 13 Nov 2026',
   datesShort: '23 Oct · 6 Nov · 13 Nov 2026',
   location: 'LSE, London',
-  format: 'Hybrid',
+  format: 'In person',
   registration: 'Registration will open on Luma.',
 };
 
@@ -274,6 +274,7 @@ export const initials = (name) =>
 // kind: 'lunch' renders a break; kind: 'intro' is a short opening slot, shown like a talk but not counted as one.
 // venue: a key of `venues` above; null renders as "Venue TBC".
 // title: null renders as "Title TBC"; speaker: null renders as "Speaker TBC".
+// remote: true marks a speaker joining live by video, shown on screen in the room (flagged on the day posters).
 // Add `abstract: '...'` to a session to fill the + panel under the talk title in the
 // speaker bio; without it the panel reads "Abstract to be announced."
 export const days = [
@@ -291,7 +292,7 @@ export const days = [
         abstract: 'A short welcome and an outline of the series: the question behind it, and how the three Fridays fit together.',
       },
       {
-        start: '10:30', end: '11:30', speaker: 'feng', title: 'The Developing Language Model: How Experience Shapes Learning and Failure',
+        start: '10:30', end: '11:30', speaker: 'feng', remote: true, title: 'The Developing Language Model: How Experience Shapes Learning and Failure',
         abstract: "Language models are usually evaluated as finished systems, but many questions about intelligence are fundamentally developmental: How does the structure of experience shape what is learned? Does accumulating knowledge change how efficiently new information can be acquired? And as models continue to train, which behaviours remain stable, and which depend on the particular path learning takes? I will present a series of studies that use language models as controlled learners to investigate these questions. First, I will examine language learning at unusually small data scales, including how the source and composition of linguistic input, bilingual experience, and the amount and diversity of developmental language affect prediction, grammatical knowledge, and semantic representations. I will then show ongoing work asking whether prior linguistic experience changes the marginal value of new evidence: the same novel-word examples become increasingly useful as a model acquires more language experience. In the second half, I will turn from learning to failure. I will briefly discuss how we can define and measure hallucination in controlled reference worlds, then focus on reinforcement-learning experiments showing that models with similar task performance can differ dramatically in whether they acknowledge their failures. Small numerical or stochastic differences during training can produce very different reporting behaviour, while reference anchoring can substantially reduce this variability. Together, these results motivate studying language models not only by what they can do at the end of training, but as developing systems whose learning history shapes both how they use information and how they behave when things go wrong.",
       },
       { start: '11:30', end: '12:30', kind: 'lunch' },
@@ -304,7 +305,7 @@ export const days = [
         abstract: "This talk argues that chess offers a unique preview of how AI may transform human expertise because superhuman chess AI has existed for more than 25 years. Drawing on this long-term case study, it identifies ten major effects of AI, including surpassing expert performance, reshaping training and decision-making, and generating new knowledge. Many of these patterns are already emerging in fields such as medicine, education, software engineering, and mathematics. AI does not make human experts obsolete; instead, expertise increasingly involves selecting appropriate AI tools, interpreting and evaluating AI outputs, and applying contextual, ethical, and practical judgement.",
       },
       {
-        start: '15:00', end: '16:00', speaker: 'manning', title: 'Predicting and Understanding Human Behaviour with AI Simulations',
+        start: '15:00', end: '16:00', speaker: 'manning', remote: true, title: 'Predicting and Understanding Human Behaviour with AI Simulations',
         abstract: "Useful social science theory should predict behaviour in settings it was never built for, yet applying a theory to a new setting almost always requires ad hoc modification. I will argue that AI agents placed in simulations offer an alternative. They provide a way of carrying theory into novel environments, and a new instrument for asking how much structure human behaviour really has. First, I will show how “general” agents can be built from theory-grounded natural language instructions and small amounts of existing human data, validated across distinct but related settings rather than by a standard train-test split. On a pre-committed population of 883,200 novel strategic games, such agents predict human play better than off-the-shelf agents, a cognitive hierarchy model, and game-theoretic equilibria. Second, I will show how prompts themselves can serve as a fittable, interpretable model of a person. Language models are assigned “type vectors” of trait intensities, which are then optimised against 119,147 decisions from 78,657 subjects across ten classic economic games. Three dimensions, Risk Aversion, Strategic Sophistication, and Trust, closely match human behaviour, and the fitted types cluster into fewer than a dozen groups that predict play in held-out games. Together, these results suggest AI simulations are not only a prediction technology, but a tool for discovering how few moving parts a theory of behaviour might need.",
       },
     ],
@@ -356,7 +357,7 @@ export const days = [
         abstract: "Large Language Models (LLMs) are demonstrating remarkable capabilities across the sciences. In less than a year, they have gone from winning International Olympiads to generating proofs for a Millennium Prize problem. For cognitive science, this raises an uncomfortable question: if the system can do the science, what kind of science is left to do? I will argue the opposite of the supposedly obvious conclusion — that LLMs mark the beginning of a new era of cognitive science rather than its end. I will preview three pieces of work in which LLMs serve as a key instrument: (1) as generators of realistic data, enabling tests of ecological rationality; (2) as systems for model discovery, supporting mechanistic insights from rich sources of behaviour; (3) as curators of large-scale behavioural datasets, enabling the search for universal laws of behaviour. Each removes a bottleneck that used to determine which questions were “askable”. Far from closing doors, I believe LLMs put within reach a set of questions that were previously deemed unreachable, making it the best time yet to be doing cognitive science.",
       },
       {
-        start: '15:00', end: '16:00', speaker: 'liu', title: 'Reliable Language Models Through the Lens of Metacognition',
+        start: '15:00', end: '16:00', speaker: 'liu', remote: true, title: 'Reliable Language Models Through the Lens of Metacognition',
         abstract: "Metacognition is a core component of intelligence that describes the ability to monitor and regulate one’s own cognitive processes. Yet even the most capable LLMs continue to exhibit systemic deficiencies in key metacognitive faculties: they hallucinate with high confidence, fail to recognise knowledge boundaries, and misrepresent their internal uncertainty, undermining trustworthiness and reliability. In this talk, we will explore how principles of metacognition from the field of psychology can be leveraged to improve the performance and reliability of modern language generation systems. In particular, I will show how metacognitive methods (prompting, training) can be devised to teach LLMs to accurately gauge their own task performance and internal uncertainty levels and communicate these to humans in a faithful, assistive fashion. Such work opens the door to more transparent and interpretable systems, and has implications for improved alignment and self-directed learning.",
       },
     ],

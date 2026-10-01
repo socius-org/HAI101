@@ -94,7 +94,7 @@ img(os.path.join(REPO, "public/img/lse.png"), (W - M - 150, 72, W - M, 222))
 # hero copy, bottom left of the band, kept left of the face (x < ~760pt)
 y = BAND - 150
 tag_size, h1_size = 36, 104
-meta_lines = [("23 Oct · 6 Nov · 13 Nov 2026", 42), ("Hybrid · LSE, London", 30)]
+meta_lines = [("23 Oct · 6 Nov · 13 Nov 2026", 42), ("In person · LSE, London", 30)]
 meta_h = sum(sz * 1.5 for _, sz in meta_lines)
 tag_lines = wrap("A lecture series spanning the social, behavioural, cognitive sciences, philosophy, and AI.", SANS, tag_size, 700)
 tag_h = tag_size * 1.5 * len(tag_lines)
@@ -202,27 +202,34 @@ for i in range(3):
 y_after_venues = qy1
 
 # ---------------------------------------------------------------- general strip: format + website
+# COMBINED=1 (the 48 x 36 in combined poster): no footer here, the speakers half carries it; the strip grows to fill
+COMBINED = os.environ.get("COMBINED") == "1"
 ay0 = y_after_venues + 36
-ah = 100
+if COMBINED:
+    ah = 2495 - ay0                 # down to where the footer ended
+    s1, s2, sq, qpad, px = 36, 29, ah - 56, 12, M + 56
+else:
+    ah = 100
+    s1, s2, sq, qpad, px = 24, 21, 68, 8, M + 44
 rect(M, ay0, W - M, ay0 + ah, INK)
-px = M + 44
-tw(px, ay0 + 42, "Hybrid, in person and online  ·  free to attend  ·  all welcome", SANS_M, 24, PAPER)
-tw(px, ay0 + 74, "Full programme, abstracts and speaker bios at socialscience.ai", SANS, 21, hexc("#c9c5c1"))
+mid = ay0 + ah / 2
+tw(px, mid - 0.08 * ah if COMBINED else ay0 + 42, "In person at LSE  ·  free to attend  ·  all welcome", SANS_M, s1, PAPER)
+tw(px, mid + 0.2 * ah if COMBINED else ay0 + 74, "Full programme, abstracts and speaker bios at socialscience.ai", SANS, s2, hexc("#c9c5c1"))
 URL = "https://socialscience.ai/"
-sq = 68
-qr_draw(W - M - 24 - sq - 16, ay0 + (ah - sq - 16) / 2, sq, URL, pad=8)
+qr_draw(W - M - (ah - sq - 2 * qpad) / 2 - sq - 2 * qpad if COMBINED else W - M - 24 - sq - 16, ay0 + (ah - sq - 2 * qpad) / 2, sq, URL, pad=qpad)
 
 # ---------------------------------------------------------------- footer
 fy = ay0 + ah + 34
-img(os.path.join(REPO, "public/img/lse.png"), (M, fy, M + 74, fy + 74))
-tw(M + 96, fy + 30, "Hosted by the Centre for Philosophy of Natural and Social Science (CPNSS)", SANS_M, 20, INK)
-tw(M + 96, fy + 58, "London School of Economics and Political Science", SANS, 20, FOG)
-# organised with socius labs
-logo = Image.open(os.path.join(REPO, "public/img/logos/socius_labs.png"))
-lh_ = 40; lw_ = lh_ * logo.size[0] / logo.size[1]
-img(os.path.join(REPO, "public/img/logos/socius_labs.png"), (W - M - lw_, fy + 17, W - M, fy + 17 + lh_))
-ow = SANS.text_length("Organised with", fontsize=20)
-tw(W - M - lw_ - 24 - ow, fy + 44, "Organised with", SANS, 20, FOG)
+if not COMBINED:
+    img(os.path.join(REPO, "public/img/lse.png"), (M, fy, M + 74, fy + 74))
+    tw(M + 96, fy + 30, "Hosted by the Centre for Philosophy of Natural and Social Science (CPNSS)", SANS_M, 20, INK)
+    tw(M + 96, fy + 58, "London School of Economics and Political Science", SANS, 20, FOG)
+    # organised with socius labs
+    logo = Image.open(os.path.join(REPO, "public/img/logos/socius_labs.png"))
+    lh_ = 40; lw_ = lh_ * logo.size[0] / logo.size[1]
+    img(os.path.join(REPO, "public/img/logos/socius_labs.png"), (W - M - lw_, fy + 17, W - M, fy + 17 + lh_))
+    ow = SANS.text_length("Organised with", fontsize=20)
+    tw(W - M - lw_ - 24 - ow, fy + 44, "Organised with", SANS, 20, FOG)
 
 doc.set_metadata({"title": "HAI101 | Human x Artificial Intelligence — poster 24 x 36 in",
                   "author": "LSE CPNSS / socius labs", "creator": "poster.py (PyMuPDF)"})

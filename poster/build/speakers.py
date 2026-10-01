@@ -156,7 +156,8 @@ rect(0, 0, W, H, INK)
 tag = 30
 rect(M, 80, M + SANS_M.text_length("HAI101", fontsize=tag) + 0.9 * tag, 80 + tag * 1.6, PAPER)
 tw(M + 0.45 * tag, 80 + tag * 1.6 - 0.42 * tag, "HAI101", SANS_M, tag, INK)
-img(os.path.join(REPO, "public/img/lse.png"), (W - M - 150, 72, W - M, 222))
+if os.environ.get("COMBINED") != "1":   # the combined poster shows the LSE mark once, on the left half
+    img(os.path.join(REPO, "public/img/lse.png"), (W - M - 150, 72, W - M, 222))
 
 # heading
 y = 236
@@ -165,7 +166,7 @@ y += 104
 tw(M, y, "Speakers", SLAB, 104, PAPER)
 # series line, right-aligned to the heading baseline
 twr(W - M, y - 44, "Human x Artificial Intelligence", SANS_M, 30, PAPER)
-twr(W - M, y, "23 Oct · 6 Nov · 13 Nov 2026  ·  LSE, London  ·  hybrid", SANS, 26, DIM)
+twr(W - M, y, "23 Oct · 6 Nov · 13 Nov 2026  ·  LSE, London  ·  in person", SANS, 26, DIM)
 
 # ---------------------------------------------------------------- cards, 4 x 3
 GAP = 24
@@ -262,7 +263,7 @@ px = M + 44
 tw(px, ay0 + 40, "ATTEND", SANS_M, 19, BRICK, tracking=0.13 * 19)
 tw(px, ay0 + 76, "Marshall Building, room MAR 2.06  ·  Fri 23 Oct", SLAB, 28, INK)
 tw(px, ay0 + 108, "Lakatos Building, room LAK 2.06  ·  Fri 6 & 13 Nov", SLAB, 28, INK)
-tw(px, ay0 + 136, "44 Lincoln’s Inn Fields  ·  7 Portugal Street  ·  hybrid, in person and online  ·  free to attend  ·  registration opens on Luma", SANS, 19, INK)
+tw(px, ay0 + 136, "44 Lincoln’s Inn Fields  ·  7 Portugal Street  ·  in person  ·  free to attend  ·  registration opens on Luma", SANS, 19, INK)
 URL = "https://socialscience.ai/"
 qr = QRCode(None, QRErrorCorrectLevel.M); qr.addData(URL); qr.make()
 n = len(qr.modules)
