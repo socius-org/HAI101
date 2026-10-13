@@ -10,11 +10,26 @@
 .ab-art {
   position: sticky;
   top: 32px;
-  aspect-ratio: 4 / 5;
-  background-color: #f5f2e9;
-  background-size: cover;
-  background-position: 50% 30%;
 }
+
+/* the rotating map: square video with a thin ink frame, caption beneath like the venue maps */
+.ab-map video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  border: 1.5px solid var(--ink);
+  background: var(--linen);
+}
+
+.ab-map figcaption {
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.45;
+  opacity: 0.8;
+}
+
+.ab-map figcaption a { font-weight: 500; }
+.ab-map figcaption a:hover { color: var(--brick); }
 
 .ab-question {
   margin-top: 16px;
@@ -50,5 +65,5 @@
 
 @media (max-width: 900px) {
   .ab { grid-template-columns: 1fr; }
-  .ab-art { position: static; aspect-ratio: 1 / 1; background-position: 50% 0%; }
+  .ab-art { position: static; }
 }
