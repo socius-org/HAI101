@@ -1,0 +1,11 @@
+numpy>=2,<3
+pandas>=2,<3
+scikit-learn>=1.4,<2
+sentence-transformers>=3,<6
+umap-learn>=0.5,<1
+hdbscan>=0.8,<1
+plotly>=5,<7
+matplotlib>=3.8,<4
+pillow>=10,<13
+imageio-ffmpeg>=0.5,<1
+requests>=2,<3

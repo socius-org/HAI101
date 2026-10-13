@@ -1,0 +1,13 @@
+speaker_id,speaker,openalex_author,openalex_id,works,abstracts,institutions,note
+feng,Steven Feng,Steven Y. Feng,A5039277252,13,10,"Stanford University, Apple (United States), Carnegie Mellon University",institution match
+oh,Nick Oh,Nick Oh,A5120277163,6,6,,pinned
+gobet,Fernand Gobet,Fernand R. Gobet,A5071463629,450,266,"University of Roehampton, London School of Economics and Political Science, University of Hertfordshire, University of Nottingham, University of Liverpool, University of Auckland, University of Fribourg, Economic and Social Research Council, Brunel University of London, Carnegie Mellon University, The University of Osaka",institution match
+manning,Benjamin Manning,Benjamin S. Manning,A5095787372,8,6,Massachusetts Institute of Technology,pinned
+jin,Helen Jin,Helen Jin,A5049104702,17,8,"Boston University, Boston Medical Center, University of Pennsylvania, The University of Texas at Austin",pinned
+peters,Megan Peters,Megan A. K. Peters,A5057951470,145,90,"Canadian Institute for Advanced Research, University of California, Irvine, University of California System, Center for Theoretical Physics, Institute of Philosophy, MIND Research Institute, Center for Theoretical Biological Physics, University College London, University of California, Riverside, University of California, Los Angeles, Nanyang Technological University, University of Michigan, MaRS, Université de Montréal, University of Plymouth",institution match
+noichl,Maximilian Noichl,Maximilian Noichl,A5033220137,11,6,"Utrecht University, University of Vienna, University of Bamberg",institution match
+bishop,Nicholas Bishop,Nicholas Bishop,A5073051863,17,12,"University of Oxford, University of Southampton",pinned
+sabatelli,Matthia Sabatelli,Matthia Sabatelli,A5074266137,44,36,"University of Groningen, University of Antwerp, University of Liège, Queen Mary University of London, FBK CREATE-NET Research Center",institution match
+thompson,Jessica Thompson,Jessica A. F. Thompson,A5047952620,19,14,"University of Oxford, University of Nottingham, Centre for Research on Brain Language and Music, Mila - Quebec Artificial Intelligence Institute, International Laboratory for Brain, Music and Sound Research, Université de Montréal, Leipzig University",pinned
+jagadish,Akshay Jagadish,Akshay Kumar Jagadish,A5016171206,37,27,"Princeton University, Helmholtz Munich, National Institute of Technology Karnataka, Max Planck Society, Max Planck Institute for Biological Cybernetics, École Polytechnique Fédérale de Lausanne, University of Tübingen",institution match
+liu,Gabrielle Liu,Gabrielle Kaili-May Liu,A5027766345,8,6,"Yale University, National Taiwan University, Massachusetts Institute of Technology",institution match
