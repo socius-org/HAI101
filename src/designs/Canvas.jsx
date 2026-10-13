@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import './canvas.css';
 import About from './About.jsx';
 import {
-  series, venues, campus, speakers, speakerById, days,
+  series, venues, speakers, speakerById, days, industry,
   img, photo, logo, initials, fmtTime,
 } from '../data.js';
 
@@ -205,6 +205,7 @@ export default function Canvas() {
             <a href="#about" className="cv-bar">About</a>
             <a href="#speakers" className="cv-bar">Speakers</a>
             <a href="#schedule" className="cv-bar">Schedule</a>
+            <a href="#industry" className="cv-bar">Industry Day</a>
             <a href="#attend" className="cv-bar">Register</a>
           </nav>
         </header>
@@ -219,7 +220,8 @@ export default function Canvas() {
             </p>
             <p className="cv-hero-meta">
               <span className="cv-mark cv-mark-dark">{series.datesShort}</span>{' '}
-              <span className="cv-mark cv-mark-dark">{series.format} · {series.location}</span>
+              <span className="cv-mark cv-mark-dark">{series.format} · {series.location}</span>{' '}
+              <span className="cv-mark">+ {industry.title} · {industry.date || 'date TBC'}</span>
             </p>
           </div>
           <img className="cv-lse" src={img('lse.png')} alt="LSE" />
@@ -384,6 +386,55 @@ export default function Canvas() {
         )}
       </section>
 
+      <section className="cv-dark cv-industry" id="industry">
+        <div className="cv-wrap cv-industry-grid">
+          <div>
+            <p className="cv-kicker">Coming soon</p>
+            <h2 className="cv-h2">{industry.title}</h2>
+            <p className="cv-industry-sub">
+              <span className="cv-mark">{industry.subtitle}</span>
+            </p>
+            {industry.blurb.map((p) => <p key={p.slice(0, 40)} className="cv-industry-blurb">{p}</p>)}
+            <dl className="cv-industry-facts">
+              <div>
+                <dt>Date</dt>
+                <dd className={industry.date ? '' : 'cv-tbc'}>{industry.date || 'To be confirmed'}</dd>
+              </div>
+              <div>
+                <dt>Venue</dt>
+                <dd className={industry.venue ? '' : 'cv-tbc'}>{industry.venue ? venues[industry.venue].label : 'To be confirmed'}</dd>
+              </div>
+              <div>
+                <dt>Speakers</dt>
+                <dd className={industry.speakers.length ? '' : 'cv-tbc'}>
+                  {industry.speakers.length ? `${industry.speakers.length} confirmed, more to come` : 'To be revealed'}
+                </dd>
+              </div>
+            </dl>
+          </div>
+          <ul className="cv-cards cv-industry-cards" aria-label="Industry Day speakers">
+            {Array.from({ length: Math.max(industry.slots, industry.speakers.length) }, (_, i) => {
+              const s = industry.speakers[i];
+              return (
+                <li key={i} className={`cv-card${s ? '' : ' is-hidden'}`}>
+                  <span className="cv-card-photo">
+                    {s?.photo ? (
+                      <img src={img(s.photo)} alt="" loading="lazy" />
+                    ) : (
+                      <span className="cv-card-blank" aria-hidden="true">?</span>
+                    )}
+                    <span className="cv-card-name">{s ? s.name : 'To be revealed'}</span>
+                  </span>
+                  <span className="cv-card-school">
+                    {s?.logo ? <img src={img(s.logo)} alt={s.company} loading="lazy" /> : <span>{s ? s.company : 'Industry'}</span>}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </section>
+
       <section className="cv-wrap cv-attend" id="attend">
         <div className="cv-attend-head">
           <div>
@@ -396,7 +447,7 @@ export default function Canvas() {
                 const when = days.filter((d) => d.venue === key).map((d) => d.date.replace(/^Fri /, ''));
                 return (
                   <li key={key}>
-                    <strong>{v.name}, room {v.room}</strong> · {when.join(' & ')}
+                    <strong>{v.label}</strong> · {when.join(' & ')}
                     <br />
                     {v.address} · <a href={v.mapsUrl} target="_blank" rel="noreferrer">Google Maps →</a>
                   </li>
@@ -408,17 +459,6 @@ export default function Canvas() {
         </div>
 
         <div className="cv-maps">
-          <figure className="cv-map">
-            <div className="cv-map-campus">
-              <img src={img(campus.map)} alt="LSE campus map with the Marshall Building (MAR) and the Lakatos Building (LAK) marked" />
-              {Object.values(venues).map((v) => (
-                <span key={v.code} className="cv-map-pin" style={{ left: `${v.mapPin.x}%`, top: `${v.mapPin.y}%` }} aria-hidden="true" />
-              ))}
-            </div>
-            <figcaption>
-              LSE campus map. The Marshall Building (MAR) on Lincoln's Inn Fields and the Lakatos Building (LAK) on Portugal Street are circled.
-            </figcaption>
-          </figure>
           {Object.values(venues).map((v) => (
             <figure key={v.code} className="cv-map">
               <iframe
@@ -446,7 +486,7 @@ export default function Canvas() {
                   {talks.length} talks · {fmtTime(first.start)}–{fmtTime(talks[talks.length - 1].end)}
                   <br />
                   {d.venue ? (
-                    `${venues[d.venue].name}, room ${venues[d.venue].room}`
+                    venues[d.venue].label
                   ) : (
                     <span className="cv-tbc">Venue TBC</span>
                   )}
@@ -468,6 +508,29 @@ export default function Canvas() {
               </li>
             );
           })}
+          <li>
+            <h3>{industry.title}</h3>
+            <p>
+              <span className={industry.date ? '' : 'cv-tbc'}>{industry.date || 'Date TBC'}</span>
+              {' · '}Speakers to be revealed
+              <br />
+              {industry.venue ? venues[industry.venue].label : <span className="cv-tbc">Venue TBC</span>}
+            </p>
+            {industry.lumaUrl ? (
+              <a
+                className="cv-register-btn"
+                href={industry.lumaUrl}
+                target="_blank"
+                rel="noreferrer"
+                data-luma-action={industry.lumaEventId ? 'checkout' : undefined}
+                data-luma-event-id={industry.lumaEventId || undefined}
+              >
+                Register on Luma
+              </a>
+            ) : (
+              <span className="cv-register-btn is-soon">Registration opens soon</span>
+            )}
+          </li>
         </ol>
       </section>
 
@@ -481,12 +544,6 @@ export default function Canvas() {
             {series.institution}
           </p>
         </div>
-        <p className="cv-footer-org">
-          Organised with
-          <a href="https://socius.org" target="_blank" rel="noreferrer">
-            <img src={img('logos/socius_labs.png')} alt="socius labs" />
-          </a>
-        </p>
       </footer>
 
       <TalkDialog talk={openTalk} onClose={() => setOpenTalk(null)} onSpeaker={showSpeaker} />

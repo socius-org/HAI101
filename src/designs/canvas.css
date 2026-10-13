@@ -632,7 +632,7 @@
 .cv-attend-head div:last-child { font-size: clamp(18px, 1.7vw, 22px); line-height: 1.35; }
 .cv-attend-head a:hover { color: var(--brick); }
 
-/* ---------- maps: campus plan (SVG) beside Google Maps ---------- */
+/* ---------- maps: one Google Map per venue ---------- */
 .cv-maps {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -641,26 +641,6 @@
 }
 
 .cv-map { min-width: 0; }
-
-.cv-map-campus {
-  position: relative;
-  border: 1.5px solid var(--ink);
-  background: #fff;
-}
-
-.cv-map-campus img { display: block; width: 100%; height: auto; }
-
-/* Ring around the LAK label; left/top come from venue.mapPin in data.js */
-.cv-map-pin {
-  position: absolute;
-  width: 11%;
-  aspect-ratio: 1;
-  transform: translate(-50%, -50%);
-  border: 3px solid var(--brick);
-  border-radius: 50%;
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.85);
-  pointer-events: none;
-}
 
 .cv-map iframe {
   display: block;
@@ -736,11 +716,58 @@
 
 .cv-footer-host { display: flex; align-items: center; gap: 16px; }
 .cv-footer-host img { width: 56px; }
-.cv-footer-org { display: flex; align-items: center; gap: 14px; }
-.cv-footer-org a { display: block; }
-.cv-footer-org img { display: block; height: 22px; width: auto; }
-.cv-footer-org a:hover img { opacity: 0.7; }
 .cv-footer a:hover { color: var(--brick); }
+
+/* ---------- Industry Day: teaser band; blank cards fill in as speakers confirm ---------- */
+.cv-industry-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 56px;
+  align-items: start;
+}
+
+.cv-industry-sub {
+  margin-top: 20px;
+  font-size: clamp(18px, 1.7vw, 22px);
+}
+
+.cv-industry-blurb {
+  margin-top: 24px;
+  max-width: 34em;
+  font-size: clamp(17px, 1.4vw, 19px);
+  line-height: 1.5;
+}
+
+.cv-industry-blurb + .cv-industry-blurb { margin-top: 12px; opacity: 0.7; }
+
+.cv-industry-facts {
+  margin-top: 40px;
+  border-bottom: 1.5px solid #4a4642;
+}
+
+.cv-industry-facts div {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 16px;
+  padding: 12px 0;
+  border-top: 1.5px solid #4a4642;
+}
+
+.cv-industry-facts dt {
+  padding-top: 3px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ochre);
+}
+
+.cv-industry-cards { grid-template-columns: repeat(3, 1fr); }
+
+.cv-industry-cards .cv-card.is-hidden { background: #3a3734; }
+.cv-industry-cards .cv-card.is-hidden .cv-card-photo { background: #24221f; }
+.cv-industry-cards .cv-card.is-hidden .cv-card-name { background: #3a3734; color: var(--paper); opacity: 0.8; }
+.cv-industry-cards .cv-card.is-hidden .cv-card-school { color: var(--paper); opacity: 0.45; font-style: italic; }
 
 /* ---------- responsive ---------- */
 @media (max-width: 1100px) {
@@ -782,6 +809,7 @@
 
   .cv-dark { margin-top: 80px; padding: 80px 0; }
   .cv-speakers { grid-template-columns: 1fr; gap: 40px; }
+  .cv-industry-grid { grid-template-columns: 1fr; gap: 40px; }
   .cv-detail-holder { position: static; max-height: none; overflow: visible; }
   .cv-attend { padding-top: 80px; padding-bottom: 80px; }
   .cv-attend-head { grid-template-columns: 1fr; gap: 24px; }
@@ -802,11 +830,12 @@
   }
   .cv-footer-host { align-items: flex-start; }
   .cv-footer-host img { width: 48px; }
-  .cv-footer-org img { height: 20px; }
 }
 
 @media (max-width: 520px) {
   .cv-cards { grid-template-columns: repeat(2, 1fr); }
+  .cv-industry-cards { grid-template-columns: repeat(2, 1fr); }
+  .cv-industry-facts div { grid-template-columns: 90px 1fr; }
   .cv-nav nav { gap: 6px; }
   .cv-bar { padding: 6px 9px; font-size: 13px; }
 }

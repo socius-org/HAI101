@@ -20,29 +20,36 @@ export const series = {
 };
 
 // Venues, keyed by building code. days[].venue below names the key for each day.
-// mapPin is the label's position on img/lse-campus-map.svg, as % of its width/height.
+// label is how the venue reads on the page; room is the short code used in the on-screen note.
 export const venues = {
-  mar: {
-    name: 'Marshall Building',
-    code: 'MAR',
-    room: 'MAR 2.06',
-    address: "44 Lincoln's Inn Fields, London WC2A 3LY",
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Marshall+Building%2C+44+Lincoln%27s+Inn+Fields%2C+London+WC2A+3LY',
-    mapsEmbedUrl: 'https://www.google.com/maps?q=Marshall+Building%2C+44+Lincoln%27s+Inn+Fields%2C+London+WC2A+3LY&z=17&output=embed',
-    mapPin: { x: 39.8, y: 41 },
+  cbg: {
+    name: 'Centre Building',
+    code: 'CBG',
+    room: 'CBG.G.01',
+    label: 'Centre Building, The LSE Lecture Theatre (CBG.G.01)',
+    address: '2 Houghton Street, London WC2A 2AD',
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=LSE+Centre+Building%2C+2+Houghton+Street%2C+London+WC2A+2AD',
+    mapsEmbedUrl: 'https://www.google.com/maps?q=LSE+Centre+Building%2C+2+Houghton+Street%2C+London+WC2A+2AD&z=17&output=embed',
   },
   lak: {
     name: 'Lakatos Building',
     code: 'LAK',
     room: 'LAK 2.06',
+    label: 'Lakatos Building, room LAK 2.06',
     address: '7 Portugal Street, London WC2A 2HJ',
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Lakatos+Building%2C+7+Portugal+Street%2C+London+WC2A+2HJ',
     mapsEmbedUrl: 'https://www.google.com/maps?q=Lakatos+Building%2C+7+Portugal+Street%2C+London+WC2A+2HJ&z=17&output=embed',
-    mapPin: { x: 50.2, y: 54.5 },
+  },
+  ckk: {
+    name: 'Cheng Kin Ku Building',
+    code: 'CKK',
+    room: 'CKK 2.04',
+    label: 'Cheng Kin Ku Building, room CKK 2.04',
+    address: "54 Lincoln's Inn Fields, London WC2A 3LJ",
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=LSE+Cheng+Kin+Ku+Building%2C+54+Lincoln%27s+Inn+Fields%2C+London+WC2A+3LJ',
+    mapsEmbedUrl: 'https://www.google.com/maps?q=LSE+Cheng+Kin+Ku+Building%2C+54+Lincoln%27s+Inn+Fields%2C+London+WC2A+3LJ&z=17&output=embed',
   },
 };
-
-export const campus = { map: 'lse-campus-map.svg' };
 
 export const intro = [
   'Machines have become good enough at imitating people that researchers now use them as proxies: to run an experiment before recruiting a single participant, to predict how a group will behave, or to test a theory at a scale no human study could reach.',
@@ -269,6 +276,26 @@ export const initials = (name) =>
     .slice(0, 2)
     .join('');
 
+// Industry Day: a fourth day with speakers from industry, announced as they confirm.
+// date / venue / lumaUrl: null renders as TBC / "Registration opens soon", like the days below.
+// speakers: confirmed speakers as { name, company, photo?, logo? } (photo/logo are paths under img/).
+// Kept apart from `speakers` so they get their own section rather than joining the academic roster.
+// slots: how many cards the section shows; any not filled by `speakers` read "To be revealed".
+export const industry = {
+  title: 'Industry Day',
+  subtitle: 'From the lab to the field',
+  date: null,
+  venue: null,
+  lumaUrl: null,
+  lumaEventId: null,
+  blurb: [
+    'A day with people working on human x artificial intelligence outside academia. Speakers from industry will talk about what they are building and studying: products, tools and research where people and AI systems meet.',
+    'Speakers will be revealed here as they are confirmed.',
+  ],
+  speakers: [],
+  slots: 6,
+};
+
 // Registration runs on Luma, one event per day. Set `lumaUrl` (the public event link) and `lumaEventId`
 // (evt-..., from the event's embed settings) to switch that day's button from "opens soon" to live.
 // kind: 'lunch' renders a break; kind: 'intro' is a short opening slot, shown like a talk but not counted as one.
@@ -283,7 +310,7 @@ export const days = [
     label: 'Session Day 1',
     date: 'Fri 23 Oct',
     dateLong: 'Friday 23 October 2026',
-    venue: 'mar',
+    venue: 'cbg',
     lumaUrl: 'https://luma.com/event/evt-I1pFNdYeOAz79AL',
     lumaEventId: 'evt-I1pFNdYeOAz79AL',
     sessions: [
@@ -344,7 +371,7 @@ export const days = [
     label: 'Session Day 3',
     date: 'Fri 13 Nov',
     dateLong: 'Friday 13 November 2026',
-    venue: 'lak',
+    venue: 'ckk',
     lumaUrl: 'https://luma.com/event/evt-mPTzB9JGAPIOL1o',
     lumaEventId: 'evt-mPTzB9JGAPIOL1o',
     sessions: [
