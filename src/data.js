@@ -32,14 +32,14 @@ export const venues = {
     // Short name only: adding the street address makes Google's embed show several LSE pins.
     mapsEmbedUrl: 'https://www.google.com/maps?q=Centre+Building%2C+London+School+of+Economics&z=17&output=embed',
   },
-  lak: {
-    name: 'Lakatos Building',
-    code: 'LAK',
-    room: 'LAK 2.06',
-    label: 'Lakatos Building, room LAK 2.06',
-    address: '7 Portugal Street, London WC2A 2HJ',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Lakatos+Building%2C+7+Portugal+Street%2C+London+WC2A+2HJ',
-    mapsEmbedUrl: 'https://www.google.com/maps?q=Lakatos+Building%2C+7+Portugal+Street%2C+London+WC2A+2HJ&z=17&output=embed',
+  clm: {
+    name: 'Clement House',
+    code: 'CLM',
+    room: 'CLM.G.02',
+    label: 'Clement House, Hong Kong Theatre (CLM.G.02)',
+    address: '99 Aldwych, London WC2B 4JF',
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=LSE+Clement+House%2C+99+Aldwych%2C+London+WC2B+4JF',
+    mapsEmbedUrl: 'https://www.google.com/maps?q=Clement+House%2C+99+Aldwych%2C+London+WC2B+4JF&z=17&output=embed',
   },
   ckk: {
     name: 'Cheng Kin Ku Building',
@@ -343,7 +343,7 @@ export const days = [
     label: 'Session Day 2',
     date: 'Fri 6 Nov',
     dateLong: 'Friday 6 November 2026',
-    venue: 'lak',
+    venue: 'clm',
     lumaUrl: 'https://luma.com/event/evt-DpbtUKkcgxBm8nM',
     lumaEventId: 'evt-DpbtUKkcgxBm8nM',
     sessions: [
