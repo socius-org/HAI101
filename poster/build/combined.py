@@ -1,8 +1,11 @@
 """HAI101 combined poster, 48 x 36 in: the two 24 x 36 in posters side by side, unscaled and still vector.
 Builds both halves with COMBINED=1 (no footer on the left, bigger info strip; no LSE mark top right), then joins them.
+Also writes the two print-shop variants next to it: -outlined (text converted to outlines with Ghostscript, no fonts)
+and -flat (a single 200 dpi raster). Set GS to the Ghostscript executable if it is not mgs/gswin64c/gs on PATH.
 Run: python poster/build/combined.py
 """
 import os
+import shutil
 import subprocess
 import sys
 import pymupdf as fitz
@@ -36,3 +39,25 @@ try:
 except PermissionError:
     os.remove(tmp); raise SystemExit(f"{OUT} is open in another program; close it and rerun.")
 print("saved", OUT, "page", page.rect)
+
+# ---------------------------------------------------------------- print variants
+base = OUT[:-4] if OUT.lower().endswith(".pdf") else OUT
+GS = os.environ.get("GS") or next((g for g in ("mgs", "gswin64c", "gs") if shutil.which(g)), None)
+if GS:
+    outlined = base + "-outlined.pdf"
+    subprocess.run([GS, "-q", "-dNOPAUSE", "-dBATCH", "-dSAFER", "-sDEVICE=pdfwrite", "-dNoOutputFonts",
+                    "-dCompatibilityLevel=1.7", f"-sOutputFile={outlined}", OUT], check=True)
+    print("saved", outlined, "(text as outlines, via", GS + ")")
+else:
+    print("Ghostscript not found; skipped the -outlined variant")
+
+flat = base + "-flat.pdf"
+pix = fitz.open(OUT)[0].get_pixmap(dpi=200)
+fdoc = fitz.open()
+fpage = fdoc.new_page(width=2 * PW, height=H)
+fpage.insert_image(fpage.rect, stream=pix.pil_tobytes(format="JPEG", quality=92, subsampling=0))
+fdoc.set_metadata({"title": "HAI101 | Human x Artificial Intelligence — combined poster 48 x 36 in (flat)",
+                   "author": "LSE CPNSS / socius labs", "creator": "combined.py (PyMuPDF)"})
+fdoc.save(flat + ".tmp", garbage=3, deflate=True)
+os.replace(flat + ".tmp", flat)
+print("saved", flat, f"({pix.width} x {pix.height} px)")

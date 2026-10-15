@@ -1,7 +1,9 @@
 """HAI101 speakers poster, 24 x 36 in portrait: the website's speaker cards on the dark ground.
 Run: python poster/build/speakers.py
 """
+import json
 import os
+import subprocess
 import pymupdf as fitz
 from PIL import Image, ImageEnhance, ImageOps
 from reportlab.graphics.barcode.qrencoder import QRCode, QRErrorCorrectLevel
@@ -256,19 +258,30 @@ for i, (sid, name, lg, when) in enumerate(SPEAKERS):
         img(lp, (cx - dw / 2, cy - dh / 2, cx + dw / 2, cy + dh / 2))
 
 # attend strip, linen on the ink ground
-ay0 = gy + 3 * ch + 2 * GAP + 32
-ah = 150
+ay0 = gy + 3 * ch + 2 * GAP + 22
+ah = 160
 rect(M, ay0, W - M, ay0 + ah, LINEN)
 px = M + 44
-tw(px, ay0 + 40, "ATTEND", SANS_M, 19, BRICK, tracking=0.13 * 19)
-tw(px, ay0 + 76, "Marshall Building, room MAR 2.06  ·  Fri 23 Oct", SLAB, 28, INK)
-tw(px, ay0 + 108, "Lakatos Building, room LAK 2.06  ·  Fri 6 & 13 Nov", SLAB, 28, INK)
-tw(px, ay0 + 136, "44 Lincoln’s Inn Fields  ·  7 Portugal Street  ·  in person  ·  free to attend  ·  registration opens on Luma", SANS, 19, INK)
+qs = 128; qp = 10
+qx1 = W - M - 24; qx0 = qx1 - qs - 2 * qp; qy0 = ay0 + (ah - qs - 2 * qp) / 2
+tw(px, ay0 + 38, "ATTEND", SANS_M, 19, BRICK, tracking=0.13 * 19)
+# one line per day: date, venue and address, straight from the site
+DATA = json.loads(subprocess.run(
+    ["node", "--input-type=module", "-e",
+     "import('./src/data.js').then(m => console.log(JSON.stringify({venues: m.venues, days: m.days})))"],
+    cwd=REPO, capture_output=True, text=True, encoding="utf-8", check=True).stdout)
+amax = qx0 - 28 - SANS.text_length("Scan for programme & registration", fontsize=17) - 40 - px
+lines = [f"{d['date']}  ·  {DATA['venues'][d['venue']]['label']}  ·  {DATA['venues'][d['venue']]['address'].replace(', London ', ', ')}"
+         for d in DATA["days"]]
+vs = 24                                          # one size for all three lines: the largest that fits the longest
+while max(SLAB.text_length(l, fontsize=vs) for l in lines) > amax and vs > 16:
+    vs -= 0.5
+for k, line in enumerate(lines):
+    tw(px, ay0 + 70 + k * 28, line, SLAB, vs, INK)
+tw(px, ay0 + 150, "In person  ·  free to attend  ·  register for each day on Luma", SANS, 17, INK)
 URL = "https://socialscience.ai/"
 qr = QRCode(None, QRErrorCorrectLevel.M); qr.addData(URL); qr.make()
 n = len(qr.modules)
-qs = 128; qp = 10
-qx1 = W - M - 24; qx0 = qx1 - qs - 2 * qp; qy0 = ay0 + (ah - qs - 2 * qp) / 2
 rect(qx0, qy0, qx1, qy0 + qs + 2 * qp, PAPER)
 cell = qs / n
 for r in range(n):

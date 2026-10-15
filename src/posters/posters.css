@@ -1,0 +1,142 @@
+/* /posters: the unlisted download page, on the site's linen ground with its label bars. */
+
+.ps {
+  --linen: #e6dfcd;
+  --linen-deep: #cabc9f;
+  --brick: #a5432a;
+  --paper: #f1f0ef;
+  --fog-ink: #6f6a66;
+  min-height: 100vh;
+  background: var(--linen);
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1.45;
+}
+
+.ps-wrap {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 48px 32px 80px;
+}
+
+.ps-head {
+  padding-bottom: 32px;
+  border-bottom: 2px solid var(--ink);
+}
+
+.ps-mark {
+  display: inline-block;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 7px 12px;
+  margin-bottom: 40px;
+}
+
+.ps-kicker {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brick);
+}
+
+.ps h1 {
+  font-family: var(--slab);
+  font-weight: 300;
+  font-size: clamp(44px, 7vw, 84px);
+  line-height: 1;
+  margin-top: 10px;
+  color: var(--brick);
+}
+
+.ps-lede {
+  margin-top: 18px;
+  max-width: 60ch;
+  color: var(--fog-ink);
+}
+
+.ps-group { padding-top: 36px; }
+
+.ps-group h2 {
+  font-family: var(--slab);
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+
+.ps-group li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  padding: 18px 0;
+  border-top: 1px solid var(--linen-deep);
+}
+
+.ps-title {
+  font-weight: 500;
+  font-size: 19px;
+  text-decoration: none;
+}
+.ps-title:hover { color: var(--brick); }
+
+.ps-note {
+  color: var(--fog-ink);
+  margin-top: 2px;
+}
+
+.ps-file {
+  font-size: 14px;
+  color: var(--fog-ink);
+  margin-top: 6px;
+  font-variant-numeric: tabular-nums;
+  word-break: break-all;
+}
+
+.ps-dl {
+  flex: none;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 9px 14px;
+  text-decoration: none;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+.ps-dl:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.ps-empty {
+  margin-top: 36px;
+  color: var(--fog-ink);
+}
+.ps-empty code {
+  font-family: inherit;
+  font-weight: 500;
+}
+
+.ps-foot {
+  margin-top: 64px;
+  padding-top: 24px;
+  border-top: 1px solid var(--linen-deep);
+  font-size: 14px;
+  color: var(--fog-ink);
+}
+.ps-foot a { text-decoration: none; }
+.ps-foot a:hover { color: var(--brick); }
+
+@media (max-width: 600px) {
+  .ps-wrap { padding: 32px 16px 64px; }
+  .ps-group li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}

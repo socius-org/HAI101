@@ -1,5 +1,7 @@
 """HAI101 poster, 24 x 36 in portrait, built with PyMuPDF from the site's data and assets."""
+import json
 import os
+import subprocess
 import pymupdf as fitz
 from PIL import Image
 from reportlab.graphics.barcode.qrencoder import QRCode, QRErrorCorrectLevel
@@ -126,16 +128,15 @@ y += q_size * 1.0
 tw(M, y, Q_LINES[1], SLAB_L, q_size, BRICK)
 
 # ---------------------------------------------------------------- programme: three days
-VENUES = {
-    "mar": ("Marshall Building · room MAR 2.06", "44 Lincoln’s Inn Fields, WC2A 3LY"),
-    "lak": ("Lakatos Building · room LAK 2.06", "7 Portugal Street, WC2A 2HJ"),
-}
-LUMA = {
-    0: "https://luma.com/event/evt-I1pFNdYeOAz79AL",
-    1: "https://luma.com/event/evt-DpbtUKkcgxBm8nM",
-    2: "https://luma.com/event/evt-mPTzB9JGAPIOL1o",
-}
-DAY_VENUE = ["mar", "lak", "lak"]
+# venues and registration links straight from the site, so the poster can never disagree with it
+DATA = json.loads(subprocess.run(
+    ["node", "--input-type=module", "-e",
+     "import('./src/data.js').then(m => console.log(JSON.stringify({venues: m.venues, days: m.days})))"],
+    cwd=REPO, capture_output=True, text=True, encoding="utf-8", check=True).stdout)
+VENUES = {k: (v["label"].replace(", ", "  ·  "), v["address"].replace(", London ", ", "))
+          for k, v in DATA["venues"].items()}
+LUMA = {i: d["lumaUrl"] for i, d in enumerate(DATA["days"])}
+DAY_VENUE = [d["venue"] for d in DATA["days"]]
 
 def qr_draw(x, y, size, data, pad=10):
     """QR code on a paper plate; returns the plate's right edge and bottom."""
@@ -193,7 +194,10 @@ for i in range(3):
     x = M + i * (colw + GAP)
     page.draw_line((x, vy), (x + colw, vy), color=hexc("#b9b4b0"), width=1.2)
     name, addr = VENUES[DAY_VENUE[i]]
-    tw(x, vy + 38, name, SANS_M, 21, INK)
+    vs = 21
+    while SANS_M.text_length(name, fontsize=vs) > colw and vs > 15:
+        vs -= 0.5
+    tw(x, vy + 38, name, SANS_M, vs, INK)
     tw(x, vy + 66, addr, SANS, 19, FOG)
     qx1, qy1 = qr_draw(x, vy + 86, 108, LUMA[i])
     tw(qx1 + 22, vy + 86 + 44, "Register on Luma", SANS_M, 22, INK)
