@@ -13,3 +13,6 @@ Akshay visa/
 
 # poster build scratch (treated headshots, previews)
 poster/build/_tmp/
+
+# social build scratch (treated headshots, key art crops)
+social/build/_tmp/

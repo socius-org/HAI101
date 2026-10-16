@@ -1,0 +1,25 @@
+CAROUSEL CAPTION
+HAI101 · Human x Artificial Intelligence
+What can machines teach us about minds?
+
+A lecture series spanning the social, behavioural, cognitive sciences, philosophy, and AI. Twelve speakers over three Fridays at LSE:
+• Friday 23 October 2026 · Centre Building, The LSE Lecture Theatre (CBG.G.01) · 4 talks, 10:00–16:00
+• Friday 6 November 2026 · Clement House, Hong Kong Theatre (CLM.G.02) · 5 talks, 9:15–16:00
+• Friday 13 November 2026 · Cheng Kin Ku Building, room CKK 2.04 · 3 talks, 12:30–16:00
+
+Free and in person. Each Friday has its own ticket on Luma: link in bio, or socialscience.ai.
+Hosted by the Centre for Philosophy of Natural and Social Science (CPNSS), London School of Economics and Political Science, with socius labs.
+
+Speakers: Steven Feng (Stanford University), Nick Oh (London School of Economics), Prof. Fernand Gobet (London School of Economics), Benjamin Manning (Massachusetts Institute of Technology), Helen Jin (University of Pennsylvania), Prof. Megan Peters (University College London), Maximilian Noichl (Utrecht University), Dr. Nicholas Bishop (University of Oxford), Prof. Matthia Sabatelli (University of Groningen), Dr. Jessica Thompson (University of Oxford), Dr. Akshay Jagadish (Princeton University), Gabrielle Kaili-May Liu (Kaili) (Yale University).
+
+#HAI101 #ArtificialIntelligence #CognitiveScience #Philosophy #SocialScience #LSE #London #LectureSeries
+
+STORY TEXT (announce)
+Human x Artificial Intelligence: three Fridays at LSE, 23 Oct · 6 Nov · 13 Nov 2026. Free, in person. Add a link sticker to https://socialscience.ai/.
+
+ALT TEXT
+01-cover: Painting of a person in profile with numbers scattered through their hair, under label bars reading Human x Artificial Intelligence, 23 Oct · 6 Nov · 13 Nov 2026, in person at LSE, London.
+02-question: The question "What can machines teach us about minds?" in large serif type, followed by a paragraph introducing the series.
+03-days: The three Fridays listed with date, venue, number of talks and the speakers' names.
+04-lineup: A grid of twelve speaker portraits with names and universities.
+05-attend: Black slide reading "Free, in person, all welcome", the three dates and venues, and a QR code to socialscience.ai.

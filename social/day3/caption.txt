@@ -1,0 +1,38 @@
+CAROUSEL CAPTION
+HAI101 · Session Day 3 · Friday 13 November 2026
+3 talks, 12:30–16:00, at LSE: Cheng Kin Ku Building, room CKK 2.04, 54 Lincoln's Inn Fields, London WC2A 3LJ.
+
+12:30  Dr. Jessica Thompson, University of Oxford: Behavioural Clones as Scientific Instruments: Machine-Learned Curricula and the Future of Discovery in the Behavioural Sciences
+13:45  Dr. Akshay Jagadish, Princeton University: Are LLMs the Beginning or End of Cognitive Science?
+15:00  Gabrielle Kaili-May Liu (Kaili), Yale University (joins by video, on screen in the room): Reliable Language Models Through the Lens of Metacognition
+
+Free and in person, all welcome. Ticket on Luma: https://luma.com/event/evt-mPTzB9JGAPIOL1o (link in bio).
+Programme and abstracts: socialscience.ai
+
+#HAI101 #ArtificialIntelligence #CognitiveScience #Philosophy #SocialScience #LSE #London #LectureSeries
+
+STORY TEXT (day / tomorrow)
+Session Day 3 of HAI101: Friday 13 November 2026, 12:30–16:00, Cheng Kin Ku Building, room CKK 2.04. Free, in person. Add a link sticker to https://luma.com/event/evt-mPTzB9JGAPIOL1o.
+
+SPOTLIGHT · Dr. Jessica Thompson
+Dr. Jessica Thompson (University of Oxford) speaks at HAI101 on Friday 13 November 2026, 12:30–13:30: "Behavioural Clones as Scientific Instruments: Machine-Learned Curricula and the Future of Discovery in the Behavioural Sciences". Free, in person at LSE (Cheng Kin Ku Building, room CKK 2.04). Ticket: https://luma.com/event/evt-mPTzB9JGAPIOL1o
+#HAI101 #ArtificialIntelligence #CognitiveScience #Philosophy #SocialScience #LSE #London #LectureSeries
+
+SPOTLIGHT · Dr. Akshay Jagadish
+Dr. Akshay Jagadish (Princeton University) speaks at HAI101 on Friday 13 November 2026, 13:45–14:45: "Are LLMs the Beginning or End of Cognitive Science?". Free, in person at LSE (Cheng Kin Ku Building, room CKK 2.04). Ticket: https://luma.com/event/evt-mPTzB9JGAPIOL1o
+#HAI101 #ArtificialIntelligence #CognitiveScience #Philosophy #SocialScience #LSE #London #LectureSeries
+
+SPOTLIGHT · Gabrielle Kaili-May Liu (Kaili)
+Gabrielle Kaili-May Liu (Kaili) (Yale University) speaks at HAI101 on Friday 13 November 2026, 15:00–16:00: "Reliable Language Models Through the Lens of Metacognition". They join live by video and are shown on screen in the room. Free, in person at LSE (Cheng Kin Ku Building, room CKK 2.04). Ticket: https://luma.com/event/evt-mPTzB9JGAPIOL1o
+#HAI101 #ArtificialIntelligence #CognitiveScience #Philosophy #SocialScience #LSE #London #LectureSeries
+
+ALT TEXT
+01-cover: Painting of a person with numbers in their hair above the heading Friday 13 November, Session Day 3 of 3, 3 talks at Cheng Kin Ku Building, room CKK 2.04.
+02-thompson: Portrait of Dr. Jessica Thompson (University of Oxford) above the talk title "Behavioural Clones as Scientific Instruments: Machine-Learned Curricula and the Future of Discovery in the Behavioural Sciences", Fri 13 Nov 12:30–13:30.
+03-jagadish: Portrait of Dr. Akshay Jagadish (Princeton University) above the talk title "Are LLMs the Beginning or End of Cognitive Science?", Fri 13 Nov 13:45–14:45.
+04-liu: Portrait of Gabrielle Kaili-May Liu (Kaili) (Yale University) above the talk title "Reliable Language Models Through the Lens of Metacognition", Fri 13 Nov 15:00–16:00.
+05-programme: The day's timetable: each talk's start time, speaker and title, with the venue Cheng Kin Ku Building, room CKK 2.04.
+06-register: Black slide reading Register, Friday 13 November, the venue address and a QR code to the free Luma ticket.
+story-day: Story: Friday 13 November in large type, the venue, and the list of talks with times.
+story-tomorrow: The same story headed Tomorrow.
+stories/spotlight-*: Portrait of the speaker on a black ground with their name, university, talk title, date, time and venue.
