@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import './canvas.css';
 import About from './About.jsx';
 import {
-  series, venues, speakers, speakerById, days, industry, reading,
-  img, photo, logo, initials, fmtTime,
+  series, venues, speakers, speakerById, days, industry, reading, logos,
+  img, photo, initials, fmtTime,
 } from '../data.js';
 
 // Timetable runs 9:00–16:00 in 15-minute rows; row 1 is the day header.
@@ -17,10 +17,17 @@ const rowOf = (t) => (toMin(t) - DAY_START) / 15 + 2;
 const HOURS = Array.from({ length: (DAY_END - DAY_START) / 60 + 1 }, (_, i) => 9 + i);
 
 // Each speaker's slot, so the bio panel can show what they are speaking on and when.
+// Industry Day talks (industry.sessions) count too, so a speaker moved there keeps a talk on their card.
 const TALKS = {};
-days.forEach((d) => d.sessions.forEach((s) => {
+const INDUSTRY_DAY = { ...industry, date: industry.date || industry.title, sessions: industry.sessions || [] };
+[...days, INDUSTRY_DAY].forEach((d) => d.sessions.forEach((s) => {
   if (!s.kind) TALKS[s.speaker || 'tbc'] = { ...s, date: d.date };
 }));
+// "Fernand Gobet and Nick Oh": the hosts of a social slot, by speaker id.
+const hostNames = (s) => (s.hosts || []).map((id) => speakerById[id]?.name.replace(/^(Prof\.|Dr\.) /, '') || id).join(' and ');
+const hostLine = (s) => `with ${hostNames(s)}${s.cohost ? ` · co-hosted with ${s.cohost}` : ''}`;
+// "Fri 23 Oct, 10:30–11:30", or just the date while the time is unset.
+const when = (t, sep = ', ') => `${t.date}${t.start ? `${sep}${fmtTime(t.start)}–${fmtTime(t.end)}` : ''}`;
 
 // Abstracts are plain strings; any http(s) URL in them is rendered as a link.
 const URL_RE = /(https?:\/\/[^\s)]+)/g;
@@ -35,6 +42,15 @@ const linkify = (text) =>
 
 const TBC_SPEAKER = { id: 'tbc', name: 'Speaker TBC', role: 'To be announced', affiliation: 'Affiliation TBC', noPhoto: true };
 
+// The paper plate under a card: one logo, two side by side (a split plate), or the affiliation as text.
+function LogoPlate({ srcs, alt }) {
+  return (
+    <span className={`cv-card-school${srcs.length > 1 ? ' is-split' : ''}`}>
+      {srcs.length ? srcs.map((src) => <img key={src} src={src} alt={alt} loading="lazy" />) : <span>{alt}</span>}
+    </span>
+  );
+}
+
 // Talk title with a + toggle that reveals the abstract (sessions[].abstract in data.js).
 function Talk({ talk }) {
   const [open, setOpen] = useState(false);
@@ -43,7 +59,7 @@ function Talk({ talk }) {
       <button type="button" className="cv-detail-talk-head" aria-expanded={open} onClick={() => setOpen(!open)}>
         <span>
           <span className="cv-detail-talk-when">
-            Talk · {talk.date}, {fmtTime(talk.start)}–{fmtTime(talk.end)}
+            Talk · {when(talk)}
           </span>
           <span className={talk.title ? 'cv-detail-talk-title' : 'cv-detail-talk-title cv-tbc'}>
             {talk.title || 'Title TBC'}
@@ -85,7 +101,7 @@ function TalkDialog({ talk, onClose, onSpeaker }) {
         <div className="cv-dialog-inner">
           <button type="button" className="cv-dialog-close" aria-label="Close" onClick={() => ref.current.close()} />
           <p className="cv-kicker">
-            {talk.dateLong} · {fmtTime(talk.start)}–{fmtTime(talk.end)}
+            {talk.dateLong}{talk.start ? ` · ${fmtTime(talk.start)}–${fmtTime(talk.end)}` : ''}
           </p>
           <h3 id="cv-dialog-title" className={talk.title ? '' : 'cv-tbc'}>{talk.title || 'Title TBC'}</h3>
           <p className="cv-dialog-who">
@@ -161,7 +177,7 @@ export default function Canvas() {
   // ?talk=<speaker id> opens that talk's pop-up on load, so a talk can be linked to directly.
   const [openTalk, setOpenTalk] = useState(() => {
     const id = new URLSearchParams(window.location.search).get('talk');
-    for (const d of days) {
+    for (const d of [...days, INDUSTRY_DAY]) {
       const s = d.sessions.find((x) => id && x.speaker === id);
       if (s) return { ...s, dateLong: d.dateLong };
     }
@@ -274,13 +290,11 @@ export default function Canvas() {
                     <span className="cv-card-name">
                       {s.name}
                       {TALKS[s.id] && (
-                        <span className="cv-card-when">{TALKS[s.id].date} · {fmtTime(TALKS[s.id].start)}</span>
+                        <span className="cv-card-when">{when(TALKS[s.id], ' · ').replace(/–.*$/, '')}</span>
                       )}
                     </span>
                   </span>
-                  <span className="cv-card-school">
-                    {logo(s) ? <img src={logo(s)} alt={s.affiliation} loading="lazy" /> : <span>{s.affiliation}</span>}
-                  </span>
+                  <LogoPlate srcs={logos(s)} alt={s.affiliation} />
                 </button>
               ))}
             </div>
@@ -328,6 +342,16 @@ export default function Canvas() {
                   </div>
                 );
               }
+              if (s.kind === 'social') {
+                return (
+                  <div key={d.id + s.start} className="cv-slot cv-slot-social" style={style}>
+                    <span className="cv-slot-meta"><time>{fmtTime(s.start)}–{fmtTime(s.end)}</time></span>
+                    <span className="cv-slot-title">{s.title}</span>
+                    <span className="cv-slot-who">{hostLine(s)}</span>
+                    {s.blurb && <span className="cv-slot-blurb">{s.blurb}</span>}
+                  </div>
+                );
+              }
               return (
                 <button
                   key={d.id + s.start}
@@ -371,6 +395,11 @@ export default function Canvas() {
                         <p>
                           <span className="cv-slot-title">{s.title}</span>
                           <span className="cv-slot-who">{sp ? sp.name : 'Speaker TBC'}</span>
+                        </p>
+                      ) : s.kind === 'social' ? (
+                        <p>
+                          <span className="cv-slot-title">{s.title}</span>
+                          <span className="cv-slot-who">{hostLine(s)}</span>
                         </p>
                       ) : (
                         <button
@@ -425,11 +454,31 @@ export default function Canvas() {
               </div>
               <div>
                 <dt>Speakers</dt>
-                <dd className={industry.speakers.length ? '' : 'cv-tbc'}>
-                  {industry.speakers.length ? `${industry.speakers.length} confirmed, more to come` : 'To be revealed'}
-                </dd>
+                <dd className="cv-tbc">To be confirmed</dd>
               </div>
             </dl>
+            {industry.companies?.length > 0 && (
+              <div className="cv-industry-companies">
+                <p className="cv-kicker">Companies taking part</p>
+                <ul>
+                  {industry.companies.map((c) => (
+                    <li key={c.name} className={c.mark ? 'is-mark' : ''}>
+                      {c.url ? (
+                        <a href={c.url} target="_blank" rel="noreferrer" aria-label={c.name}>
+                          <img src={img(c.logo)} alt={c.mark ? '' : c.name} loading="lazy" />
+                          {c.mark && <span>{c.name}</span>}
+                        </a>
+                      ) : (
+                        <span className="cv-industry-company">
+                          <img src={img(c.logo)} alt={c.mark ? '' : c.name} loading="lazy" />
+                          {c.mark && <span>{c.name}</span>}
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
           <ul className="cv-cards cv-industry-cards" aria-label="Industry Day speakers">
             {Array.from({ length: Math.max(industry.slots, industry.speakers.length) }, (_, i) => {
@@ -444,9 +493,7 @@ export default function Canvas() {
                     )}
                     <span className="cv-card-name">{s ? s.name : 'To be revealed'}</span>
                   </span>
-                  <span className="cv-card-school">
-                    {s?.logo ? <img src={img(s.logo)} alt={s.company} loading="lazy" /> : <span>{s ? s.company : 'Industry'}</span>}
-                  </span>
+                  <LogoPlate srcs={(s?.logos || []).map(img)} alt={s ? s.company : 'Industry'} />
                 </li>
               );
             })}
@@ -502,7 +549,7 @@ export default function Canvas() {
               <li key={d.id}>
                 <h3>{d.dateLong}</h3>
                 <p>
-                  {talks.length} talks · {fmtTime(first.start)}–{fmtTime(talks[talks.length - 1].end)}
+                  {talks.length} talks · {fmtTime(first.start)}–{fmtTime(d.sessions[d.sessions.length - 1].end)}
                   <br />
                   {d.venue ? (
                     venues[d.venue].label
@@ -563,6 +610,13 @@ export default function Canvas() {
             {series.institution}
           </p>
         </div>
+        <p className="cv-footer-org">
+          Supported by
+          <a href="https://cookiylabs.com" target="_blank" rel="noreferrer">
+            <img src={img('logos/cookiy.svg')} alt="" />
+            Cookiy Labs
+          </a>
+        </p>
       </footer>
 
       <TalkDialog talk={openTalk} onClose={() => setOpenTalk(null)} onSpeaker={showSpeaker} />

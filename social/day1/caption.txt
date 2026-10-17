@@ -1,12 +1,12 @@
 CAROUSEL CAPTION
 HAI101 · Session Day 1 · Friday 23 October 2026
-4 talks, 10:00–16:00, at LSE: Centre Building, The LSE Lecture Theatre (CBG.G.01), 2 Houghton Street, London WC2A 2AD.
+3 talks, 10:00–16:00, at LSE: Centre Building, The LSE Lecture Theatre (CBG.G.01), 2 Houghton Street, London WC2A 2AD.
 
 10:00  Nick Oh, London School of Economics: Introduction to HAI101
 10:30  Steven Feng, Stanford University (joins by video, on screen in the room): The Developing Language Model: How Experience Shapes Learning and Failure
 12:30  Nick Oh, London School of Economics: Neural Networks as Behavioural and Cognitive Proxy
 13:45  Prof. Fernand Gobet, London School of Economics: Impact of AI on Human Expertise: Canaries in the Coalmine
-15:00  Benjamin Manning, Massachusetts Institute of Technology (joins by video, on screen in the room): Predicting and Understanding Human Behaviour with AI Simulations
+15:00  Open floor, with Fernand Gobet and Nick Oh · co-hosted with LSESU AI Society
 
 Free and in person, all welcome. Ticket on Luma: https://luma.com/event/evt-I1pFNdYeOAz79AL (link in bio).
 Programme and abstracts: socialscience.ai
@@ -28,18 +28,13 @@ SPOTLIGHT · Prof. Fernand Gobet
 Prof. Fernand Gobet (London School of Economics) speaks at HAI101 on Friday 23 October 2026, 13:45–14:45: "Impact of AI on Human Expertise: Canaries in the Coalmine". Free, in person at LSE (Centre Building, The LSE Lecture Theatre (CBG.G.01)). Ticket: https://luma.com/event/evt-I1pFNdYeOAz79AL
 #HAI101 #ArtificialIntelligence #CognitiveScience #Philosophy #SocialScience #LSE #London #LectureSeries
 
-SPOTLIGHT · Benjamin Manning
-Benjamin Manning (Massachusetts Institute of Technology) speaks at HAI101 on Friday 23 October 2026, 15:00–16:00: "Predicting and Understanding Human Behaviour with AI Simulations". They join live by video and are shown on screen in the room. Free, in person at LSE (Centre Building, The LSE Lecture Theatre (CBG.G.01)). Ticket: https://luma.com/event/evt-I1pFNdYeOAz79AL
-#HAI101 #ArtificialIntelligence #CognitiveScience #Philosophy #SocialScience #LSE #London #LectureSeries
-
 ALT TEXT
-01-cover: Painting of a person with numbers in their hair above the heading Friday 23 October, Session Day 1 of 3, 4 talks at Centre Building, The LSE Lecture Theatre (CBG.G.01).
+01-cover: Painting of a person with numbers in their hair above the heading Friday 23 October, Session Day 1 of 3, 3 talks at Centre Building, The LSE Lecture Theatre (CBG.G.01).
 02-feng: Portrait of Steven Feng (Stanford University) above the talk title "The Developing Language Model: How Experience Shapes Learning and Failure", Fri 23 Oct 10:30–11:30.
 03-oh: Portrait of Nick Oh (London School of Economics) above the talk title "Neural Networks as Behavioural and Cognitive Proxy", Fri 23 Oct 12:30–13:30.
 04-gobet: Portrait of Prof. Fernand Gobet (London School of Economics) above the talk title "Impact of AI on Human Expertise: Canaries in the Coalmine", Fri 23 Oct 13:45–14:45.
-05-manning: Portrait of Benjamin Manning (Massachusetts Institute of Technology) above the talk title "Predicting and Understanding Human Behaviour with AI Simulations", Fri 23 Oct 15:00–16:00.
-06-programme: The day's timetable: each talk's start time, speaker and title, with the venue Centre Building, The LSE Lecture Theatre (CBG.G.01).
-07-register: Black slide reading Register, Friday 23 October, the venue address and a QR code to the free Luma ticket.
+05-programme: The day's timetable: each talk's start time, speaker and title, with the venue Centre Building, The LSE Lecture Theatre (CBG.G.01).
+06-register: Black slide reading Register, Friday 23 October, the venue address and a QR code to the free Luma ticket.
 story-day: Story: Friday 23 October in large type, the venue, and the list of talks with times.
 story-tomorrow: The same story headed Tomorrow.
 stories/spotlight-*: Portrait of the speaker on a black ground with their name, university, talk title, date, time and venue.

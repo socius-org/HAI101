@@ -10,6 +10,48 @@ from reportlab.graphics.barcode.qrencoder import QRCode, QRErrorCorrectLevel
 
 S = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(S, "..", ".."))
+
+# everything about the speakers comes from the site: order, names, logos, talk slots and titles
+DATA = json.loads(subprocess.run(
+    ["node", "--input-type=module", "-e",
+     "import('./src/data.js').then(m => console.log(JSON.stringify("
+     "{venues: m.venues, days: m.days, speakers: m.speakers, industry: m.industry})))"],
+    cwd=REPO, capture_output=True, text=True, encoding="utf-8", check=True).stdout)
+LOGOS = {"feng": "stanford", "oh": "lse", "gobet": "lse", "manning": "mit", "jin": "penn",
+         "peters": "ucl", "noichl": "utrecht", "bishop": "oxford", "thompson": "oxford", "jagadish": "princeton",
+         "sabatelli": "groningen", "liu": "yale"}   # mirrors LOGOS in data.js (not exported); a list splits the plate
+
+
+def logo_doc(name):
+    """A logo as (document, width, height): PNGs as images, SVGs as vector pages (kept vector in the PDF)."""
+    fn = name if os.path.splitext(name)[1] else name + ".png"
+    path = os.path.join(REPO, "public/img/logos", fn)
+    if fn.endswith(".svg"):
+        d = fitz.open("pdf", fitz.open(path).convert_to_pdf())
+        return d, d[0].rect.width, d[0].rect.height
+    return path, *Image.open(path).size
+
+
+def place_logos(names, x0, x1, cy, max_h, gap=12):
+    """Fit one or two logos side by side, centred on (x0..x1, cy), each at most max_h tall. Two logos share
+    the width down the middle with a thin divider, like the site's split plate."""
+    names = names if isinstance(names, list) else [names]
+    n = len(names)
+    slot_w = ((x1 - x0) - gap * (n - 1)) / n
+    for i, nm in enumerate(names):
+        doc, lw_, lh_ = logo_doc(nm)
+        h = max_h * (0.82 if n > 1 else 1)
+        sc = min(h / lh_, slot_w / lw_)
+        dw, dh = lw_ * sc, lh_ * sc
+        cx = x0 + i * (slot_w + gap) + slot_w / 2
+        r = fitz.Rect(cx - dw / 2, cy - dh / 2, cx + dw / 2, cy + dh / 2)
+        if isinstance(doc, str):
+            page.insert_image(r, filename=doc, keep_proportion=True)
+        else:
+            page.show_pdf_page(r, doc, 0)
+        if i:
+            dx = x0 + i * (slot_w + gap) - gap / 2
+            page.draw_line((dx, cy - max_h / 2), (dx, cy + max_h / 2), color=hexc("#d8d5d2"), width=1)
 OUT = os.environ.get("POSTER_OUT") or os.path.join(REPO, "poster", "HAI101-speakers-24x36in.pdf")
 TMP = os.path.join(S, "_tmp"); os.makedirs(TMP, exist_ok=True)
 
@@ -120,36 +162,17 @@ def paper_logo(path):
     out = Image.new("RGBA", im.size, (241, 240, 239, 0)); out.putalpha(a)
     p = os.path.join(TMP, "logo_paper.png"); out.save(p); return p
 
-# speakers in session order: (id, name, logo, date line)
-TITLES = {
-    "oh": "Neural Networks as Behavioural and Cognitive Proxy",
-    "feng": "The Developing Language Model: How Experience Shapes Learning and Failure",
-    "gobet": "Impact of AI on Human Expertise: Canaries in the Coalmine",
-    "manning": "Predicting and Understanding Human Behaviour with AI Simulations",
-    "jin": "Beyond the Right Answer: Measuring Machine and Human Understanding",
-    "peters": "Testing for Consciousness in Artificial Minds",
-    "noichl": "Uncovering the general structure of model transfer between sciences",
-    "bishop": "Boundedly Rational Agents at Collective Scale",
-    "sabatelli": "When Machines Learn Like Us: Cognitive-Like Phenomena in Neural Learning",
-    "thompson": "Behavioural Clones as Scientific Instruments: Machine-Learned Curricula and the Future of Discovery in the Behavioural Sciences",
-    "jagadish": "Are LLMs the Beginning or End of Cognitive Science?",
-    "liu": "Reliable Language Models Through the Lens of Metacognition",
-}
-
-SPEAKERS = [
-    ("feng", "Steven Feng", "stanford", "Fri 23 Oct · 10:30"),
-    ("oh", "Nick Oh", "lse", "Fri 23 Oct · 12:30"),
-    ("gobet", "Prof. Fernand Gobet", "lse", "Fri 23 Oct · 13:45"),
-    ("manning", "Benjamin Manning", "mit", "Fri 23 Oct · 15:00"),
-    ("jin", "Helen Jin", "penn", "Fri 6 Nov · 9:15"),
-    ("peters", "Prof. Megan Peters", "ucl", "Fri 6 Nov · 10:30"),
-    ("noichl", "Maximilian Noichl", "utrecht", "Fri 6 Nov · 12:30"),
-    ("bishop", "Dr. Nicholas Bishop", "oxford", "Fri 6 Nov · 13:45"),
-    ("sabatelli", "Prof. Matthia Sabatelli", "groningen", "Fri 6 Nov · 15:00"),
-    ("thompson", "Dr. Jessica Thompson", "oxford", "Fri 13 Nov · 12:30"),
-    ("jagadish", "Dr. Akshay Jagadish", "princeton", "Fri 13 Nov · 13:45"),
-    ("liu", "Gabrielle Kaili-May Liu (Kaili)", "yale", "Fri 13 Nov · 15:00"),
-]
+# speakers in site order: (id, name, logo, date line). The slot is the speaker's talk on one of the
+# three Fridays, or on Industry Day (industry.sessions), where times may still be unset.
+hm = lambda t: t.lstrip("0")
+TITLES, WHEN = {}, {}
+ind = DATA["industry"]
+for d in DATA["days"] + [{"date": ind.get("date") or ind["title"], "sessions": ind.get("sessions", [])}]:
+    for s in d["sessions"]:
+        if s.get("speaker") and s.get("kind") != "intro":
+            TITLES[s["speaker"]] = s["title"]
+            WHEN[s["speaker"]] = d["date"] + (f" · {hm(s['start'])}" if s.get("start") else "")
+SPEAKERS = [(sp["id"], sp["name"], LOGOS[sp["id"]], WHEN.get(sp["id"], "")) for sp in DATA["speakers"]]
 
 # ---------------------------------------------------------------- ground (the site's .cv-dark section)
 rect(0, 0, W, H, INK)
@@ -225,8 +248,6 @@ for i, (sid, name, lg, when) in enumerate(SPEAKERS):
         tw(x0 + pad, ty, ln, SLAB, ts, INK if title else FOG_INK); ty += ts * 1.2
     # plate(s) under the photo
     rect(x0, y0 + ph, x0 + cw, y0 + ch, PAPER)
-    lp = os.path.join(REPO, f"public/img/logos/{lg}.png")
-    lw_, lh_ = Image.open(lp).size
     if LAYOUT == "strip":
         ts = 16
         lines = wrap(title, SLAB, ts, cw - 28) if title else ["Title to be announced"]
@@ -245,17 +266,10 @@ for i, (sid, name, lg, when) in enumerate(SPEAKERS):
         ty = y0 + ph + (sh - len(lines) * ts * 1.2) / 2 + ts * 0.95
         for ln in lines:
             tw(x0 + 14, ty, ln, SLAB, ts, INK if title else FOG_INK); ty += ts * 1.2
-        mh, mw = 56, box_w
-        sc = min(mh / lh_, mw / lw_)
-        dw, dh = lw_ * sc, lh_ * sc
-        cx, cy = x0 + cw - 14 - box_w / 2, y0 + ph + sh / 2
-        img(lp, (cx - dw / 2, cy - dh / 2, cx + dw / 2, cy + dh / 2))
+        place_logos(lg, x0 + cw - 14 - box_w, x0 + cw - 14, y0 + ph + sh / 2, 56)
     else:
-        mh, mw = (62 if LAYOUT == "strip" else 66), cw - 60
-        sc = min(mh / lh_, mw / lw_)
-        dw, dh = lw_ * sc, lh_ * sc
-        cx, cy = x0 + cw / 2, y0 + ph + th + sh / 2
-        img(lp, (cx - dw / 2, cy - dh / 2, cx + dw / 2, cy + dh / 2))
+        mh = 62 if LAYOUT == "strip" else 66
+        place_logos(lg, x0 + 30, x0 + cw - 30, y0 + ph + th + sh / 2, mh)
 
 # attend strip, linen on the ink ground
 ay0 = gy + 3 * ch + 2 * GAP + 22
@@ -266,10 +280,6 @@ qs = 128; qp = 10
 qx1 = W - M - 24; qx0 = qx1 - qs - 2 * qp; qy0 = ay0 + (ah - qs - 2 * qp) / 2
 tw(px, ay0 + 38, "ATTEND", SANS_M, 19, BRICK, tracking=0.13 * 19)
 # one line per day: date, venue and address, straight from the site
-DATA = json.loads(subprocess.run(
-    ["node", "--input-type=module", "-e",
-     "import('./src/data.js').then(m => console.log(JSON.stringify({venues: m.venues, days: m.days})))"],
-    cwd=REPO, capture_output=True, text=True, encoding="utf-8", check=True).stdout)
 amax = qx0 - 28 - SANS.text_length("Scan for programme & registration", fontsize=17) - 40 - px
 lines = [f"{d['date']}  ·  {DATA['venues'][d['venue']]['label']}  ·  {DATA['venues'][d['venue']]['address'].replace(', London ', ', ')}"
          for d in DATA["days"]]

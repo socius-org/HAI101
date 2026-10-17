@@ -131,7 +131,7 @@ tw(M, y, Q_LINES[1], SLAB_L, q_size, BRICK)
 # venues and registration links straight from the site, so the poster can never disagree with it
 DATA = json.loads(subprocess.run(
     ["node", "--input-type=module", "-e",
-     "import('./src/data.js').then(m => console.log(JSON.stringify({venues: m.venues, days: m.days})))"],
+     "import('./src/data.js').then(m => console.log(JSON.stringify({venues: m.venues, days: m.days, speakers: m.speakers})))"],
     cwd=REPO, capture_output=True, text=True, encoding="utf-8", check=True).stdout)
 VENUES = {k: (v["label"].replace(", ", "  ·  "), v["address"].replace(", London ", ", "))
           for k, v in DATA["venues"].items()}
@@ -149,26 +149,16 @@ def qr_draw(x, y, size, data, pad=10):
                 rect(x + pad + c * cell, y + pad + r * cell, x + pad + (c + 1) * cell + 0.3, y + pad + (r + 1) * cell + 0.3, INK)
     return x + size + 2 * pad, y + size + 2 * pad
 
-DAYS = [
-    ("Session Day 1", "Friday 23 October", "4 talks · 10:00–16:00", [
-        ("Steven Feng", "Stanford University"),
-        ("Nick Oh", "London School of Economics"),
-        ("Prof. Fernand Gobet", "London School of Economics"),
-        ("Benjamin Manning", "Massachusetts Institute of Technology"),
-    ]),
-    ("Session Day 2", "Friday 6 November", "5 talks · 9:15–16:00", [
-        ("Helen Jin", "University of Pennsylvania"),
-        ("Prof. Megan Peters", "University College London"),
-        ("Maximilian Noichl", "Utrecht University"),
-        ("Dr. Nicholas Bishop", "University of Oxford"),
-        ("Prof. Matthia Sabatelli", "University of Groningen"),
-    ]),
-    ("Session Day 3", "Friday 13 November", "3 talks · 12:30–16:00", [
-        ("Dr. Jessica Thompson", "University of Oxford"),
-        ("Dr. Akshay Jagadish", "Princeton University"),
-        ("Gabrielle Kaili-May Liu (Kaili)", "Yale University"),
-    ]),
-]
+# the three days, from the site: label, date, "n talks · first–last", speakers in order
+SPK = {s["id"]: s for s in DATA["speakers"]}
+hm = lambda t: t.lstrip("0")
+DAYS = []
+for d in DATA["days"]:
+    talks = [s for s in d["sessions"] if s.get("speaker") and s.get("kind") != "intro"]
+    span = f"{hm(d['sessions'][0]['start'])}–{hm(d['sessions'][-1]['end'])}"
+    DAYS.append((d["label"], d["dateLong"].rsplit(" ", 1)[0], f"{len(talks)} talks · {span}",
+                 [(SPK[s["speaker"]]["name"], SPK[s["speaker"]]["affiliation"]) for s in talks]))
+MAX_PEOPLE = max(len(p) for _, _, _, p in DAYS)
 GAP = 56
 colw = (CW - 2 * GAP) / 3
 y_days = y + 88
@@ -186,7 +176,7 @@ for i, (label, date, meta, people) in enumerate(DAYS):
         tw(x, yy, name, SANS_M, 25, INK)
         tw(x, yy + 27, aff, SANS, 20, FOG)
         yy += 60
-y_after_days = y_days + 36 + 50 + 38 + 52 + 4 * 60 + 27
+y_after_days = y_days + 36 + 50 + 38 + 52 + (MAX_PEOPLE - 1) * 60 + 27   # last name row's affiliation line
 
 # venue and registration QR for each day, aligned below the longest speaker list
 vy = y_after_days + 22

@@ -286,6 +286,22 @@
 
 .cv-slot-who span { font-weight: 400; opacity: 0.7; }
 
+/* open-floor slot: linen with a coffee-coloured rule, not clickable */
+.cv-slot-social {
+  background: var(--paper);
+  color: var(--ink);
+  border-left: 3px solid var(--ochre);
+  cursor: default;
+}
+.cv-slot-social:hover { background: var(--paper); }
+.cv-slot-blurb {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 1.4;
+  opacity: 0.7;
+}
+
 .cv-slot-break {
   background: repeating-linear-gradient(135deg, transparent 0 7px, rgba(28, 28, 30, 0.16) 7px 8px);
   color: var(--ink);
@@ -507,6 +523,11 @@
   height: auto;
   object-fit: contain;
 }
+
+/* two affiliations: the plate splits down the middle, one logo each side */
+.cv-card-school.is-split { gap: 12px; }
+.cv-card-school.is-split img { max-width: calc(50% - 6px); max-height: 32px; }
+.cv-card-school.is-split img + img { border-left: 1px solid var(--line); padding-left: 12px; }
 
 .cv-detail-holder {
   position: sticky;
@@ -751,6 +772,12 @@
 .cv-footer-host img { width: 56px; }
 .cv-footer a:hover { color: var(--brick); }
 
+/* right of the footer: the supporter's mark and name */
+.cv-footer-org { display: flex; align-items: center; gap: 12px; }
+.cv-footer-org a { display: inline-flex; align-items: center; gap: 8px; font-weight: 500; text-decoration: none; }
+.cv-footer-org img { display: block; height: 22px; width: auto; }
+.cv-footer-org a:hover img { opacity: 0.7; }
+
 /* ---------- Industry Day: teaser band; blank cards fill in as speakers confirm ---------- */
 .cv-industry-grid {
   display: grid;
@@ -777,6 +804,32 @@
   margin-top: 40px;
   border-bottom: 1.5px solid #4a4642;
 }
+
+/* logo strip of the companies taking part: paper plates like the cards' */
+.cv-industry-companies { margin-top: 36px; }
+.cv-industry-companies ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+}
+.cv-industry-companies li a,
+.cv-industry-company {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 64px;
+  padding: 12px 20px;
+  background: var(--paper);
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+}
+.cv-industry-companies img { max-height: 32px; max-width: 180px; width: auto; height: auto; object-fit: contain; }
+.cv-industry-companies .is-mark img { height: 24px; }
+.cv-industry-companies li a:hover { background: var(--linen); }
 
 .cv-industry-facts div {
   display: grid;

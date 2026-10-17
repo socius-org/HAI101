@@ -147,6 +147,8 @@ def paper_logo(path):
     p = os.path.join(TMP, "logo_paper.png"); out.save(p); return p
 
 hm = lambda t: t.lstrip("0")
+short = lambda name: name.replace("Prof. ", "").replace("Dr. ", "")
+hosts_of = lambda s: " & ".join(short(SPK[h]["name"]) for h in s.get("hosts", [])) + (f"  ·  co-hosted with {s['cohost']}" if s.get("cohost") else "")
 sessions = day["sessions"]
 talks = [s for s in sessions if s.get("speaker") and s.get("kind") != "intro"]
 # remote talks: `remote: true` on a session in data.js; MOCK_REMOTE=feng,manning previews it without touching the data
@@ -209,11 +211,14 @@ page.draw_line((M, PY0), (W - M, PY0), color=INK, width=2.2)
 yy = PY0
 for s in sessions:
     kind = s.get("kind")
-    if kind in ("lunch", "intro"):
+    if kind in ("lunch", "intro", "social"):
         base = yy + SHORT / 2 + 11
         tw(M, base, hm(s["start"]), SLAB, 30, FOG if kind == "lunch" else INK)
         if kind == "lunch":
             tw(M + TIME_W, base, "Lunch break", SANS, 26, FOG)
+        elif kind == "social":
+            adv = tw(M + TIME_W, base, s["title"], SANS_M, 26, INK)
+            tw(M + TIME_W + adv + 14, base, f"·  with {hosts_of(s)}", SANS, 26, FOG)
         else:
             adv = tw(M + TIME_W, base, s["title"], SANS_M, 26, INK)
             tw(M + TIME_W + adv + 14, base, f"·  {SPK[s['speaker']]['name']}", SANS, 26, FOG)

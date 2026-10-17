@@ -253,7 +253,8 @@ export const speakers = [
 export const speakerById = Object.fromEntries(speakers.map((s) => [s.id, s]));
 export const photo = (s) => (s.noPhoto ? null : img(`speakers/${s.id}.jpg`));
 
-// Institution logo per speaker; speakers without one fall back to the affiliation as text.
+// Institution logo(s) per speaker, as file names under img/logos/ (".png" unless an extension is given).
+// A list gives the card a split plate; speakers without one fall back to the affiliation as text.
 const LOGOS = {
   feng: 'stanford',
   oh: 'lse',
@@ -268,7 +269,9 @@ const LOGOS = {
   sabatelli: 'groningen',
   liu: 'yale',
 };
-export const logo = (s) => (LOGOS[s.id] ? img(`logos/${LOGOS[s.id]}.png`) : null);
+const logoFile = (l) => `logos/${/\.\w+$/.test(l) ? l : `${l}.png`}`;
+export const logos = (s) => [].concat(LOGOS[s.id] || []).map((l) => img(logoFile(l)));
+export const logo = (s) => logos(s)[0] || null;
 export const initials = (name) =>
   name
     .replace(/^(Prof\.|Dr\.)\s*/, '')
@@ -293,13 +296,15 @@ export const reading = {
 
 // Industry Day: a fourth day with speakers from industry, announced as they confirm.
 // date / venue / lumaUrl: null renders as TBC / "Registration opens soon", like the days below.
-// speakers: confirmed speakers as { name, company, photo?, logo? } (photo/logo are paths under img/).
+// date and dateLong follow the same format as the days ("Fri 27 Nov", "Friday 27 November 2026").
+// speakers: confirmed speakers as { name, company, photo?, logos? } (paths under img/; two logos split the plate).
 // Kept apart from `speakers` so they get their own section rather than joining the academic roster.
 // slots: how many cards the section shows; any not filled by `speakers` read "To be revealed".
 export const industry = {
   title: 'Industry Day',
   subtitle: 'From the lab to the field',
-  date: null,
+  date: 'Fri 27 Nov',
+  dateLong: 'Friday 27 November 2026',
   venue: null,
   lumaUrl: null,
   lumaEventId: null,
@@ -307,13 +312,31 @@ export const industry = {
     'A day with people working on human x artificial intelligence outside academia. Speakers from industry will talk about what they are building and studying: products, tools and research where people and AI systems meet.',
     'Speakers will be revealed here as they are confirmed.',
   ],
-  speakers: [],
+  speakers: [
+    { name: 'Benjamin Manning', company: 'Massachusetts Institute of Technology', photo: 'speakers/manning.jpg', logos: ['logos/mit.png', 'logos/expected_parrot.svg'] },
+  ],
+  // Companies taking part, shown as a logo strip in the section; url is optional.
+  // mark: true means the logo is a small symbol rather than a wordmark, so the name is set beside it.
+  companies: [
+    { name: 'Expected Parrot', logo: 'logos/expected_parrot.svg', url: 'https://www.expectedparrot.com/' },
+    { name: 'Cookiy Labs', logo: 'logos/cookiy.svg', url: 'https://cookiylabs.com', mark: true },
+  ],
   slots: 6,
+  // Talks with abstracts, like days[].sessions; start/end are null until the programme is set.
+  // A speaker listed in `speakers` above keeps their bio there and the talk shows on their card.
+  sessions: [
+    {
+      start: null, end: null, speaker: 'manning', remote: true, title: 'Predicting and Understanding Human Behaviour with AI Simulations',
+      abstract: "Useful social science theory should predict behaviour in settings it was never built for, yet applying a theory to a new setting almost always requires ad hoc modification. I will argue that AI agents placed in simulations offer an alternative. They provide a way of carrying theory into novel environments, and a new instrument for asking how much structure human behaviour really has. First, I will show how “general” agents can be built from theory-grounded natural language instructions and small amounts of existing human data, validated across distinct but related settings rather than by a standard train-test split. On a pre-committed population of 883,200 novel strategic games, such agents predict human play better than off-the-shelf agents, a cognitive hierarchy model, and game-theoretic equilibria. Second, I will show how prompts themselves can serve as a fittable, interpretable model of a person. Language models are assigned “type vectors” of trait intensities, which are then optimised against 119,147 decisions from 78,657 subjects across ten classic economic games. Three dimensions, Risk Aversion, Strategic Sophistication, and Trust, closely match human behaviour, and the fitted types cluster into fewer than a dozen groups that predict play in held-out games. Together, these results suggest AI simulations are not only a prediction technology, but a tool for discovering how few moving parts a theory of behaviour might need.",
+    },
+  ],
 };
 
 // Registration runs on Luma, one event per day. Set `lumaUrl` (the public event link) and `lumaEventId`
 // (evt-..., from the event's embed settings) to switch that day's button from "opens soon" to live.
-// kind: 'lunch' renders a break; kind: 'intro' is a short opening slot, shown like a talk but not counted as one.
+// kind: 'lunch' renders a break; kind: 'intro' is a short opening slot, shown like a talk but not counted as one;
+// kind: 'social' is an open-floor slot with `hosts` (speaker ids), an optional `cohost` (a group's name) and a `blurb`;
+// not counted as a talk.
 // venue: a key of `venues` above; null renders as "Venue TBC".
 // title: null renders as "Title TBC"; speaker: null renders as "Speaker TBC".
 // remote: true marks a speaker joining live by video, shown on screen in the room (flagged on the day posters).
@@ -347,8 +370,8 @@ export const days = [
         abstract: "This talk argues that chess offers a unique preview of how AI may transform human expertise because superhuman chess AI has existed for more than 25 years. Drawing on this long-term case study, it identifies ten major effects of AI, including surpassing expert performance, reshaping training and decision-making, and generating new knowledge. Many of these patterns are already emerging in fields such as medicine, education, software engineering, and mathematics. AI does not make human experts obsolete; instead, expertise increasingly involves selecting appropriate AI tools, interpreting and evaluating AI outputs, and applying contextual, ethical, and practical judgement.",
       },
       {
-        start: '15:00', end: '16:00', speaker: 'manning', remote: true, title: 'Predicting and Understanding Human Behaviour with AI Simulations',
-        abstract: "Useful social science theory should predict behaviour in settings it was never built for, yet applying a theory to a new setting almost always requires ad hoc modification. I will argue that AI agents placed in simulations offer an alternative. They provide a way of carrying theory into novel environments, and a new instrument for asking how much structure human behaviour really has. First, I will show how “general” agents can be built from theory-grounded natural language instructions and small amounts of existing human data, validated across distinct but related settings rather than by a standard train-test split. On a pre-committed population of 883,200 novel strategic games, such agents predict human play better than off-the-shelf agents, a cognitive hierarchy model, and game-theoretic equilibria. Second, I will show how prompts themselves can serve as a fittable, interpretable model of a person. Language models are assigned “type vectors” of trait intensities, which are then optimised against 119,147 decisions from 78,657 subjects across ten classic economic games. Three dimensions, Risk Aversion, Strategic Sophistication, and Trust, closely match human behaviour, and the fitted types cluster into fewer than a dozen groups that predict play in held-out games. Together, these results suggest AI simulations are not only a prediction technology, but a tool for discovering how few moving parts a theory of behaviour might need.",
+        start: '15:00', end: '16:00', kind: 'social', title: 'Open floor', hosts: ['gobet', 'oh'], cohost: 'LSESU AI Society',
+        blurb: 'Coffee, conversation and questions on the day\u2019s talks, with Fernand Gobet and Nick Oh.',
       },
     ],
   },

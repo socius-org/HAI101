@@ -15,6 +15,7 @@ Output (run: python social/build/social.py; DAY=2 builds one day only; SOCIAL_OU
 """
 import json
 import os
+import shutil
 import subprocess
 import pymupdf as fitz
 from PIL import Image, ImageEnhance, ImageFilter, ImageOps
@@ -41,6 +42,8 @@ SITE = "socialscience.ai"
 HASHTAGS = "#HAI101 #ArtificialIntelligence #CognitiveScience #Philosophy #SocialScience #LSE #London #LectureSeries"
 
 hm = lambda t: t.lstrip("0")
+short_name = lambda name: name.replace("Prof. ", "").replace("Dr. ", "")
+hosts_of = lambda s: " and ".join(short_name(SPK[h]["name"]) for h in s.get("hosts", [])) + (f" · co-hosted with {s['cohost']}" if s.get("cohost") else "")
 talks_of = lambda d: [s for s in d["sessions"] if s.get("speaker") and s.get("kind") != "intro"]
 span_of = lambda d: f"{hm(d['sessions'][0]['start'])}–{hm(d['sessions'][-1]['end'])}"
 short_addr = lambda v: v["address"].replace(", London ", ", ")
@@ -497,14 +500,16 @@ def programme_slide(d, path):
     c.line(M, y, c.W - M, y, INK, 2)
     TIME_W = 150
     avail = c.H - M - 50 - y
-    talks, shorts = talks_of(d), [s for s in d["sessions"] if s.get("kind") in ("lunch", "intro")]
+    talks, shorts = talks_of(d), [s for s in d["sessions"] if s.get("kind") in ("lunch", "intro", "social")]
     row = min(150, (avail - 52 * len(shorts)) / max(1, len(talks)))
     for s in d["sessions"]:
         kind = s.get("kind")
-        if kind in ("lunch", "intro"):
+        if kind in ("lunch", "intro", "social"):
             base = y + 34
             c.tw(M, base, hm(s["start"]), SLAB, 24, FOG if kind == "lunch" else INK)
-            label = "Lunch break" if kind == "lunch" else f"{s['title']}  ·  {SPK[s['speaker']]['name']}"
+            label = ("Lunch break" if kind == "lunch" else
+                     f"{s['title']}  ·  with {hosts_of(s)}" if kind == "social" else
+                     f"{s['title']}  ·  {SPK[s['speaker']]['name']}")
             c.tw(M + TIME_W, base, label, SANS, 22, FOG if kind == "lunch" else INK)
             y += 52
         else:
@@ -567,13 +572,19 @@ def day_story(d, path, tomorrow=False):
     c.line(M, y, c.W - M, y, INK, 2); y += 20
     sy = c.H - SAFE_BOTTOM - 130
     row = min(92, (sy - 30 - y) / len(talks_of(d)))
-    for s in talks_of(d):
-        sp = SPK[s["speaker"]]
+    socials = [s for s in d["sessions"] if s.get("kind") == "social"]
+    row = min(92, (sy - 30 - y) / (len(talks_of(d)) + len(socials)))
+    for s in talks_of(d) + socials:
         c.tw(M, y + 40, hm(s["start"]), SLAB, 26, INK)
-        c.tw(M + 120, y + 40, sp["name"], SANS_M, 26, INK)
-        if s.get("remote"):
-            c.tw(M + 120 + SANS_M.text_length(sp["name"], fontsize=26) + 16, y + 40, "· on screen", SANS, 20, FOG)
-        c.para(M + 120, y + 68, s["title"] or "Title to be announced", SANS, 19, c.W - M - (M + 120), FOG, lh=1.25, max_lines=1)
+        if s.get("kind") == "social":
+            c.tw(M + 120, y + 40, s["title"], SANS_M, 26, INK)
+            c.para(M + 120, y + 68, f"with {hosts_of(s)}", SANS, 19, c.W - M - (M + 120), FOG, lh=1.25, max_lines=1)
+        else:
+            sp = SPK[s["speaker"]]
+            c.tw(M + 120, y + 40, sp["name"], SANS_M, 26, INK)
+            if s.get("remote"):
+                c.tw(M + 120 + SANS_M.text_length(sp["name"], fontsize=26) + 16, y + 40, "· on screen", SANS, 20, FOG)
+            c.para(M + 120, y + 68, s["title"] or "Title to be announced", SANS, 19, c.W - M - (M + 120), FOG, lh=1.25, max_lines=1)
         y += row
         c.line(M, y, c.W - M, y, LINEN_DEEP, 1.2)
     c.rect(M, sy, c.W - M, sy + 110, INK)
@@ -619,6 +630,9 @@ def day_caption(d, path, slides):
     for s in d["sessions"]:
         if s.get("kind") == "lunch":
             continue
+        if s.get("kind") == "social":
+            rows.append(f"{hm(s['start'])}  {s['title']}, with {hosts_of(s)}")
+            continue
         sp = SPK[s["speaker"]]
         t = s["title"] or "Title to be announced"
         tag = " (joins by video, on screen in the room)" if s.get("remote") else ""
@@ -660,6 +674,7 @@ def build_day(d):
     n = day_no(d)
     v = VENUES[d["venue"]]
     out = os.path.join(OUT, f"day{n}")
+    shutil.rmtree(out, ignore_errors=True)        # no stale slides when the line-up changes
     slides = []
     day_cover(d, os.path.join(out, "carousel", "01-cover.jpg"))
     slides.append(("01-cover", f"Painting of a person with numbers in their hair above the heading {d['dateLong'].rsplit(' ', 1)[0]}, {d['label']} of {len(DAYS)}, {len(talks_of(d))} talks at {v['label']}."))
@@ -686,6 +701,7 @@ def build_day(d):
 
 def build_series():
     out = os.path.join(OUT, "series")
+    shutil.rmtree(out, ignore_errors=True)
     series_cover(os.path.join(out, "carousel", "01-cover.jpg"))
     series_question(os.path.join(out, "carousel", "02-question.jpg"))
     series_days(os.path.join(out, "carousel", "03-days.jpg"))
