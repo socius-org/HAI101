@@ -277,6 +277,20 @@ export const initials = (name) =>
     .slice(0, 2)
     .join('');
 
+// Preliminary reading: a lecture note for people who have not met a neural network before.
+// The PDF lives under public/notes/ (built from lecture-notes/transformers-src, see its README).
+export const reading = {
+  kicker: 'Before the series',
+  title: 'Introduction to Transformers and LLMs',
+  file: 'notes/HAI101-Introduction-to-Transformers-and-LLMs.pdf',
+  cover: 'notes-cover.jpg',
+  authors: 'Nick Oh (LSE) and Steven Feng (Stanford University)',
+  meta: '43 pages · about an hour to read, three with the linked videos',
+  blurb: [
+    'Most of the talks in this series take for granted a working picture of what a large language model does. If you have never met a neural network, or want that picture sharpened before the lectures, this note is where to start. It follows one forward pass of a transformer from token embeddings to next-token prediction, assuming little beyond elementary linear algebra.',
+  ],
+};
+
 // Industry Day: a fourth day with speakers from industry, announced as they confirm.
 // date / venue / lumaUrl: null renders as TBC / "Registration opens soon", like the days below.
 // speakers: confirmed speakers as { name, company, photo?, logo? } (photo/logo are paths under img/).

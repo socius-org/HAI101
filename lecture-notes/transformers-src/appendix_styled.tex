@@ -1,0 +1,150 @@
+%==============================================================================
+%  APPENDIX STYLING  --- reuses the main preamble palette (ink / paper /
+%  meas* blue family / mix* green family) so the video cards share the
+%  visual language of the Section-2 diagrams and the hero callout box.
+%==============================================================================
+
+% Small palette-consistent chip (echoes the DRAFT chip on the title page).
+\newcommand{\chip}[2][softgray]{%
+  \tikz[baseline=-0.5ex]{\node[fill=#1, text=paper, rounded corners=2pt,
+    inner xsep=4.5pt, inner ysep=1.8pt, font=\footnotesize\bfseries]{#2};}}
+
+% "Watch" tag placed before each link (a play glyph in the section accent).
+\newcommand{\watchtag}[1][measink]{%
+  \tikz[baseline=-0.45ex]{%
+    \node[fill=#1, text=paper, rounded corners=2pt,
+      inner xsep=4pt, inner ysep=1.6pt, font=\scriptsize\bfseries]
+      {$\blacktriangleright$\,\textsc{watch}};}}
+
+% Thumbnail: a measdeep tile with a palette play button + duration chip,
+% styled like the flat-architecture nodes (rounded corners=2pt).
+% \vidthumb[<accent>]{<duration>}
+\newcommand{\vidthumb}[2][measink]{%
+  \begin{tikzpicture}
+    \node[rounded corners=2pt, fill=measdeep, minimum width=2.95cm,
+          minimum height=1.66cm, inner sep=0pt] (t) {};
+    % subtle inner ring in the section accent
+    \node[rounded corners=1.5pt, draw=#1!70, line width=0.5pt,
+          minimum width=2.72cm, minimum height=1.42cm, inner sep=0pt] at (t.center) {};
+    % play button: paper disc with an accent-colored triangle
+    \node[circle, fill=paper, minimum size=0.66cm, inner sep=0pt] (pb) at (t.center) {};
+    \fill[#1] ([xshift=0.02cm]pb.center) ++(-0.075cm,0.105cm)
+      -- ++(0,-0.21cm) -- ++(0.185cm,0.105cm) -- cycle;
+    % duration chip, bottom-right
+    \node[anchor=south east, fill=ink!85, text=paper, rounded corners=1.5pt,
+          inner xsep=3pt, inner ysep=1.3pt, font=\scriptsize\bfseries]
+      at ([xshift=-3.5pt, yshift=3.5pt]t.south east) {#2};
+  \end{tikzpicture}}
+
+% Card container: the hero-callout idiom (hidden frame, ink!3!paper back,
+% accent borderline). Single left accent by default.
+% \begin{videobox}[<accent>] ... \end{videobox}
+\newtcolorbox{videobox}[1][measink]{%
+  enhanced, breakable, sharp corners,
+  colback=ink!3!paper, frame hidden, boxrule=0pt,
+  borderline west={2.5pt}{0pt}{#1},
+  left=13pt, right=13pt, top=8pt, bottom=8pt,
+  before skip=6pt, after skip=6pt}
+
+% Capstone variant: blue-west / green-east double accent, matching the
+% "Attention and the Feedforward Network" callout in Section 8.
+\newtcolorbox{videoboxD}{%
+  enhanced, breakable, sharp corners,
+  colback=ink!3!paper, frame hidden, boxrule=0pt,
+  borderline west={2.5pt}{0pt}{measink},
+  borderline east={2.5pt}{0pt}{mixink},
+  left=13pt, right=13pt, top=8pt, bottom=8pt,
+  before skip=6pt, after skip=6pt}
+
+% One video card. URLs are passed with RAW underscores; \nolinkurl handles
+% them, so no manual escaping is needed.
+% \vidcard[<accent>]{<duration>}{<title>}{<source>}{<description>}{<url>}
+\newcommand{\vidcard}[6][measink]{%
+  \begin{videobox}[#1]
+  \noindent
+  \begin{minipage}[c]{0.23\linewidth}\centering\vidthumb[#1]{#2}\end{minipage}%
+  \hfill
+  \begin{minipage}[c]{0.73\linewidth}
+    \textbf{#3}\\[0.12em]
+    {\small\itshape\color{softgray}#4}\\[0.5em]
+    {\small #5}\\[0.55em]
+    {\small\watchtag[#1]~\href{https://#6}{\textcolor{#1}{\nolinkurl{#6}}}}
+  \end{minipage}
+  \end{videobox}}
+
+% Capstone card (double accent).
+\newcommand{\vidcardD}[5]{%
+  \begin{videoboxD}
+  \noindent
+  \begin{minipage}[c]{0.23\linewidth}\centering\vidthumb[measink]{#1}\end{minipage}%
+  \hfill
+  \begin{minipage}[c]{0.73\linewidth}
+    \textbf{#2}\\[0.12em]
+    {\small\itshape\color{softgray}#3}\\[0.5em]
+    {\small #4}\\[0.55em]
+    {\small\watchtag[measink]~\href{https://#5}{\textcolor{measink}{\nolinkurl{#5}}}}
+  \end{minipage}
+  \end{videoboxD}}
+
+% Right-aligned runtime note, styled as a soft chip.
+\newcommand{\runtime}[1]{%
+  \par\vspace{0.4em}\noindent\hfill\chip[ink!55]{#1}}
+
+%==============================================================================
+\section{Prerequisites: Video Resources}
+%==============================================================================
+
+This appendix collects video resources for readers who want a thorough review of the mathematical foundations. The videos are organised into two sections: \meas{linear algebra} and \mix{neural networks}.
+
+%------------------------------------------------------------------------------
+\subsection{Linear Algebra}
+%------------------------------------------------------------------------------
+
+The \textit{Essence of Linear Algebra} series by 3Blue1Brown provides geometric intuition for the concepts used throughout this document. The following chapters are particularly relevant:
+
+\vidcard[measink]{9:52}{Vectors}{3Blue1Brown --- Essence of Linear Algebra, Ch.\ 1}{Introduces vectors as arrows in space and as lists of numbers. Establishes coordinates, vector addition, and scalar multiplication.}{youtube.com/watch?v=fNk_zzaMoSs}
+
+\vidcard[measink]{9:59}{Linear combinations, span, and basis vectors}{3Blue1Brown --- Essence of Linear Algebra, Ch.\ 2}{Defines linear combinations as weighted sums of vectors. Introduces basis vectors and the idea that any vector can be built by scaling and adding basis vectors.}{youtube.com/watch?v=k7RM-ot2NWY}
+
+\vidcard[measink]{10:59}{Linear transformations and matrices}{3Blue1Brown --- Essence of Linear Algebra, Ch.\ 3}{Shows that matrices encode linear transformations. The columns of a matrix tell you where the basis vectors land. Matrix--vector multiplication computes where a vector ends up after the transformation.}{youtube.com/watch?v=kYB8IZa5AuE}
+
+\vidcard[measink]{14:12}{Dot products and duality}{3Blue1Brown --- Essence of Linear Algebra, Ch.\ 9}{Reveals the geometric meaning of the dot product: projecting one vector onto another and measuring the result. Connects dot products to linear transformations via duality.}{youtube.com/watch?v=LyGKycYT2v0}
+
+\vidcard[measink]{16:45}{Abstract vector spaces}{3Blue1Brown --- Essence of Linear Algebra, Ch.\ 16}{Generalises vectors beyond arrows and lists of numbers. Shows that functions can be vectors too, and introduces the axioms that define a vector space. Explains why linear algebra applies to any setting with sensible notions of addition and scaling.}{youtube.com/watch?v=TgKwz5Ikpc8}
+
+\runtime{Total runtime $\approx$ 1 hour}
+
+%------------------------------------------------------------------------------
+\subsection{Neural Networks}
+%------------------------------------------------------------------------------
+
+The following videos provide foundational knowledge on neural networks, including the concepts of parameterised functions, gradient descent, and backpropagation.
+
+\vidcard[mixink]{18:40}{But what is a neural network?}{3Blue1Brown --- Deep Learning, Ch.\ 1}{Introduces neural networks as layered structures of neurons. Explains how weighted sums and activation functions combine to recognise patterns, using handwritten digit recognition as an example.}{youtube.com/watch?v=aircAruvnKk}
+
+\vidcard[mixink]{20:33}{Gradient descent, how neural networks learn}{3Blue1Brown --- Deep Learning, Ch.\ 2}{Explains gradient descent as the process of iteratively adjusting weights to minimise a loss function. Visualises the loss landscape and the path toward better solutions.}{youtube.com/watch?v=IHZwWFHWa-w}
+
+\vidcard[mixink]{12:47}{Backpropagation, intuitively}{3Blue1Brown --- Deep Learning, Ch.\ 3}{Builds intuition for backpropagation: how errors at the output propagate backward through the network to inform weight updates. Focuses on the conceptual picture rather than formulas.}{youtube.com/watch?v=Ilg3gGewQ5U}
+
+\vidcard[mixink]{10:18}{Backpropagation calculus}{3Blue1Brown --- Deep Learning, Ch.\ 4}{Walks through the calculus of backpropagation: the chain rule applied layer by layer. Shows how gradients are computed in practice.}{youtube.com/watch?v=tIeHLnjs5U8}
+
+\vidcard[mixink]{1:09:25}{MIT Introduction to Deep Learning | 6.S191}{Alexander Amini}{Covers perceptrons, activation functions, loss functions, gradient descent, backpropagation, and regularisation. Provides a comprehensive introduction to neural network foundations.}{youtube.com/watch?v=alfdI7S6wCY}
+
+\runtime{Total runtime $\approx$ 2.5 hours (1.5 hours excluding the MIT lecture)}
+
+%==============================================================================
+\newpage
+\section{Further Resources: Large Language Models}
+%==============================================================================
+
+This appendix provides additional video resources for readers who want deeper context on large language models and transformers. These videos by 3Blue1Brown offer visual explanations that complement the mathematical treatment in this document. They carry the \meas{attention} / \mix{feedforward} double accent of the Section~8 callout, marking them as the capstone of the series.
+
+\vidcardD{7:58}{Large Language Models explained briefly}{3Blue1Brown}{A concise overview of what large language models are and how they work. Provides context for the detailed mechanics covered in this document.}{youtube.com/watch?v=LPZh9BOjkQs}
+
+\vidcardD{27:14}{Transformers, the tech behind LLMs}{3Blue1Brown --- Deep Learning, Ch.\ 5}{Introduces the transformer architecture with visual animations. Covers embeddings, attention, and how information flows through the network.}{youtube.com/watch?v=wjZofJX0v4M}
+
+\vidcardD{26:10}{Attention in transformers, step-by-step}{3Blue1Brown --- Deep Learning, Ch.\ 6}{A detailed walkthrough of the attention mechanism. Visualises how queries, keys, and values interact to route information between positions.}{youtube.com/watch?v=eMlx5fFNoYc}
+
+\vidcardD{22:43}{How might LLMs store facts}{3Blue1Brown --- Deep Learning, Ch.\ 7}{Explores how factual knowledge might be encoded in transformer weights. Discusses the MLP layers as potential sites of fact storage and retrieval.}{youtube.com/watch?v=9-Jl0dxWQs8}
+
+\runtime{Total runtime $\approx$ 1.5 hours}

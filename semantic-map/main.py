@@ -143,6 +143,7 @@ def main():
     ap.add_argument("--hide-talks", action="store_true", help="abstract level: leave the HAI101 talk squares out of the plot (layout unchanged)")
     ap.add_argument("--web", action="store_true", help="animation without heading/legend/note and with bigger label bars, for embedding in the site")
     ap.add_argument("--no-animation", action="store_true")
+    ap.add_argument("--px", type=int, default=1080, help="animation frame size in pixels (square); marker and label sizes scale with it")
     ap.add_argument("--from-coords", action="store_true", help="skip embedding/reduction; redraw from the saved coords")
     args = ap.parse_args()
 
@@ -199,7 +200,7 @@ def main():
     write_html(plot_scene(scene, args.theme), html, args.theme, cdn=args.web)
     written.append(html)
     if not args.no_animation:
-        written += animate(scene, out, args.theme, web=args.web)
+        written += animate(scene, out, args.theme, px=args.px, web=args.web)
 
     print("\n== summary ==")
     for k, v in summary.items():

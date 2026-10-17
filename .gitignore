@@ -16,3 +16,18 @@ poster/build/_tmp/
 
 # social build scratch (treated headshots, key art crops)
 social/build/_tmp/
+
+# LaTeX build products (the PDF the site serves lives in public/notes/)
+lecture-notes/**/*.aux
+lecture-notes/**/*.log
+lecture-notes/**/*.out
+lecture-notes/**/*.toc
+lecture-notes/**/*.bbl
+lecture-notes/**/*.blg
+lecture-notes/**/*.fls
+lecture-notes/**/*.fdb_latexmk
+lecture-notes/**/*.synctex.gz
+lecture-notes/transformers-src/main.pdf
+lecture-notes/transformers-src/build.log
+# downloaded reference material, not ours to publish
+lecture-notes/microgpt-src/

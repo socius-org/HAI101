@@ -45,7 +45,7 @@ vs empirical/benchmarks; see `AXES` in `src/reduce.py`).
 6. **Plot** (`src/plot.py`): `output/author_map_3d.html`, coloured by cluster, marker size ~ sqrt(papers),
    hover shows name, paper count and cluster keywords, permanent labels for the top `--label-top`.
 7. **Animate** (`src/animate.py`): matplotlib orbit, azimuth 0-360 in 2-degree steps at 20 degrees
-   elevation, 30 fps, 1080x1080 MP4 (ffmpeg on PATH or the one bundled with `imageio-ffmpeg`), and a
+   elevation, 30 fps, square MP4 at `--px` pixels (1080 by default; the site uses 1440; ffmpeg on PATH or the one bundled with `imageio-ffmpeg`), and a
    600 px / 15 fps GIF. Stills at azimuth 0, 90 and 180 are saved as `frame_az*.png`.
 
 ## Options (`python main.py --help`)

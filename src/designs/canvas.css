@@ -632,6 +632,39 @@
 .cv-attend-head div:last-child { font-size: clamp(18px, 1.7vw, 22px); line-height: 1.35; }
 .cv-attend-head a:hover { color: var(--brick); }
 
+/* ---------- reading: the preliminary lecture note ---------- */
+.cv-reading { padding-top: 48px; padding-bottom: 120px; }
+
+.cv-reading-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  gap: clamp(40px, 6vw, 96px);
+  align-items: start;
+}
+
+.cv-reading-cover {
+  display: block;
+  border: 1.5px solid var(--ink);
+  background: #fff;
+  box-shadow: 12px 12px 0 var(--linen-deep);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+.cv-reading-cover:hover { transform: translate(-3px, -3px); box-shadow: 15px 15px 0 var(--linen-deep); }
+.cv-reading-cover img { width: 100%; }
+
+.cv-reading-authors { margin-top: 16px; font-weight: 500; }
+
+.cv-reading-blurb {
+  margin-top: 20px;
+  max-width: 36em;
+  font-size: clamp(17px, 1.45vw, 20px);
+  line-height: 1.55;
+}
+.cv-reading-blurb + .cv-reading-blurb { opacity: 0.75; }
+
+.cv-reading-meta { margin-top: 24px; font-size: 15px; opacity: 0.7; }
+.cv-reading .cv-register-btn { margin-top: 20px; }
+
 /* ---------- maps: one Google Map per venue ---------- */
 .cv-maps {
   display: grid;
@@ -810,6 +843,9 @@
   .cv-dark { margin-top: 80px; padding: 80px 0; }
   .cv-speakers { grid-template-columns: 1fr; gap: 40px; }
   .cv-industry-grid { grid-template-columns: 1fr; gap: 40px; }
+  .cv-reading-grid { grid-template-columns: 1fr; gap: 40px; }
+  .cv-reading-cover { max-width: 300px; }
+  .cv-reading { padding-bottom: 80px; }
   .cv-detail-holder { position: static; max-height: none; overflow: visible; }
   .cv-attend { padding-top: 80px; padding-bottom: 80px; }
   .cv-attend-head { grid-template-columns: 1fr; gap: 24px; }

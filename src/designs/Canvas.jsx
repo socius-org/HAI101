@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import './canvas.css';
 import About from './About.jsx';
 import {
-  series, venues, speakers, speakerById, days, industry,
+  series, venues, speakers, speakerById, days, industry, reading,
   img, photo, logo, initials, fmtTime,
 } from '../data.js';
 
@@ -203,6 +203,7 @@ export default function Canvas() {
           <a href="#top" className="cv-bar cv-bar-dark">{series.code}</a>
           <nav aria-label="Sections">
             <a href="#about" className="cv-bar">About</a>
+            <a href="#reading" className="cv-bar">Reading</a>
             <a href="#speakers" className="cv-bar">Speakers</a>
             <a href="#schedule" className="cv-bar">Schedule</a>
             <a href="#industry" className="cv-bar">Industry Day</a>
@@ -229,6 +230,24 @@ export default function Canvas() {
       </section>
 
       <About />
+
+      <section className="cv-wrap cv-reading" id="reading">
+        <div className="cv-reading-grid">
+          <a className="cv-reading-cover" href={`${import.meta.env.BASE_URL}${reading.file}`} target="_blank" rel="noreferrer">
+            <img src={img(reading.cover)} alt={`First page of ${reading.title}`} loading="lazy" />
+          </a>
+          <div>
+            <p className="cv-kicker">{reading.kicker}</p>
+            <h2 className="cv-h2">{reading.title}</h2>
+            <p className="cv-reading-authors">{reading.authors}</p>
+            {reading.blurb.map((p) => <p key={p.slice(0, 40)} className="cv-reading-blurb">{p}</p>)}
+            <p className="cv-reading-meta">{reading.meta}</p>
+            <a className="cv-register-btn" href={`${import.meta.env.BASE_URL}${reading.file}`} target="_blank" rel="noreferrer">
+              Read the note (PDF)
+            </a>
+          </div>
+        </div>
+      </section>
 
       <section className="cv-dark" id="speakers">
         <div className="cv-wrap">
