@@ -313,12 +313,11 @@ export const industry = {
     'Speakers will be revealed here as they are confirmed.',
   ],
   speakers: [
-    { name: 'Benjamin Manning', company: 'Massachusetts Institute of Technology', photo: 'speakers/manning.jpg', logos: ['logos/mit.png', 'logos/expected_parrot.svg'] },
+    { name: 'Benjamin Manning', company: 'Massachusetts Institute of Technology', photo: 'speakers/manning.jpg', logos: ['logos/mit.png'] },
   ],
   // Companies taking part, shown as a logo strip in the section; url is optional.
   // mark: true means the logo is a small symbol rather than a wordmark, so the name is set beside it.
   companies: [
-    { name: 'Expected Parrot', logo: 'logos/expected_parrot.svg', url: 'https://www.expectedparrot.com/' },
     { name: 'Cookiy Labs', logo: 'logos/cookiy.svg', url: 'https://cookiylabs.com', mark: true },
   ],
   slots: 6,
