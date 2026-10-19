@@ -17,7 +17,7 @@ const KINDS = [
   { match: /combined-48x36in-outlined\.pdf$/, group: 'Combined, 48 × 36 in', title: 'Combined poster, outlined', note: 'Text converted to outlines, no fonts embedded: for print shops' },
   { match: /combined-48x36in-flat\.pdf$/, group: 'Combined, 48 × 36 in', title: 'Combined poster, flattened', note: 'A single 200 dpi image: safest for any printer' },
   { match: /-poster-24x36in\.pdf$/, group: 'Single sheets, 24 × 36 in', title: 'Series poster', note: 'Key art, the three days and registration codes' },
-  { match: /-speakers-24x36in\.pdf$/, group: 'Single sheets, 24 × 36 in', title: 'Speakers poster', note: 'All twelve speakers with talk titles' },
+  { match: /-speakers-24x36in\.pdf$/, group: 'Single sheets, 24 × 36 in', title: 'Speakers poster', note: 'All speakers with talk titles' },
   { match: /-day1-24x36in\.pdf$/, group: 'Per day, 24 × 36 in', title: dayName(1), note: 'That Friday’s programme with its registration code' },
   { match: /-day2-24x36in\.pdf$/, group: 'Per day, 24 × 36 in', title: dayName(2), note: 'That Friday’s programme with its registration code' },
   { match: /-day3-24x36in\.pdf$/, group: 'Per day, 24 × 36 in', title: dayName(3), note: 'That Friday’s programme with its registration code' },

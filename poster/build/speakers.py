@@ -17,7 +17,7 @@ DATA = json.loads(subprocess.run(
      "import('./src/data.js').then(m => console.log(JSON.stringify("
      "{venues: m.venues, days: m.days, speakers: m.speakers, industry: m.industry})))"],
     cwd=REPO, capture_output=True, text=True, encoding="utf-8", check=True).stdout)
-LOGOS = {"feng": "stanford", "oh": "lse", "gobet": "lse", "manning": "mit", "jin": "penn",
+LOGOS = {"feng": "stanford", "oh": "lse", "gobet": "lse", "yoo": "lse", "manning": "mit", "jin": "penn",
          "peters": "ucl", "noichl": "utrecht", "bishop": "oxford", "thompson": "oxford", "jagadish": "princeton",
          "sabatelli": "groningen", "liu": "yale"}   # mirrors LOGOS in data.js (not exported); a list splits the plate
 
@@ -169,9 +169,15 @@ TITLES, WHEN = {}, {}
 ind = DATA["industry"]
 for d in DATA["days"] + [{"date": ind.get("date") or ind["title"], "sessions": ind.get("sessions", [])}]:
     for s in d["sessions"]:
-        if s.get("speaker") and s.get("kind") != "intro":
-            TITLES[s["speaker"]] = s["title"]
-            WHEN[s["speaker"]] = d["date"] + (f" · {hm(s['start'])}" if s.get("start") else "")
+        t = s.get("talk") if s.get("kind") == "social" else (s if s.get("speaker") and s.get("kind") != "intro" else None)
+        if t:
+            TITLES[t["speaker"]] = t["title"]
+            WHEN[t["speaker"]] = d["date"] + (f" · {hm(s['start'])}" if s.get("start") else "")
+for d in DATA["days"]:                         # hosts of an open-floor slot: that slot, unless they also give a talk
+    for s in d["sessions"]:
+        if s.get("kind") == "social":
+            for h in s.get("hosts", []):
+                TITLES.setdefault(h, s["title"]); WHEN.setdefault(h, f"{d['date']} · {hm(s['start'])}")
 SPEAKERS = [(sp["id"], sp["name"], LOGOS[sp["id"]], WHEN.get(sp["id"], "")) for sp in DATA["speakers"]]
 
 # ---------------------------------------------------------------- ground (the site's .cv-dark section)
@@ -193,26 +199,30 @@ tw(M, y, "Speakers", SLAB, 104, PAPER)
 twr(W - M, y - 44, "Human x Artificial Intelligence", SANS_M, 30, PAPER)
 twr(W - M, y, "23 Oct · 6 Nov · 13 Nov 2026  ·  LSE, London  ·  in person", SANS, 26, DIM)
 
-# ---------------------------------------------------------------- cards, 4 x 3
+# ---------------------------------------------------------------- cards: 4 x 3 up to twelve speakers, 5 x 3 beyond
 GAP = 24
-cw = (CW - 3 * GAP) / 4
+COLS = 4 if len(SPEAKERS) <= 12 else 5
+ROWS = -(-len(SPEAKERS) // COLS)
+cw = (CW - (COLS - 1) * GAP) / COLS
 LAYOUT = os.environ.get("TITLE_LAYOUT", "caption")   # caption (default) | strip | plate
 if LAYOUT == "strip":
     ph, th, sh = cw * 1.1, 84, 90        # shorter photo, title strip, logo plate
 elif LAYOUT == "caption":
-    ph, th, sh = cw * 5 / 4 + 20, 0, 98  # a touch taller than the site's 4:5, to use the page; title lives in the name card
+    # a touch taller than the site's 4:5, to use the page; title lives in the name card. Narrower
+    # 5-column cards grow taller still, so three rows fill the same height as the 4-column grid.
+    ph, th, sh = cw * (5 / 4 if COLS == 4 else 1.6) + 20, 0, 98
 else:
     ph, th, sh = cw * 5 / 4, 0, 118      # site's 4:5 photo; title beside the logo on a taller plate
 ch = ph + th + sh
 # caption layout: one title size and one name-card height for all speakers, set by the longest title
-CAP_NS, CAP_WS, CAP_PAD = 27, 19, 14
+CAP_NS, CAP_WS, CAP_PAD = (27, 19, 14) if COLS == 4 else (23, 16, 12)
 CAP_W = cw - 24
-CAP_TS = 15                # title size; a title that will not fit in three lines sizes down on its own
-CAP_LINES = 3
+CAP_TS = 15 if COLS == 4 else 13   # title size; a title that will not fit in the lines sizes down on its own
+CAP_LINES = 3 if COLS == 4 else 4
 CAP_BH = 12 + CAP_NS + 6 + CAP_WS + 10 + CAP_LINES * CAP_TS * 1.2 + 8
 gy = y + 52
 for i, (sid, name, lg, when) in enumerate(SPEAKERS):
-    col, row = i % 4, i // 4
+    col, row = i % COLS, i // COLS
     x0 = M + col * (cw + GAP)
     y0 = gy + row * (ch + GAP)
     # photo
@@ -272,7 +282,7 @@ for i, (sid, name, lg, when) in enumerate(SPEAKERS):
         place_logos(lg, x0 + 30, x0 + cw - 30, y0 + ph + th + sh / 2, mh)
 
 # attend strip, linen on the ink ground
-ay0 = gy + 3 * ch + 2 * GAP + 22
+ay0 = gy + ROWS * ch + (ROWS - 1) * GAP + 22
 ah = 160
 rect(M, ay0, W - M, ay0 + ah, LINEN)
 px = M + 44

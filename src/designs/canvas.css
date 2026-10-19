@@ -294,6 +294,9 @@
   cursor: default;
 }
 .cv-slot-social:hover { background: var(--paper); }
+.cv-slot-social.has-talk { cursor: pointer; }
+.cv-slot-social.has-talk:hover { background: var(--linen); }
+.cv-slot-social .cv-plus { border-color: var(--ink); }
 .cv-slot-blurb {
   display: block;
   margin-top: 6px;
@@ -656,12 +659,18 @@
 /* ---------- reading: the preliminary lecture note ---------- */
 .cv-reading { padding-top: 48px; padding-bottom: 120px; }
 
+/* cover on the left beside the text; on narrow screens the cover drops under the title (see below) */
 .cv-reading-grid {
   display: grid;
   grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
-  gap: clamp(40px, 6vw, 96px);
+  grid-template-areas: 'cover head' 'cover body';
+  column-gap: clamp(40px, 6vw, 96px);
+  row-gap: 0;
   align-items: start;
 }
+.cv-reading-head { grid-area: head; }
+.cv-reading-cover { grid-area: cover; }
+.cv-reading-body { grid-area: body; }
 
 .cv-reading-cover {
   display: block;
@@ -896,9 +905,9 @@
   .cv-dark { margin-top: 80px; padding: 80px 0; }
   .cv-speakers { grid-template-columns: 1fr; gap: 40px; }
   .cv-industry-grid { grid-template-columns: 1fr; gap: 40px; }
-  .cv-reading-grid { grid-template-columns: 1fr; gap: 40px; }
+  .cv-reading-grid { grid-template-columns: 1fr; grid-template-areas: 'head' 'cover' 'body'; row-gap: 28px; }
   .cv-reading-cover { max-width: 300px; }
-  .cv-reading { padding-bottom: 80px; }
+  .cv-reading { padding-top: 72px; padding-bottom: 80px; }   /* room after the About pull-quote */
   .cv-detail-holder { position: static; max-height: none; overflow: visible; }
   .cv-attend { padding-top: 80px; padding-bottom: 80px; }
   .cv-attend-head { grid-template-columns: 1fr; gap: 24px; }

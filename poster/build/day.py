@@ -24,7 +24,7 @@ SERIES, VENUES = DATA["series"], DATA["venues"]
 SPK = {s["id"]: s for s in DATA["speakers"]}
 day = DATA["days"][DAY - 1]
 venue = VENUES[day["venue"]]
-LOGOS = {"feng": "stanford", "oh": "lse", "gobet": "lse", "manning": "mit", "jin": "penn", "peters": "ucl",
+LOGOS = {"feng": "stanford", "oh": "lse", "gobet": "lse", "yoo": "lse", "manning": "mit", "jin": "penn", "peters": "ucl",
          "noichl": "utrecht", "bishop": "oxford", "thompson": "oxford", "jagadish": "princeton",
          "sabatelli": "groningen", "liu": "yale"}   # mirrors LOGOS in data.js (not exported)
 
@@ -69,6 +69,11 @@ def tw(x, y, text, font, size, color=INK, tracking=0):
 def twr(xr, y, text, font, size, color=INK, tracking=0):
     """Right-aligned line."""
     tw(xr - font.text_length(text, fontsize=size) - tracking * (len(text) - 1), y, text, font, size, color, tracking)
+
+def c_fit(text, font, size, maxw):
+    while font.text_length(text, fontsize=size) > maxw and size > 12:
+        size -= 0.5
+    return size
 
 def wrap(text, font, size, maxw):
     words, lines, cur = text.split(), [], ""
@@ -148,8 +153,16 @@ def paper_logo(path):
 
 hm = lambda t: t.lstrip("0")
 short = lambda name: name.replace("Prof. ", "").replace("Dr. ", "")
-hosts_of = lambda s: " & ".join(short(SPK[h]["name"]) for h in s.get("hosts", [])) + (f"  ·  co-hosted with {s['cohost']}" if s.get("cohost") else "")
-sessions = day["sessions"]
+def hosts_of(s):
+    names = [short(SPK[h]["name"]) for h in s.get("hosts", [])]
+    joined = f"{', '.join(names[:-1])} & {names[-1]}" if len(names) > 1 else "".join(names)
+    return joined + (f"  ·  co-hosted with {s['cohost']}" if s.get("cohost") else "")
+# an open-floor slot may carry a talk (sessions[].talk): it is drawn as a talk row with the slot as a note
+def talk_of(s):
+    if s.get("kind") == "social" and s.get("talk"):
+        return {**s["talk"], "start": s["start"], "end": s["end"], "note": f"{s['title']}  ·  with {hosts_of(s)}"}
+    return s if s.get("speaker") and s.get("kind") != "intro" else None
+sessions = [talk_of(s) or s for s in day["sessions"]]
 talks = [s for s in sessions if s.get("speaker") and s.get("kind") != "intro"]
 # remote talks: `remote: true` on a session in data.js; MOCK_REMOTE=feng,manning previews it without touching the data
 MOCK_REMOTE = set(filter(None, os.environ.get("MOCK_REMOTE", "").split(",")))
@@ -202,9 +215,9 @@ tmax = W - M - PLATE_W - 40 - tx
 # one type scale K for the whole poster: the largest that fits every talk's text block in its row
 wrap_title = lambda s, ts: wrap(s["title"] or "Title to be announced", SLAB, ts, tmax)
 # cap top of the name to the descenders of the last title line
-text_block = lambda tl, k: k * (0.75 * 36 + 58 + 30 * (1.3 + 1.22 * (len(tl) - 1)))
+text_block = lambda tl, k, note=False: k * (0.75 * 36 + 58 + 30 * (1.3 + 1.22 * (len(tl) - 1)) + (34 if note else 0))
 K = 1.0
-while K > 0.7 and any(text_block(wrap_title(s, 30 * K), K) > row_h - 30 for s in talks):
+while K > 0.7 and any(text_block(wrap_title(s, 30 * K), K, s.get("note")) > row_h - 30 for s in talks):
     K -= 0.02
 
 page.draw_line((M, PY0), (W - M, PY0), color=INK, width=2.2)
@@ -237,13 +250,15 @@ for s in sessions:
         # name, affiliation, title
         ns, as_, ts = 36 * K, 24 * K, 30 * K
         tl = wrap_title(s, ts)
-        block = text_block(tl, K)
+        block = text_block(tl, K, s.get("note"))
         by = yy + row_h / 2 - block / 2 + ns * 0.75
         tw(tx, by, sp["name"], SANS_M, ns, INK)
         tw(tx, by + 36 * K, sp["affiliation"], SANS, as_, FOG)
         ty = by + 58 * K + ts * 1.05
         for ln in tl:
             tw(tx, ty, ln, SLAB, ts, INK if s["title"] else FOG); ty += ts * 1.22
+        if s.get("note"):
+            tw(tx, ty + 6 * K, s["note"], SANS, c_fit(s["note"], SANS, 22 * K, tmax), FOG)
         # institution plate
         lx1 = W - M; lx0 = lx1 - PLATE_W
         ly0 = yy + (row_h - PLATE_H) / 2

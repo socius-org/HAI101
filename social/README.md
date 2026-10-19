@@ -16,7 +16,7 @@ Each folder has a `caption.txt` with ready-to-paste captions, hashtags and alt t
 | --- | --- | --- |
 | `series/carousel/` | 5 slides | Announcement carousel: cover, the question, three Fridays, line-up, attend |
 | `series/story-announce.jpg` | story | Series announcement story (add a link sticker to socialscience.ai) |
-| `series/story-lineup.jpg` | story | All twelve speakers |
+| `series/story-lineup.jpg` | story | All the speakers |
 | `day<N>/carousel/` | 7-8 slides | Cover, one slide per speaker, programme, register (QR to that day's Luma) |
 | `day<N>/story-day.jpg` | story | The day's programme, headed with the date |
 | `day<N>/story-tomorrow.jpg` | story | The same, headed "Tomorrow" |

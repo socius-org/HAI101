@@ -154,7 +154,8 @@ SPK = {s["id"]: s for s in DATA["speakers"]}
 hm = lambda t: t.lstrip("0")
 DAYS = []
 for d in DATA["days"]:
-    talks = [s for s in d["sessions"] if s.get("speaker") and s.get("kind") != "intro"]
+    talks = [s.get("talk") or s for s in d["sessions"]
+             if (s.get("speaker") and s.get("kind") != "intro") or (s.get("kind") == "social" and s.get("talk"))]
     span = f"{hm(d['sessions'][0]['start'])}–{hm(d['sessions'][-1]['end'])}"
     DAYS.append((d["label"], d["dateLong"].rsplit(" ", 1)[0], f"{len(talks)} talks · {span}",
                  [(SPK[s["speaker"]]["name"], SPK[s["speaker"]]["affiliation"]) for s in talks]))

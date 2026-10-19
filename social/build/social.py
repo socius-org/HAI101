@@ -4,7 +4,7 @@ Output (run: python social/build/social.py; DAY=2 builds one day only; SOCIAL_OU
   social/series/          general assets that work on any date
     carousel/01..05       announcement carousel, 4:5 (cover, the question, three Fridays, line-up, attend)
     story-announce.jpg    9:16 story
-    story-lineup.jpg      9:16 story with the twelve speakers
+    story-lineup.jpg      9:16 story with all the speakers
     caption.txt           ready-to-paste caption, hashtags and alt text
   social/day<N>/          one folder per Friday
     carousel/01..         cover, one slide per speaker, programme, register (4:5)
@@ -35,7 +35,7 @@ DATA = json.loads(subprocess.run(
     cwd=REPO, capture_output=True, text=True, encoding="utf-8", check=True).stdout)
 SERIES, INTRO, VENUES, DAYS = DATA["series"], DATA["intro"], DATA["venues"], DATA["days"]
 SPK = {s["id"]: s for s in DATA["speakers"]}
-LOGOS = {"feng": "stanford", "oh": "lse", "gobet": "lse", "manning": "mit", "jin": "penn", "peters": "ucl",
+LOGOS = {"feng": "stanford", "oh": "lse", "gobet": "lse", "yoo": "lse", "manning": "mit", "jin": "penn", "peters": "ucl",
          "noichl": "utrecht", "bishop": "oxford", "thompson": "oxford", "jagadish": "princeton",
          "sabatelli": "groningen", "liu": "yale"}   # mirrors LOGOS in data.js (not exported)
 SITE = "socialscience.ai"
@@ -43,8 +43,19 @@ HASHTAGS = "#HAI101 #ArtificialIntelligence #CognitiveScience #Philosophy #Socia
 
 hm = lambda t: t.lstrip("0")
 short_name = lambda name: name.replace("Prof. ", "").replace("Dr. ", "")
-hosts_of = lambda s: " and ".join(short_name(SPK[h]["name"]) for h in s.get("hosts", [])) + (f" · co-hosted with {s['cohost']}" if s.get("cohost") else "")
-talks_of = lambda d: [s for s in d["sessions"] if s.get("speaker") and s.get("kind") != "intro"]
+def hosts_of(s):
+    names = [short_name(SPK[h]["name"]) for h in s.get("hosts", [])]
+    joined = f"{', '.join(names[:-1])} and {names[-1]}" if len(names) > 1 else "".join(names)
+    return joined + (f" · co-hosted with {s['cohost']}" if s.get("cohost") else "")
+# a talk given inside an open-floor slot (sessions[].talk) counts as a talk; `note` names the slot
+def talk_of(s):
+    if s.get("kind") == "social" and s.get("talk"):
+        return {**s["talk"], "start": s["start"], "end": s["end"], "note": f"{s['title']} with {hosts_of(s)}"}
+    return s if s.get("speaker") and s.get("kind") != "intro" else None
+talks_of = lambda d: [t for t in (talk_of(s) for s in d["sessions"]) if t]
+NUM = {12: "Twelve", 13: "Thirteen", 14: "Fourteen", 15: "Fifteen", 16: "Sixteen"}
+n_word = lambda n: NUM.get(n, str(n))
+GRID_COLS = 4 if len(SPK) <= 12 else 5
 span_of = lambda d: f"{hm(d['sessions'][0]['start'])}–{hm(d['sessions'][-1]['end'])}"
 short_addr = lambda v: v["address"].replace(", London ", ", ")
 day_no = lambda d: DAYS.index(d) + 1
@@ -329,9 +340,10 @@ def series_lineup(path):
     c.rect(0, 0, c.W, c.H, LINEN)
     c.tag()
     c.tw(M, 230, "THE LINE-UP", SANS_M, 22, BRICK, tracking=0.14 * 22)
-    c.tw(M, 306, "Twelve speakers", SLAB_L, 72, INK)
-    gap = 20; cell = (c.W - 2 * M - 3 * gap) / 4
-    speaker_grid(c, 340, 4, cell, gap, cell * 0.98, name_size=21, aff_size=16)
+    c.tw(M, 306, f"{n_word(len(SPK))} speakers", SLAB_L, 72, INK)
+    gap = 20; cell = (c.W - 2 * M - (GRID_COLS - 1) * gap) / GRID_COLS
+    speaker_grid(c, 340, GRID_COLS, cell, gap, cell * (0.98 if GRID_COLS == 4 else 1.1),
+                 name_size=21 if GRID_COLS == 4 else 18, aff_size=16 if GRID_COLS == 4 else 14)
     footer_site(c, c.H - M, note=f"{SERIES['datesShort']} · LSE, London")
     c.save(path)
 
@@ -394,10 +406,11 @@ def series_story_lineup(path):
     c.rect(0, 0, c.W, c.H, LINEN)
     c.tag()
     c.tw(M, SAFE_TOP + 30, "THE LINE-UP", SANS_M, 22, BRICK, tracking=0.14 * 22)
-    c.tw(M, SAFE_TOP + 110, "Twelve speakers,", SLAB_L, 68, INK)
+    c.tw(M, SAFE_TOP + 110, f"{n_word(len(SPK))} speakers,", SLAB_L, 68, INK)
     c.tw(M, SAFE_TOP + 182, "three Fridays at LSE", SLAB_L, 68, INK)
-    gap = 20; cell = (c.W - 2 * M - 3 * gap) / 4
-    speaker_grid(c, SAFE_TOP + 250, 4, cell, gap, cell * 1.08, name_size=20, aff_size=15)
+    gap = 20; cell = (c.W - 2 * M - (GRID_COLS - 1) * gap) / GRID_COLS
+    speaker_grid(c, SAFE_TOP + 250, GRID_COLS, cell, gap, cell * (1.08 if GRID_COLS == 4 else 1.15),
+                 name_size=20 if GRID_COLS == 4 else 17, aff_size=15 if GRID_COLS == 4 else 13)
     sy = c.H - SAFE_BOTTOM - 110
     c.rect(M, sy, c.W - M, sy + 96, INK)
     c.tw(M + 36, sy + 42, SERIES["datesShort"], SANS_M, 26, PAPER)
@@ -412,7 +425,7 @@ def series_caption(path):
 {SERIES['code']} · {SERIES['title']}
 {SERIES['question']}
 
-{SERIES['tagline']} Twelve speakers over three Fridays at LSE:
+{SERIES['tagline']} {n_word(len(SPK))} speakers over three Fridays at LSE:
 {d_lines}
 
 Free and in person. Each Friday has its own ticket on Luma: link in bio, or {SITE}.
@@ -429,7 +442,7 @@ ALT TEXT
 01-cover: Painting of a person in profile with numbers scattered through their hair, under label bars reading Human x Artificial Intelligence, {SERIES['datesShort']}, in person at LSE, London.
 02-question: The question "{SERIES['question']}" in large serif type, followed by a paragraph introducing the series.
 03-days: The three Fridays listed with date, venue, number of talks and the speakers' names.
-04-lineup: A grid of twelve speaker portraits with names and universities.
+04-lineup: A grid of {n_word(len(SPK)).lower()} speaker portraits with names and universities.
 05-attend: Black slide reading "Free, in person, all welcome", the three dates and venues, and a QR code to {SITE}.
 """
     os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -500,9 +513,10 @@ def programme_slide(d, path):
     c.line(M, y, c.W - M, y, INK, 2)
     TIME_W = 150
     avail = c.H - M - 50 - y
-    talks, shorts = talks_of(d), [s for s in d["sessions"] if s.get("kind") in ("lunch", "intro", "social")]
+    talks, shorts = talks_of(d), [s for s in d["sessions"] if s.get("kind") in ("lunch", "intro") or (s.get("kind") == "social" and not s.get("talk"))]
     row = min(150, (avail - 52 * len(shorts)) / max(1, len(talks)))
     for s in d["sessions"]:
+        s = talk_of(s) if s.get("kind") == "social" and s.get("talk") else s
         kind = s.get("kind")
         if kind in ("lunch", "intro", "social"):
             base = y + 34
@@ -519,7 +533,7 @@ def programme_slide(d, path):
             nx = M + TIME_W
             name = sp["name"] + ("   ·   on screen" if s.get("remote") else "")
             c.tw(nx, y + 44, name, SANS_M, 26, INK)
-            title = s["title"] or "Title to be announced"
+            title = (s["title"] or "Title to be announced") + (f"  ·  {s['note']}" if s.get("note") else "")
             c.para(nx, y + 78, title, SANS, 21, c.W - M - nx, FOG, lh=1.3, max_lines=2)
             y += row
         c.line(M, y, c.W - M, y, LINEN_DEEP, 1.2)
@@ -572,7 +586,7 @@ def day_story(d, path, tomorrow=False):
     c.line(M, y, c.W - M, y, INK, 2); y += 20
     sy = c.H - SAFE_BOTTOM - 130
     row = min(92, (sy - 30 - y) / len(talks_of(d)))
-    socials = [s for s in d["sessions"] if s.get("kind") == "social"]
+    socials = [s for s in d["sessions"] if s.get("kind") == "social" and not s.get("talk")]
     row = min(92, (sy - 30 - y) / (len(talks_of(d)) + len(socials)))
     for s in talks_of(d) + socials:
         c.tw(M, y + 40, hm(s["start"]), SLAB, 26, INK)
@@ -584,7 +598,7 @@ def day_story(d, path, tomorrow=False):
             c.tw(M + 120, y + 40, sp["name"], SANS_M, 26, INK)
             if s.get("remote"):
                 c.tw(M + 120 + SANS_M.text_length(sp["name"], fontsize=26) + 16, y + 40, "· on screen", SANS, 20, FOG)
-            c.para(M + 120, y + 68, s["title"] or "Title to be announced", SANS, 19, c.W - M - (M + 120), FOG, lh=1.25, max_lines=1)
+            c.para(M + 120, y + 68, (s["title"] or "Title to be announced") + (f" · {s['note']}" if s.get("note") else ""), SANS, 19, c.W - M - (M + 120), FOG, lh=1.25, max_lines=1)
         y += row
         c.line(M, y, c.W - M, y, LINEN_DEEP, 1.2)
     c.rect(M, sy, c.W - M, sy + 110, INK)
@@ -631,7 +645,9 @@ def day_caption(d, path, slides):
         if s.get("kind") == "lunch":
             continue
         if s.get("kind") == "social":
-            rows.append(f"{hm(s['start'])}  {s['title']}, with {hosts_of(s)}")
+            t = s.get("talk")
+            lead = f"{SPK[t['speaker']]['name']}, {SPK[t['speaker']]['affiliation']}: {t['title'] or 'title to be announced'}  ·  " if t else ""
+            rows.append(f"{hm(s['start'])}  {lead}{s['title']}, with {hosts_of(s)}")
             continue
         sp = SPK[s["speaker"]]
         t = s["title"] or "Title to be announced"

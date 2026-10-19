@@ -58,7 +58,7 @@ export const intro = [
 ];
 
 export const summary =
-  'HAI101 brings together twelve researchers working at the intersection of the social, behavioural and cognitive sciences, philosophy and AI, to ask what machines can teach us about minds, and what the study of minds can teach the machines.';
+  'HAI101 brings together thirteen researchers working at the intersection of the social, behavioural and cognitive sciences, philosophy and AI, to ask what machines can teach us about minds, and what the study of minds can teach the machines.';
 
 export const speakers = [
   {
@@ -107,6 +107,21 @@ export const speakers = [
       ['Chunking mechanisms in human learning', 'Gobet et al., 2001'],
       ['Deliberate practice: Is that all it takes to become an expert?', 'Hambrick et al., 2014'],
       ['Automating the practice of science: Opportunities, challenges and implications', 'Musslick et al., 2025'],
+    ],
+  },
+  {
+    id: 'yoo',
+    name: 'Prof. Youngjin Yoo',
+    role: 'Professor of Information Systems and Innovation, Dept. of Management',
+    affiliation: 'London School of Economics',
+    lab: 'Academic Director, LSE Lifelong Learning Digital & Innovation',
+    publications: [
+      ['The new organizing logic of digital innovation: An agenda for information systems research', 'Yoo, Henfridsson & Lyytinen, 2010'],
+      ['The unknowability of autonomous tools and the liminal experience of their use', 'Zhang, Yoo, Lyytinen & Lindberg, 2021'],
+      ['Evolving epistemic infrastructure: The role of scientific journals in the age of generative AI', 'Yoo, 2024'],
+      ['Temporality of organizational knowledge in generative AI systems', 'Heimburg, Yoo & Wiesche, 2025'],
+      ['Open-source AI community as ‘trading zone’: The role of open-source models in the diffusion of artificial intelligence innovation', 'Gao, Yoo & Schecter, 2025'],
+      ['User-centric data governance', 'Yoo, 2026'],
     ],
   },
   {
@@ -259,6 +274,7 @@ const LOGOS = {
   feng: 'stanford',
   oh: 'lse',
   gobet: 'lse',
+  yoo: 'lse',
   manning: 'mit',
   jin: 'penn',
   peters: 'ucl',
@@ -334,8 +350,8 @@ export const industry = {
 // Registration runs on Luma, one event per day. Set `lumaUrl` (the public event link) and `lumaEventId`
 // (evt-..., from the event's embed settings) to switch that day's button from "opens soon" to live.
 // kind: 'lunch' renders a break; kind: 'intro' is a short opening slot, shown like a talk but not counted as one;
-// kind: 'social' is an open-floor slot with `hosts` (speaker ids), an optional `cohost` (a group's name) and a `blurb`;
-// not counted as a talk.
+// kind: 'social' is an open-floor slot with `hosts` (speaker ids), an optional `cohost` (a group's name) and a `blurb`.
+// It may carry a `talk` ({ speaker, title, abstract }) given inside the slot, which counts as that speaker's talk.
 // venue: a key of `venues` above; null renders as "Venue TBC".
 // title: null renders as "Title TBC"; speaker: null renders as "Speaker TBC".
 // remote: true marks a speaker joining live by video, shown on screen in the room (flagged on the day posters).
@@ -369,8 +385,8 @@ export const days = [
         abstract: "This talk argues that chess offers a unique preview of how AI may transform human expertise because superhuman chess AI has existed for more than 25 years. Drawing on this long-term case study, it identifies ten major effects of AI, including surpassing expert performance, reshaping training and decision-making, and generating new knowledge. Many of these patterns are already emerging in fields such as medicine, education, software engineering, and mathematics. AI does not make human experts obsolete; instead, expertise increasingly involves selecting appropriate AI tools, interpreting and evaluating AI outputs, and applying contextual, ethical, and practical judgement.",
       },
       {
-        start: '15:00', end: '16:00', kind: 'social', title: 'Open floor', hosts: ['gobet', 'oh'], cohost: 'LSESU AI Society',
-        blurb: 'Coffee, conversation and questions on the day\u2019s talks, with Fernand Gobet and Nick Oh.',
+        start: '15:00', end: '16:00', speaker: 'yoo', title: null,
+        abstract: null,
       },
     ],
   },

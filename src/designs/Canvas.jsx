@@ -20,12 +20,28 @@ const HOURS = Array.from({ length: (DAY_END - DAY_START) / 60 + 1 }, (_, i) => 9
 // Industry Day talks (industry.sessions) count too, so a speaker moved there keeps a talk on their card.
 const TALKS = {};
 const INDUSTRY_DAY = { ...industry, date: industry.date || industry.title, sessions: industry.sessions || [] };
+// A talk given inside an open-floor slot (sessions[].talk), as a session of its own.
+const socialTalk = (s) => (s.kind === 'social' && s.talk ? { ...s.talk, start: s.start, end: s.end } : null);
 [...days, INDUSTRY_DAY].forEach((d) => d.sessions.forEach((s) => {
   if (!s.kind) TALKS[s.speaker || 'tbc'] = { ...s, date: d.date };
+  else if (socialTalk(s)) TALKS[s.talk.speaker] = { ...socialTalk(s), date: d.date };
 }));
 // "Fernand Gobet and Nick Oh": the hosts of a social slot, by speaker id.
-const hostNames = (s) => (s.hosts || []).map((id) => speakerById[id]?.name.replace(/^(Prof\.|Dr\.) /, '') || id).join(' and ');
+const shortName = (id) => speakerById[id]?.name.replace(/^(Prof\.|Dr\.) /, '') || id;
+const hostNames = (s) => {
+  const names = (s.hosts || []).map(shortName);
+  return names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}` : names[0] || '';
+};
 const hostLine = (s) => `with ${hostNames(s)}${s.cohost ? ` · co-hosted with ${s.cohost}` : ''}`;
+// "Talk by Youngjin Yoo · with ..." when the slot carries a talk.
+const socialLine = (s) => `${s.talk ? `Talk by ${shortName(s.talk.speaker)} · ` : ''}${hostLine(s)}`;
+// Hosts of an open-floor slot get it on their card and detail too, labelled by the slot's title.
+const HOSTING = {};
+days.forEach((d) => d.sessions.forEach((s) => {
+  if (s.kind === 'social') (s.hosts || []).forEach((id) => {
+    HOSTING[id] = { ...s, date: d.date, label: s.title, title: socialLine(s), abstract: s.blurb };
+  });
+}));
 // "Fri 23 Oct, 10:30–11:30", or just the date while the time is unset.
 const when = (t, sep = ', ') => `${t.date}${t.start ? `${sep}${fmtTime(t.start)}–${fmtTime(t.end)}` : ''}`;
 
@@ -59,7 +75,7 @@ function Talk({ talk }) {
       <button type="button" className="cv-detail-talk-head" aria-expanded={open} onClick={() => setOpen(!open)}>
         <span>
           <span className="cv-detail-talk-when">
-            Talk · {when(talk)}
+            {talk.label || 'Talk'} · {when(talk)}
           </span>
           <span className={talk.title ? 'cv-detail-talk-title' : 'cv-detail-talk-title cv-tbc'}>
             {talk.title || 'Title TBC'}
@@ -134,6 +150,7 @@ function Detail({ s }) {
       <p className="cv-detail-role">{s.role}</p>
       {s.lab && <p className="cv-detail-lab">{s.lab}</p>}
       {TALKS[s.id] && <Talk talk={TALKS[s.id]} />}
+      {HOSTING[s.id] && <Talk talk={HOSTING[s.id]} />}
       {s.upcoming && (
         <div className="cv-detail-block">
           <h4>Upcoming</h4>
@@ -178,8 +195,8 @@ export default function Canvas() {
   const [openTalk, setOpenTalk] = useState(() => {
     const id = new URLSearchParams(window.location.search).get('talk');
     for (const d of [...days, INDUSTRY_DAY]) {
-      const s = d.sessions.find((x) => id && x.speaker === id);
-      if (s) return { ...s, dateLong: d.dateLong };
+      const s = d.sessions.find((x) => id && (x.speaker === id || x.talk?.speaker === id));
+      if (s) return { ...(socialTalk(s) || s), dateLong: d.dateLong };
     }
     return null;
   });
@@ -249,13 +266,15 @@ export default function Canvas() {
 
       <section className="cv-wrap cv-reading" id="reading">
         <div className="cv-reading-grid">
-          <a className="cv-reading-cover" href={`${import.meta.env.BASE_URL}${reading.file}`} target="_blank" rel="noreferrer">
-            <img src={img(reading.cover)} alt={`First page of ${reading.title}`} loading="lazy" />
-          </a>
-          <div>
+          <div className="cv-reading-head">
             <p className="cv-kicker">{reading.kicker}</p>
             <h2 className="cv-h2">{reading.title}</h2>
             <p className="cv-reading-authors">{reading.authors}</p>
+          </div>
+          <a className="cv-reading-cover" href={`${import.meta.env.BASE_URL}${reading.file}`} target="_blank" rel="noreferrer">
+            <img src={img(reading.cover)} alt={`First page of ${reading.title}`} loading="lazy" />
+          </a>
+          <div className="cv-reading-body">
             {reading.blurb.map((p) => <p key={p.slice(0, 40)} className="cv-reading-blurb">{p}</p>)}
             <p className="cv-reading-meta">{reading.meta}</p>
             <a className="cv-register-btn" href={`${import.meta.env.BASE_URL}${reading.file}`} target="_blank" rel="noreferrer">
@@ -289,8 +308,8 @@ export default function Canvas() {
                     )}
                     <span className="cv-card-name">
                       {s.name}
-                      {TALKS[s.id] && (
-                        <span className="cv-card-when">{when(TALKS[s.id], ' · ').replace(/–.*$/, '')}</span>
+                      {(TALKS[s.id] || HOSTING[s.id]) && (
+                        <span className="cv-card-when">{when(TALKS[s.id] || HOSTING[s.id], ' · ').replace(/–.*$/, '')}</span>
                       )}
                     </span>
                   </span>
@@ -343,13 +362,22 @@ export default function Canvas() {
                 );
               }
               if (s.kind === 'social') {
+                const Tag = s.talk ? 'button' : 'div';
                 return (
-                  <div key={d.id + s.start} className="cv-slot cv-slot-social" style={style}>
+                  <Tag
+                    key={d.id + s.start}
+                    type={s.talk ? 'button' : undefined}
+                    className={`cv-slot cv-slot-social${s.talk ? ' has-talk' : ''}`}
+                    style={style}
+                    aria-haspopup={s.talk ? 'dialog' : undefined}
+                    onClick={s.talk ? () => setOpenTalk({ ...socialTalk(s), dateLong: d.dateLong, room: venues[d.venue]?.room }) : undefined}
+                  >
+                    {s.talk && <span className="cv-plus" aria-hidden="true" />}
                     <span className="cv-slot-meta"><time>{fmtTime(s.start)}–{fmtTime(s.end)}</time></span>
                     <span className="cv-slot-title">{s.title}</span>
-                    <span className="cv-slot-who">{hostLine(s)}</span>
+                    <span className="cv-slot-who">{socialLine(s)}</span>
                     {s.blurb && <span className="cv-slot-blurb">{s.blurb}</span>}
-                  </div>
+                  </Tag>
                 );
               }
               return (
@@ -396,11 +424,24 @@ export default function Canvas() {
                           <span className="cv-slot-title">{s.title}</span>
                           <span className="cv-slot-who">{sp ? sp.name : 'Speaker TBC'}</span>
                         </p>
-                      ) : s.kind === 'social' ? (
+                      ) : s.kind === 'social' && !s.talk ? (
                         <p>
                           <span className="cv-slot-title">{s.title}</span>
-                          <span className="cv-slot-who">{hostLine(s)}</span>
+                          <span className="cv-slot-who">{socialLine(s)}</span>
                         </p>
+                      ) : s.kind === 'social' ? (
+                        <button
+                          type="button"
+                          className="cv-list-open"
+                          aria-haspopup="dialog"
+                          onClick={() => setOpenTalk({ ...socialTalk(s), dateLong: d.dateLong, room: venues[d.venue]?.room })}
+                        >
+                          <span>
+                            <span className="cv-slot-title">{s.title}</span>
+                            <span className="cv-slot-who">{socialLine(s)}</span>
+                          </span>
+                          <span className="cv-plus" aria-hidden="true" />
+                        </button>
                       ) : (
                         <button
                           type="button"
@@ -543,7 +584,7 @@ export default function Canvas() {
 
         <ol className="cv-register">
           {days.map((d) => {
-            const talks = d.sessions.filter((s) => !s.kind);
+            const talks = d.sessions.filter((s) => !s.kind || socialTalk(s));
             const first = d.sessions.find((s) => s.kind !== 'lunch');
             return (
               <li key={d.id}>
