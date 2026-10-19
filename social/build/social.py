@@ -217,7 +217,8 @@ def wrap(text, font, size, maxw):
 
 # same reframing as the posters: (zoom, top_bias)
 FOCUS = {"noichl": (0.94, 1.5), "oh": (0.96, 1.0), "feng": (0.96, 1.0), "gobet": (0.965, 1.0),
-         "manning": (0.88, 1.0), "jagadish": (0.88, 1.0), "liu": (0.96, 1.0)}
+         "manning": (0.88, 1.0), "jagadish": (0.88, 1.0), "liu": (0.96, 1.0),
+         "yoo": (0.9, 1.0)}   # tight source crop: zoom out so his head matches the others on the wide slides
 
 def treated_photo(sid, ratio):
     """The speaker cards' look: grayscale + 25% sepia, contrast 1.05, 78% over the dark ground. ratio = h/w."""
