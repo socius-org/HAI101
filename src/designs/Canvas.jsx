@@ -388,12 +388,12 @@ export default function Canvas() {
                     <li key={c.name} className={c.mark ? 'is-mark' : ''}>
                       {c.url ? (
                         <a href={c.url} target="_blank" rel="noreferrer" aria-label={c.name}>
-                          <img src={img(c.logo)} alt={c.mark ? '' : c.name} loading="lazy" />
+                          <img src={img(c.logo)} alt={c.mark ? '' : c.name} loading="lazy" style={c.height ? { height: c.height } : undefined} />
                           {c.mark && <span>{c.name}</span>}
                         </a>
                       ) : (
                         <span className="cv-industry-company">
-                          <img src={img(c.logo)} alt={c.mark ? '' : c.name} loading="lazy" />
+                          <img src={img(c.logo)} alt={c.mark ? '' : c.name} loading="lazy" style={c.height ? { height: c.height } : undefined} />
                           {c.mark && <span>{c.name}</span>}
                         </span>
                       )}

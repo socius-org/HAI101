@@ -371,7 +371,8 @@ export const industry = {
   // mark: true means the logo is a small symbol rather than a wordmark, so the name is set beside it.
   companies: [
     { name: 'Cookiy Labs', logo: 'logos/cookiy.svg', url: 'https://cookiylabs.com', mark: true },
-    { name: 'MatrAIx', logo: 'logos/matraix.png', url: 'https://matraix.ai' },
+    // height (px, optional) sizes a wordmark to sit level with the marks beside it.
+    { name: 'MatrAIx', logo: 'logos/matraix.png', url: 'https://matraix.ai', height: 22 },
   ],
   slots: 6,
   // Talks with abstracts, like days[].sessions. Industry Day is the fourth column of the timetable; a
