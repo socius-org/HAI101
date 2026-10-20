@@ -6,13 +6,19 @@ import {
   img, photo, initials, fmtTime,
 } from '../data.js';
 
-// Timetable runs 9:00–16:00 in 15-minute rows; row 1 is the day header.
+// Timetable runs from 9:00 to the last session's end (16:00 at least, rounded up to the hour) in
+// 15-minute rows; row 1 is the day header.
 const DAY_START = 9 * 60;
-const DAY_END = 16 * 60;
 const toMin = (t) => {
   const [h, m] = t.split(':').map(Number);
   return h * 60 + m;
 };
+const DAY_END = Math.max(
+  16 * 60,
+  ...[...days, industry].flatMap((d) => (d.sessions || []).filter((s) => s.end).map((s) => Math.ceil(toMin(s.end) / 60) * 60)),
+);
+const DAY_END_T = `${String(DAY_END / 60).padStart(2, '0')}:00`;
+const ROWS = (DAY_END - DAY_START) / 15;
 const rowOf = (t) => (toMin(t) - DAY_START) / 15 + 2;
 const HOURS = Array.from({ length: (DAY_END - DAY_START) / 60 + 1 }, (_, i) => 9 + i);
 
@@ -465,7 +471,10 @@ export default function Canvas() {
           className="cv-table"
           role="table"
           aria-label="Timetable"
-          style={{ gridTemplateColumns: `84px repeat(${SCHEDULE_DAYS.length}, 1fr)` }}
+          style={{
+            gridTemplateColumns: `84px repeat(${SCHEDULE_DAYS.length}, 1fr)`,
+            gridTemplateRows: `auto repeat(${ROWS}, minmax(27px, auto))`,
+          }}
         >
           <div className="cv-corner" style={{ gridColumn: 1, gridRow: 1 }} />
           {SCHEDULE_DAYS.map((d, i) => (
@@ -484,7 +493,7 @@ export default function Canvas() {
             const untimed = d.sessions.filter((s) => !s.start);
             if (!untimed.length) return null;
             return (
-              <div key={d.id + '-tbc'} className="cv-slot-tbc" style={{ gridColumn: i + 2, gridRow: rowOf('16:00') + 1 }}>
+              <div key={d.id + '-tbc'} className="cv-slot-tbc" style={{ gridColumn: i + 2, gridRow: rowOf(DAY_END_T) + 1 }}>
                 <span className="cv-slot-tbc-head">Times to be announced</span>
                 {untimed.map((s) => (
                   <button
