@@ -337,7 +337,7 @@ export const industry = {
       name: 'Dr. Xiaomin Li',
       role: 'Co-Founder and CEO',
       company: 'MatrAIx',
-      lab: 'Ph.D. in Applied Mathematics, Harvard University · Research Associate, MIT',
+      lab: 'Ph.D. in Applied Mathematics, Harvard University',
       photo: 'speakers/li.jpg',
       logos: ['logos/matraix.png', 'logos/harvard.svg'],
       previously: [
