@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import './canvas.css';
 import About from './About.jsx';
 import {
-  series, venues, speakers, speakerById, days, industry, reading, logos,
+  series, venues, speakers, speakerById, days, industry, industryRoster, industryById, reading, logos,
   img, photo, initials, fmtTime,
 } from '../data.js';
 
@@ -103,7 +103,7 @@ function TalkDialog({ talk, onClose, onSpeaker }) {
   useEffect(() => {
     if (talk && !ref.current.open) ref.current.showModal();
   }, [talk]);
-  const sp = talk?.speaker ? speakerById[talk.speaker] : null;
+  const sp = talk?.speaker ? speakerById[talk.speaker] || industryById[talk.speaker] : null;
 
   return (
     <dialog
@@ -191,6 +191,9 @@ export default function Canvas() {
   const [activeId, setActiveId] = useState(roster[0].id);
   const active = roster.find((s) => s.id === activeId);
   const detailRef = useRef(null);
+  // Industry Day has its own cards and detail panel, selected like the academic roster.
+  const [activeInd, setActiveInd] = useState(industryRoster[0]?.id ?? null);
+  const indDetailRef = useRef(null);
   // ?talk=<speaker id> opens that talk's pop-up on load, so a talk can be linked to directly.
   const [openTalk, setOpenTalk] = useState(() => {
     const id = new URLSearchParams(window.location.search).get('talk');
@@ -203,10 +206,15 @@ export default function Canvas() {
 
   // On narrow screens the bio sits below the photo grid, so go straight to it.
   const showSpeaker = (id) => {
-    setActiveId(id);
-    const target = window.matchMedia('(max-width: 900px)').matches
-      ? detailRef.current
-      : document.getElementById('speakers');
+    const narrow = window.matchMedia('(max-width: 900px)').matches;
+    let target;
+    if (speakerById[id]) {
+      setActiveId(id);
+      target = narrow ? detailRef.current : document.getElementById('speakers');
+    } else {
+      setActiveInd(id);
+      target = narrow ? indDetailRef.current : document.getElementById('industry');
+    }
     requestAnimationFrame(() => target?.scrollIntoView({ block: 'start' }));
   };
 
@@ -476,6 +484,7 @@ export default function Canvas() {
       </section>
 
       <section className="cv-dark cv-industry" id="industry">
+        {/* row 1: the pitch beside the facts; row 2: cards beside the chosen speaker's bio, as in Speakers */}
         <div className="cv-wrap cv-industry-grid">
           <div>
             <p className="cv-kicker">Coming soon</p>
@@ -484,6 +493,8 @@ export default function Canvas() {
               <span className="cv-mark">{industry.subtitle}</span>
             </p>
             {industry.blurb.map((p) => <p key={p.slice(0, 40)} className="cv-industry-blurb">{p}</p>)}
+          </div>
+          <div>
             <dl className="cv-industry-facts">
               <div>
                 <dt>Date</dt>
@@ -521,24 +532,56 @@ export default function Canvas() {
               </div>
             )}
           </div>
-          <ul className="cv-cards cv-industry-cards" aria-label="Industry Day speakers">
-            {Array.from({ length: Math.max(industry.slots, industry.speakers.length) }, (_, i) => {
-              const s = industry.speakers[i];
+        </div>
+        <div className="cv-wrap cv-speakers cv-industry-speakers">
+          <div className="cv-cards cv-industry-cards" aria-label="Industry Day speakers">
+            {Array.from({ length: Math.max(industry.slots, industryRoster.length) }, (_, i) => {
+              const s = industryRoster[i];
+              if (!s) {
+                return (
+                  <div key={i} className="cv-card is-hidden">
+                    <span className="cv-card-photo">
+                      <span className="cv-card-blank" aria-hidden="true">?</span>
+                      <span className="cv-card-name">To be revealed</span>
+                    </span>
+                    <LogoPlate srcs={[]} alt="Industry" />
+                  </div>
+                );
+              }
               return (
-                <li key={i} className={`cv-card${s ? '' : ' is-hidden'}`}>
+                <button
+                  key={s.id}
+                  type="button"
+                  className={`cv-card${s.id === activeInd ? ' on' : ''}`}
+                  aria-pressed={s.id === activeInd}
+                  onClick={() => {
+                    setActiveInd(s.id);
+                    if (window.matchMedia('(max-width: 900px)').matches) {
+                      requestAnimationFrame(() => indDetailRef.current?.scrollIntoView({ block: 'start' }));
+                    }
+                  }}
+                >
                   <span className="cv-card-photo">
-                    {s?.photo ? (
+                    {s.photo ? (
                       <img src={img(s.photo)} alt="" loading="lazy" />
                     ) : (
-                      <span className="cv-card-blank" aria-hidden="true">?</span>
+                      <span className="cv-card-blank" aria-hidden="true">{initials(s.name)}</span>
                     )}
-                    <span className="cv-card-name">{s ? s.name : 'To be revealed'}</span>
+                    <span className="cv-card-name">
+                      {s.name}
+                      {TALKS[s.id] && (
+                        <span className="cv-card-when">{when(TALKS[s.id], ' · ').replace(/–.*$/, '')}</span>
+                      )}
+                    </span>
                   </span>
-                  <LogoPlate srcs={(s?.logos || []).map(img)} alt={s ? s.company : 'Industry'} />
-                </li>
+                  <LogoPlate srcs={(s.logos || []).map(img)} alt={s.company} />
+                </button>
               );
             })}
-          </ul>
+          </div>
+          <div ref={indDetailRef} className="cv-detail-holder">
+            {activeInd && industryById[activeInd] && <Detail key={activeInd} s={industryById[activeInd]} />}
+          </div>
         </div>
       </section>
 

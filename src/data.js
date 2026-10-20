@@ -313,7 +313,9 @@ export const reading = {
 // Industry Day: a fourth day with speakers from industry, announced as they confirm.
 // date / venue / lumaUrl: null renders as TBC / "Registration opens soon", like the days below.
 // date and dateLong follow the same format as the days ("Fri 27 Nov", "Friday 27 November 2026").
-// speakers: confirmed speakers as { name, company, photo?, logos? } (paths under img/; two logos split the plate).
+// speakers: confirmed speakers, each with the fields of the academic roster (id, name, role, previously, interests,
+// publications) plus `company` in place of `affiliation`, `photo` (a path under img/) and `logos` (two split the plate).
+// `ref: '<academic id>'` reuses that speaker's bio and photo; the industry entry's own fields override it.
 // Kept apart from `speakers` so they get their own section rather than joining the academic roster.
 // slots: how many cards the section shows; any not filled by `speakers` read "To be revealed".
 export const industry = {
@@ -329,7 +331,7 @@ export const industry = {
     'Speakers will be revealed here as they are confirmed.',
   ],
   speakers: [
-    { name: 'Benjamin Manning', company: 'Massachusetts Institute of Technology', photo: 'speakers/manning.jpg', logos: ['logos/mit.png'] },
+    { ref: 'manning', company: 'Massachusetts Institute of Technology', logos: ['logos/mit.png'] },
   ],
   // Companies taking part, shown as a logo strip in the section; url is optional.
   // mark: true means the logo is a small symbol rather than a wordmark, so the name is set beside it.
@@ -346,6 +348,14 @@ export const industry = {
     },
   ],
 };
+
+// Industry Day roster with bios resolved (see industry.speakers above), in the shape the Speakers section uses.
+export const industryRoster = industry.speakers.map((s) => {
+  const base = s.ref ? { ...speakerById[s.ref], id: s.ref, photo: `speakers/${s.ref}.jpg` } : {};
+  const merged = { ...base, ...s };
+  return { ...merged, id: merged.id || merged.name.toLowerCase().replace(/\W+/g, '-'), affiliation: merged.company };
+});
+export const industryById = Object.fromEntries(industryRoster.map((s) => [s.id, s]));
 
 // Registration runs on Luma, one event per day. Set `lumaUrl` (the public event link) and `lumaEventId`
 // (evt-..., from the event's embed settings) to switch that day's button from "opens soon" to live.
@@ -385,8 +395,8 @@ export const days = [
         abstract: "This talk argues that chess offers a unique preview of how AI may transform human expertise because superhuman chess AI has existed for more than 25 years. Drawing on this long-term case study, it identifies ten major effects of AI, including surpassing expert performance, reshaping training and decision-making, and generating new knowledge. Many of these patterns are already emerging in fields such as medicine, education, software engineering, and mathematics. AI does not make human experts obsolete; instead, expertise increasingly involves selecting appropriate AI tools, interpreting and evaluating AI outputs, and applying contextual, ethical, and practical judgement.",
       },
       {
-        start: '15:00', end: '16:00', speaker: 'yoo', title: null,
-        abstract: null,
+        start: '15:00', end: '16:00', speaker: 'yoo', title: 'The Runtime Economy: Designing for Generative Capacity',
+        abstract: "In this talk, I describe the runtime economy, in which value is constituted at the moment of use, when models, data, tools, and human knowledge come together in a particular situation. Its basis is not the scarcity of these components, but the uniqueness of their combination and its fit with that moment. Generative AI makes this economy possible through two technological shifts. The semantic flip enables computation to operate on meaning through learned representations. The organic flip moves computation from fixed configurations and predetermined outputs to emergent compositions formed at runtime. Together, they make it possible to constitute contextually meaningful value that was not specified in advance. I introduce three interrelated constructs at two levels. At the individual level, endogenous utility describes how successive interactions become more valuable as the individual and the system co-evolve. At the organizational level, generative externalities are the resulting surpluses, which exceed what the individual anticipated and what any contributor could have produced alone. They can arise from one individual’s repeated engagement with a system, and they expand both productive capacity and demand. Generative capabilities enable an organization to produce these surpluses: to formulate new problems, compose solutions, and undertake activities previously beyond its reach. The goal is to expand the human frontier, in the service of human flourishing. In the runtime economy, architecture matters. Because value is constituted when resources come together at runtime, architecture determines who can bring them together, who controls their use, and who can retain and build on the learning they generate. These choices shape whether generative capabilities accumulate among participants or become concentrated in the systems they depend on. The central design problem is how to organize runtime value creation so that individuals and organizations continually expand what they can do. None of this is inevitable. What generative AI gives us is a possibility. Architecture is the key to realizing it, and we have to work at it actively to make it happen.",
       },
     ],
   },

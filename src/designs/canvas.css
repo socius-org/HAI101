@@ -810,7 +810,7 @@
 .cv-industry-blurb + .cv-industry-blurb { margin-top: 12px; opacity: 0.7; }
 
 .cv-industry-facts {
-  margin-top: 40px;
+  margin-top: 8px;
   border-bottom: 1.5px solid #4a4642;
 }
 
@@ -858,6 +858,9 @@
 }
 
 .cv-industry-cards { grid-template-columns: repeat(3, 1fr); }
+
+/* the cards + bio row, below the pitch and facts */
+.cv-industry-speakers { margin-top: 48px; }
 
 .cv-industry-cards .cv-card.is-hidden { background: #3a3734; }
 .cv-industry-cards .cv-card.is-hidden .cv-card-photo { background: #24221f; }
