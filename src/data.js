@@ -335,11 +335,11 @@ export const industry = {
     {
       id: 'li',
       name: 'Dr. Xiaomin Li',
-      role: 'Affiliate Assistant Professor, University of Washington',
+      role: 'Co-Founder and CEO',
       company: 'MatrAIx',
-      lab: 'Previously Google DeepMind and Microsoft CoreAI',
+      lab: 'Ph.D. in Applied Mathematics, Harvard University · Research Associate, MIT',
       photo: 'speakers/li.jpg',
-      logos: ['logos/matraix.png', 'logos/uw.svg'],
+      logos: ['logos/matraix.png', 'logos/harvard.svg'],
       previously: [
         'Senior Research Scientist, Google DeepMind (GenAI)',
         'Senior Research Scientist, Microsoft CoreAI (GitHub Copilot)',
@@ -354,7 +354,7 @@ export const industry = {
       name: 'Dr. Yuexing Hao',
       role: 'Co-Founder and COO',
       company: 'MatrAIx',
-      lab: 'Previously Microsoft and MIT EECS',
+      lab: 'Postdoctoral Researcher, MIT EECS',
       photo: 'speakers/hao.jpg',
       logos: ['logos/matraix.png', 'logos/mit.png'],
       previously: [
