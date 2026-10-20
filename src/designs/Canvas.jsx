@@ -19,19 +19,39 @@ const HOURS = Array.from({ length: (DAY_END - DAY_START) / 60 + 1 }, (_, i) => 9
 // Each speaker's slot, so the bio panel can show what they are speaking on and when.
 // Industry Day talks (industry.sessions) count too, so a speaker moved there keeps a talk on their card.
 const TALKS = {};
-const INDUSTRY_DAY = { ...industry, date: industry.date || industry.title, sessions: industry.sessions || [] };
+const INDUSTRY_DAY = { ...industry, id: 'industry', label: industry.title, date: industry.date || industry.title, sessions: industry.sessions || [] };
+// The timetable's columns: the three academic Fridays and Industry Day.
+const SCHEDULE_DAYS = [...days, INDUSTRY_DAY];
+// A session's speaker, academic or Industry Day; the line under their name is the company on Industry Day.
+const bySpeaker = (id) => (id ? speakerById[id] || industryById[id] : null);
+const affil = (sp) => sp?.company || sp?.affiliation || 'Affiliation TBC';
+// A session names one speaker (`speaker`) or several giving a joint talk (`speakers`).
+const speakerIds = (s) => s.speakers || (s.speaker ? [s.speaker] : []);
+const sessionSpeakers = (s) => speakerIds(s).map(bySpeaker).filter(Boolean);
 // A talk given inside an open-floor slot (sessions[].talk), as a session of its own.
 const socialTalk = (s) => (s.kind === 'social' && s.talk ? { ...s.talk, start: s.start, end: s.end } : null);
-[...days, INDUSTRY_DAY].forEach((d) => d.sessions.forEach((s) => {
-  if (!s.kind) TALKS[s.speaker || 'tbc'] = { ...s, date: d.date };
-  else if (socialTalk(s)) TALKS[s.talk.speaker] = { ...socialTalk(s), date: d.date };
+SCHEDULE_DAYS.forEach((d) => d.sessions.forEach((s) => {
+  if (!s.kind) {
+    const ids = speakerIds(s);
+    (ids.length ? ids : ['tbc']).forEach((id) => { TALKS[id] = { ...s, date: d.date }; });
+  } else if (socialTalk(s)) TALKS[s.talk.speaker] = { ...socialTalk(s), date: d.date };
 }));
-// "Fernand Gobet and Nick Oh": the hosts of a social slot, by speaker id.
-const shortName = (id) => speakerById[id]?.name.replace(/^(Prof\.|Dr\.) /, '') || id;
-const hostNames = (s) => {
-  const names = (s.hosts || []).map(shortName);
-  return names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}` : names[0] || '';
-};
+// "Fernand Gobet and Nick Oh": names joined for a sentence.
+const joinNames = (names) =>
+  names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}` : names[0] || '';
+const shortName = (id) => bySpeaker(id)?.name.replace(/^(Prof\.|Dr\.) /, '') || id;
+const hostNames = (s) => joinNames((s.hosts || []).map(shortName));
+// "Xiaomin Li and Yuexing Hao · MatrAIx": who gives a session, and where they are from.
+function Who({ s }) {
+  const sps = sessionSpeakers(s);
+  const affils = [...new Set(sps.map(affil))];
+  return (
+    <>
+      {sps.length ? joinNames(sps.map((sp) => sp.name)) : 'Speaker TBC'}{' '}
+      <span>· {sps.length ? affils.join(' · ') : 'Affiliation TBC'}</span>
+    </>
+  );
+}
 const hostLine = (s) => `with ${hostNames(s)}${s.cohost ? ` · co-hosted with ${s.cohost}` : ''}`;
 // "Talk by Youngjin Yoo · with ..." when the slot carries a talk.
 const socialLine = (s) => `${s.talk ? `Talk by ${shortName(s.talk.speaker)} · ` : ''}${hostLine(s)}`;
@@ -103,7 +123,7 @@ function TalkDialog({ talk, onClose, onSpeaker }) {
   useEffect(() => {
     if (talk && !ref.current.open) ref.current.showModal();
   }, [talk]);
-  const sp = talk?.speaker ? speakerById[talk.speaker] || industryById[talk.speaker] : null;
+  const sps = talk ? sessionSpeakers(talk) : [];
 
   return (
     <dialog
@@ -120,9 +140,7 @@ function TalkDialog({ talk, onClose, onSpeaker }) {
             {talk.dateLong}{talk.start ? ` · ${fmtTime(talk.start)}–${fmtTime(talk.end)}` : ''}
           </p>
           <h3 id="cv-dialog-title" className={talk.title ? '' : 'cv-tbc'}>{talk.title || 'Title TBC'}</h3>
-          <p className="cv-dialog-who">
-            {sp ? sp.name : 'Speaker TBC'} <span>· {sp ? sp.affiliation : 'Affiliation TBC'}</span>
-          </p>
+          <p className="cv-dialog-who"><Who s={talk} /></p>
           {talk.remote && (
             <p className="cv-dialog-onscreen">
               <OnScreen /> {onScreenNote(talk.room || 'the room')}
@@ -131,11 +149,11 @@ function TalkDialog({ talk, onClose, onSpeaker }) {
           <p className={talk.abstract ? 'cv-dialog-abstract' : 'cv-dialog-abstract cv-tbc'}>
             {talk.abstract ? linkify(talk.abstract) : 'Abstract to be announced.'}
           </p>
-          {sp && (
-            <button type="button" className="cv-dialog-link" onClick={() => { ref.current.close(); onSpeaker(sp.id); }}>
-              About the speaker
+          {sps.map((sp) => (
+            <button key={sp.id} type="button" className="cv-dialog-link" onClick={() => { ref.current.close(); onSpeaker(sp.id); }}>
+              {sps.length > 1 ? `About ${shortName(sp.id)}` : 'About the speaker'}
             </button>
-          )}
+          ))}
         </div>
       )}
     </dialog>
@@ -187,7 +205,9 @@ function Detail({ s }) {
 
 export default function Canvas() {
   // The placeholder card only appears while some session still has no speaker.
-  const roster = TALKS.tbc ? [...speakers, TBC_SPEAKER] : speakers;
+  // Academic speakers who moved to Industry Day (industry.speakers[].ref) are shown there, not here.
+  const mainSpeakers = speakers.filter((s) => !industryById[s.id]);
+  const roster = TALKS.tbc ? [...mainSpeakers, TBC_SPEAKER] : mainSpeakers;
   const [activeId, setActiveId] = useState(roster[0].id);
   const active = roster.find((s) => s.id === activeId);
   const detailRef = useRef(null);
@@ -198,7 +218,7 @@ export default function Canvas() {
   const [openTalk, setOpenTalk] = useState(() => {
     const id = new URLSearchParams(window.location.search).get('talk');
     for (const d of [...days, INDUSTRY_DAY]) {
-      const s = d.sessions.find((x) => id && (x.speaker === id || x.talk?.speaker === id));
+      const s = d.sessions.find((x) => id && (speakerIds(x).includes(id) || x.talk?.speaker === id));
       if (s) return { ...(socialTalk(s) || s), dateLong: d.dateLong };
     }
     return null;
@@ -245,9 +265,9 @@ export default function Canvas() {
           <nav aria-label="Sections">
             <a href="#about" className="cv-bar">About</a>
             <a href="#reading" className="cv-bar">Reading</a>
-            <a href="#speakers" className="cv-bar">Speakers</a>
-            <a href="#schedule" className="cv-bar">Schedule</a>
+            <a href="#speakers" className="cv-bar">Main Session</a>
             <a href="#industry" className="cv-bar">Industry Day</a>
+            <a href="#schedule" className="cv-bar">Schedule</a>
             <a href="#attend" className="cv-bar">Register</a>
           </nav>
         </header>
@@ -295,7 +315,7 @@ export default function Canvas() {
       <section className="cv-dark" id="speakers">
         <div className="cv-wrap">
           <p className="cv-kicker">The line-up</p>
-          <h2 className="cv-h2">Speakers</h2>
+          <h2 className="cv-h2">Main Session</h2>
           <div className="cv-speakers">
             <div className="cv-cards">
               {roster.map((s) => (
@@ -332,157 +352,6 @@ export default function Canvas() {
         </div>
       </section>
 
-      <section className="cv-wrap" id="schedule">
-        <p className="cv-kicker">Schedule</p>
-        <h2 className="cv-h2">Three Fridays</h2>
-
-        {/* desktop: timetable */}
-        <div className="cv-table" role="table" aria-label="Timetable">
-          <div className="cv-corner" style={{ gridColumn: 1, gridRow: 1 }} />
-          {days.map((d, i) => (
-            <div key={d.id} className="cv-dayhead" style={{ gridColumn: i + 2, gridRow: 1 }}>
-              <span>{d.label}</span>
-              {d.date}
-            </div>
-          ))}
-          {HOURS.map((h) => (
-            <div key={h} className="cv-hour" style={{ gridColumn: '1 / -1', gridRow: rowOf(`${h}:00`) }}>
-              <span>{h}:00</span>
-            </div>
-          ))}
-          {days.map((d, i) =>
-            d.sessions.map((s) => {
-              const sp = s.speaker ? speakerById[s.speaker] : null;
-              const style = { gridColumn: i + 2, gridRow: `${rowOf(s.start)} / ${rowOf(s.end)}` };
-              if (s.kind === 'lunch') {
-                return (
-                  <div key={d.id + s.start} className="cv-slot cv-slot-break" style={style}>
-                    Lunch break
-                  </div>
-                );
-              }
-              if (s.kind === 'intro') {
-                return (
-                  <div key={d.id + s.start} className="cv-slot cv-slot-intro" style={style}>
-                    <time>{fmtTime(s.start)}–{fmtTime(s.end)}</time>
-                    <span className="cv-slot-title">{s.title}</span>
-                  </div>
-                );
-              }
-              if (s.kind === 'social') {
-                const Tag = s.talk ? 'button' : 'div';
-                return (
-                  <Tag
-                    key={d.id + s.start}
-                    type={s.talk ? 'button' : undefined}
-                    className={`cv-slot cv-slot-social${s.talk ? ' has-talk' : ''}`}
-                    style={style}
-                    aria-haspopup={s.talk ? 'dialog' : undefined}
-                    onClick={s.talk ? () => setOpenTalk({ ...socialTalk(s), dateLong: d.dateLong, room: venues[d.venue]?.room }) : undefined}
-                  >
-                    {s.talk && <span className="cv-plus" aria-hidden="true" />}
-                    <span className="cv-slot-meta"><time>{fmtTime(s.start)}–{fmtTime(s.end)}</time></span>
-                    <span className="cv-slot-title">{s.title}</span>
-                    <span className="cv-slot-who">{socialLine(s)}</span>
-                    {s.blurb && <span className="cv-slot-blurb">{s.blurb}</span>}
-                  </Tag>
-                );
-              }
-              return (
-                <button
-                  key={d.id + s.start}
-                  type="button"
-                  className="cv-slot"
-                  style={style}
-                  aria-haspopup="dialog"
-                  onClick={() => setOpenTalk({ ...s, dateLong: d.dateLong, room: venues[d.venue]?.room })}
-                >
-                  <span className="cv-plus" aria-hidden="true" />
-                  <span className="cv-slot-meta">
-                    <time>{fmtTime(s.start)}–{fmtTime(s.end)}</time>
-                    {s.remote && <OnScreen />}
-                  </span>
-                  <span className={s.title ? 'cv-slot-title' : 'cv-slot-title cv-tbc'}>{s.title || 'Title TBC'}</span>
-                  <span className="cv-slot-who">
-                    {sp ? sp.name : 'Speaker TBC'} <span>· {sp ? sp.affiliation : 'Affiliation TBC'}</span>
-                  </span>
-                </button>
-              );
-            })
-          )}
-        </div>
-
-        {/* mobile: stacked lists */}
-        <div className="cv-list">
-          {days.map((d) => (
-            <div key={d.id}>
-              <h3>
-                <span className="cv-mark cv-mark-dark">{d.date}</span>
-              </h3>
-              <ol>
-                {d.sessions.map((s) => {
-                  const sp = s.speaker ? speakerById[s.speaker] : null;
-                  return (
-                    <li key={s.start} className={s.kind === 'lunch' ? 'cv-list-break' : ''}>
-                      <time>{fmtTime(s.start)}–{fmtTime(s.end)}</time>
-                      {s.kind === 'lunch' ? (
-                        <p>Lunch break</p>
-                      ) : s.kind === 'intro' ? (
-                        <p>
-                          <span className="cv-slot-title">{s.title}</span>
-                          <span className="cv-slot-who">{sp ? sp.name : 'Speaker TBC'}</span>
-                        </p>
-                      ) : s.kind === 'social' && !s.talk ? (
-                        <p>
-                          <span className="cv-slot-title">{s.title}</span>
-                          <span className="cv-slot-who">{socialLine(s)}</span>
-                        </p>
-                      ) : s.kind === 'social' ? (
-                        <button
-                          type="button"
-                          className="cv-list-open"
-                          aria-haspopup="dialog"
-                          onClick={() => setOpenTalk({ ...socialTalk(s), dateLong: d.dateLong, room: venues[d.venue]?.room })}
-                        >
-                          <span>
-                            <span className="cv-slot-title">{s.title}</span>
-                            <span className="cv-slot-who">{socialLine(s)}</span>
-                          </span>
-                          <span className="cv-plus" aria-hidden="true" />
-                        </button>
-                      ) : (
-                        <button
-                          type="button"
-                          className="cv-list-open"
-                          aria-haspopup="dialog"
-                          onClick={() => setOpenTalk({ ...s, dateLong: d.dateLong, room: venues[d.venue]?.room })}
-                        >
-                          <span>
-                            <span className={s.title ? 'cv-slot-title' : 'cv-slot-title cv-tbc'}>{s.title || 'Title TBC'}</span>
-                            <span className="cv-slot-who">
-                              {sp ? sp.name : 'Speaker TBC'} <span>· {sp ? sp.affiliation : 'Affiliation TBC'}</span>
-                            </span>
-                            {s.remote && <OnScreen />}
-                          </span>
-                          <span className="cv-plus" aria-hidden="true" />
-                        </button>
-                      )}
-                    </li>
-                  );
-                })}
-              </ol>
-            </div>
-          ))}
-        </div>
-
-        <p className="cv-note">All times are UK time.</p>
-        {days.some((d) => d.sessions.some((s) => s.remote)) && (
-          <p className="cv-note cv-note-onscreen">
-            <OnScreen /> {onScreenNote('the room')}
-          </p>
-        )}
-      </section>
-
       <section className="cv-dark cv-industry" id="industry">
         {/* row 1: the pitch beside the facts; row 2: cards beside the chosen speaker's bio, as in Speakers */}
         <div className="cv-wrap cv-industry-grid">
@@ -506,7 +375,9 @@ export default function Canvas() {
               </div>
               <div>
                 <dt>Speakers</dt>
-                <dd className="cv-tbc">To be confirmed</dd>
+                <dd className={industryRoster.length ? '' : 'cv-tbc'}>
+                  {industryRoster.length ? `${industryRoster.length} confirmed · more to follow` : 'To be confirmed'}
+                </dd>
               </div>
             </dl>
             {industry.companies?.length > 0 && (
@@ -585,6 +456,179 @@ export default function Canvas() {
         </div>
       </section>
 
+      <section className="cv-wrap" id="schedule">
+        <p className="cv-kicker">Schedule</p>
+        <h2 className="cv-h2">Four Fridays</h2>
+
+        {/* desktop: timetable */}
+        <div
+          className="cv-table"
+          role="table"
+          aria-label="Timetable"
+          style={{ gridTemplateColumns: `84px repeat(${SCHEDULE_DAYS.length}, 1fr)` }}
+        >
+          <div className="cv-corner" style={{ gridColumn: 1, gridRow: 1 }} />
+          {SCHEDULE_DAYS.map((d, i) => (
+            <div key={d.id} className="cv-dayhead" style={{ gridColumn: i + 2, gridRow: 1 }}>
+              <span>{d.label}</span>
+              {d.date}
+            </div>
+          ))}
+          {HOURS.map((h) => (
+            <div key={h} className="cv-hour" style={{ gridColumn: '1 / -1', gridRow: rowOf(`${h}:00`) }}>
+              <span>{h}:00</span>
+            </div>
+          ))}
+          {/* talks without a slot yet (Industry Day, as speakers confirm) are listed under the column */}
+          {SCHEDULE_DAYS.map((d, i) => {
+            const untimed = d.sessions.filter((s) => !s.start);
+            if (!untimed.length) return null;
+            return (
+              <div key={d.id + '-tbc'} className="cv-slot-tbc" style={{ gridColumn: i + 2, gridRow: rowOf('16:00') + 1 }}>
+                <span className="cv-slot-tbc-head">Times to be announced</span>
+                {untimed.map((s) => (
+                  <button
+                    key={speakerIds(s).join('+') || s.title}
+                    type="button"
+                    className="cv-slot-tbc-item"
+                    aria-haspopup="dialog"
+                    onClick={() => setOpenTalk({ ...s, dateLong: d.dateLong, room: venues[d.venue]?.room })}
+                  >
+                    <span className={s.title ? 'cv-slot-title' : 'cv-slot-title cv-tbc'}>{s.title || 'Title TBC'}</span>
+                    <span className="cv-slot-who"><Who s={s} /></span>
+                  </button>
+                ))}
+              </div>
+            );
+          })}
+          {SCHEDULE_DAYS.map((d, i) =>
+            d.sessions.filter((s) => s.start).map((s) => {
+              const style = { gridColumn: i + 2, gridRow: `${rowOf(s.start)} / ${rowOf(s.end)}` };
+              if (s.kind === 'lunch') {
+                return (
+                  <div key={d.id + s.start} className="cv-slot cv-slot-break" style={style}>
+                    Lunch break
+                  </div>
+                );
+              }
+              if (s.kind === 'intro') {
+                return (
+                  <div key={d.id + s.start} className="cv-slot cv-slot-intro" style={style}>
+                    <time>{fmtTime(s.start)}–{fmtTime(s.end)}</time>
+                    <span className="cv-slot-title">{s.title}</span>
+                  </div>
+                );
+              }
+              if (s.kind === 'social') {
+                const Tag = s.talk ? 'button' : 'div';
+                return (
+                  <Tag
+                    key={d.id + s.start}
+                    type={s.talk ? 'button' : undefined}
+                    className={`cv-slot cv-slot-social${s.talk ? ' has-talk' : ''}`}
+                    style={style}
+                    aria-haspopup={s.talk ? 'dialog' : undefined}
+                    onClick={s.talk ? () => setOpenTalk({ ...socialTalk(s), dateLong: d.dateLong, room: venues[d.venue]?.room }) : undefined}
+                  >
+                    {s.talk && <span className="cv-plus" aria-hidden="true" />}
+                    <span className="cv-slot-meta"><time>{fmtTime(s.start)}–{fmtTime(s.end)}</time></span>
+                    <span className="cv-slot-title">{s.title}</span>
+                    <span className="cv-slot-who">{socialLine(s)}</span>
+                    {s.blurb && <span className="cv-slot-blurb">{s.blurb}</span>}
+                  </Tag>
+                );
+              }
+              return (
+                <button
+                  key={d.id + s.start}
+                  type="button"
+                  className="cv-slot"
+                  style={style}
+                  aria-haspopup="dialog"
+                  onClick={() => setOpenTalk({ ...s, dateLong: d.dateLong, room: venues[d.venue]?.room })}
+                >
+                  <span className="cv-plus" aria-hidden="true" />
+                  <span className="cv-slot-meta">
+                    <time>{fmtTime(s.start)}–{fmtTime(s.end)}</time>
+                    {s.remote && <OnScreen />}
+                  </span>
+                  <span className={s.title ? 'cv-slot-title' : 'cv-slot-title cv-tbc'}>{s.title || 'Title TBC'}</span>
+                  <span className="cv-slot-who"><Who s={s} /></span>
+                </button>
+              );
+            })
+          )}
+        </div>
+
+        {/* mobile: stacked lists */}
+        <div className="cv-list">
+          {SCHEDULE_DAYS.map((d) => (
+            <div key={d.id}>
+              <h3>
+                <span className="cv-mark cv-mark-dark">{d.date}</span>
+              </h3>
+              <ol>
+                {d.sessions.map((s) => {
+                  const sp = bySpeaker(s.speaker);
+                  return (
+                    <li key={s.start || speakerIds(s).join('+') || s.title} className={s.kind === 'lunch' ? 'cv-list-break' : ''}>
+                      {s.start ? <time>{fmtTime(s.start)}–{fmtTime(s.end)}</time> : <time className="cv-tbc">Time TBC</time>}
+                      {s.kind === 'lunch' ? (
+                        <p>Lunch break</p>
+                      ) : s.kind === 'intro' ? (
+                        <p>
+                          <span className="cv-slot-title">{s.title}</span>
+                          <span className="cv-slot-who">{sp ? sp.name : 'Speaker TBC'}</span>
+                        </p>
+                      ) : s.kind === 'social' && !s.talk ? (
+                        <p>
+                          <span className="cv-slot-title">{s.title}</span>
+                          <span className="cv-slot-who">{socialLine(s)}</span>
+                        </p>
+                      ) : s.kind === 'social' ? (
+                        <button
+                          type="button"
+                          className="cv-list-open"
+                          aria-haspopup="dialog"
+                          onClick={() => setOpenTalk({ ...socialTalk(s), dateLong: d.dateLong, room: venues[d.venue]?.room })}
+                        >
+                          <span>
+                            <span className="cv-slot-title">{s.title}</span>
+                            <span className="cv-slot-who">{socialLine(s)}</span>
+                          </span>
+                          <span className="cv-plus" aria-hidden="true" />
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className="cv-list-open"
+                          aria-haspopup="dialog"
+                          onClick={() => setOpenTalk({ ...s, dateLong: d.dateLong, room: venues[d.venue]?.room })}
+                        >
+                          <span>
+                            <span className={s.title ? 'cv-slot-title' : 'cv-slot-title cv-tbc'}>{s.title || 'Title TBC'}</span>
+                            <span className="cv-slot-who"><Who s={s} /></span>
+                            {s.remote && <OnScreen />}
+                          </span>
+                          <span className="cv-plus" aria-hidden="true" />
+                        </button>
+                      )}
+                    </li>
+                  );
+                })}
+              </ol>
+            </div>
+          ))}
+        </div>
+
+        <p className="cv-note">All times are UK time.</p>
+        {SCHEDULE_DAYS.some((d) => d.sessions.some((s) => s.remote)) && (
+          <p className="cv-note cv-note-onscreen">
+            <OnScreen /> {onScreenNote('the room')}
+          </p>
+        )}
+      </section>
+
       <section className="cv-wrap cv-attend" id="attend">
         <div className="cv-attend-head">
           <div>
@@ -626,14 +670,16 @@ export default function Canvas() {
         </div>
 
         <ol className="cv-register">
-          {days.map((d) => {
+          {SCHEDULE_DAYS.map((d) => {
             const talks = d.sessions.filter((s) => !s.kind || socialTalk(s));
-            const first = d.sessions.find((s) => s.kind !== 'lunch');
+            const timed = d.sessions.filter((s) => s.start && s.kind !== 'lunch');
+            const growing = d.id === 'industry' && talks.length < (industry.slots || 0);
             return (
               <li key={d.id}>
                 <h3>{d.dateLong}</h3>
                 <p>
-                  {talks.length} talks · {fmtTime(first.start)}–{fmtTime(d.sessions[d.sessions.length - 1].end)}
+                  {talks.length} {talks.length === 1 ? 'talk' : 'talks'}{growing ? ' so far' : ''}
+                  {timed.length > 0 && ` · ${fmtTime(timed[0].start)}–${fmtTime(timed[timed.length - 1].end)}`}
                   <br />
                   {d.venue ? (
                     venues[d.venue].label
@@ -658,29 +704,6 @@ export default function Canvas() {
               </li>
             );
           })}
-          <li>
-            <h3>{industry.title}</h3>
-            <p>
-              <span className={industry.date ? '' : 'cv-tbc'}>{industry.date || 'Date TBC'}</span>
-              {' · '}Speakers to be revealed
-              <br />
-              {industry.venue ? venues[industry.venue].label : <span className="cv-tbc">Venue TBC</span>}
-            </p>
-            {industry.lumaUrl ? (
-              <a
-                className="cv-register-btn"
-                href={industry.lumaUrl}
-                target="_blank"
-                rel="noreferrer"
-                data-luma-action={industry.lumaEventId ? 'checkout' : undefined}
-                data-luma-event-id={industry.lumaEventId || undefined}
-              >
-                Register on Luma
-              </a>
-            ) : (
-              <span className="cv-register-btn is-soon">Registration opens soon</span>
-            )}
-          </li>
         </ol>
       </section>
 

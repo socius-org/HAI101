@@ -113,14 +113,17 @@ def img(path, r):
 # Per-speaker reframing: (zoom, top_bias). zoom > 1 crops in; top_bias 1.0 takes all the cropped height off
 # the top (face moves up, clear of the name card), 0.0 off the bottom, 0.5 from both. zoom < 1 zooms out onto a
 # blurred extension of the photo, with top_bias 1.0 keeping the photo at the top of the frame (above 1.0 nudges it up).
+# (zoom, top_bias) for the 5-column cards (ratio 1.6): zoom < 1 scales the whole photo onto a blurred
+# extension of itself; top_bias 1.0 pins it to the top, a little under 1 leaves headroom above the hair.
 FOCUS = {
-    "noichl": (0.94, 1.5),
+    "noichl": (0.97, 0.94),
     "oh": (0.96, 1.0),
     "feng": (0.96, 1.0),
     "gobet": (0.965, 1.0),
     "manning": (0.88, 1.0),
-    "jagadish": (0.88, 1.0),
-    "liu": (0.96, 1.0),
+    "jagadish": (0.86, 0.88),
+    "liu": (0.95, 0.92),
+    "yoo": (0.93, 0.9),
 }
 
 def treated_photo(sid, ratio=None):

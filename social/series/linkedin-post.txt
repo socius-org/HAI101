@@ -1,0 +1,141 @@
+LINKEDIN POST · HAI101
+Attach: social/series/combined-poster.jpg (4800 x 3600). Post as a collaborative post with the
+speakers added as collaborators, so it appears on their profiles too. Where a name is in
+[brackets], use LinkedIn's @-mention so it links to their profile.
+
+The post to use is first. Three alternatives follow: A is a plainer announcement, B leads with
+the idea, C is written in "we" for a collaborative post where the speakers share it themselves.
+
+
+=====================================================================
+THE POST · original version, with Industry Day as the fourth Friday
+=====================================================================
+
+What can machines teach us about minds?
+
+That is the question behind HAI101: Human x Artificial Intelligence, a lecture series I'm
+organising at LSE this autumn with the Centre for Philosophy of Natural and Social Science.
+
+Machines now imitate people well enough that researchers use them as proxies: to run an
+experiment before recruiting a participant, to predict how a group will behave, to test a
+theory at a scale no human study could reach. At the same time, the machines have become
+something to study in their own right. The questions we once asked only of people are being
+asked of them.
+
+Thirteen speakers from Stanford, MIT, Penn, UCL, Utrecht, Oxford, Groningen, Princeton, Yale
+and LSE, over four Fridays:
+
+• 23 Oct · [Steven Feng], [Nick Oh], [Fernand Gobet], [Youngjin Yoo]
+• 6 Nov · [Helen Jin], [Megan Peters], [Maximilian Noichl], [Nicholas Bishop], [Matthia Sabatelli]
+• 13 Nov · [Jessica Thompson], [Akshay Jagadish], [Gabrielle Kaili-May Liu]
+• 27 Nov · Industry Day, with [Benjamin Manning] first to confirm
+
+Free and in person at LSE. Each Friday has its own ticket, and if you have never met a neural
+network, we wrote a note to read beforehand: Introduction to Transformers and LLMs, with
+[Steven Feng].
+
+Programme, abstracts, reading and registration: socialscience.ai
+
+Supported by Cookiy Labs, with the LSESU AI Society.
+
+#HAI101 #ArtificialIntelligence #CognitiveScience #Philosophy #SocialScience #LSE
+
+
+=====================================================================
+ALTERNATIVES
+=====================================================================
+
+=====================================================================
+OPTION A · THE ANNOUNCEMENT
+=====================================================================
+
+HAI101: Human x Artificial Intelligence — a lecture series at LSE, four Fridays this autumn.
+
+What can machines teach us about minds, and what can the study of minds teach the machines?
+Thirteen researchers from the social, behavioural and cognitive sciences, philosophy and AI,
+hosted by LSE's Centre for Philosophy of Natural and Social Science.
+
+• Fri 23 Oct · [Steven Feng] (Stanford), [Nick Oh] (LSE), [Fernand Gobet] (LSE), [Youngjin Yoo] (LSE)
+• Fri 6 Nov · [Helen Jin] (Penn), [Megan Peters] (UCL), [Maximilian Noichl] (Utrecht), [Nicholas Bishop] (Oxford), [Matthia Sabatelli] (Groningen)
+• Fri 13 Nov · [Jessica Thompson] (Oxford), [Akshay Jagadish] (Princeton), [Gabrielle Kaili-May Liu] (Yale)
+• Fri 27 Nov · Industry Day, with [Benjamin Manning] (MIT) and more to come
+
+Free, in person, one ticket per Friday. New to neural networks? Read our note first:
+Introduction to Transformers and LLMs, with [Steven Feng].
+
+Programme, abstracts and registration: socialscience.ai
+
+Supported by Cookiy Labs, with the LSESU AI Society.
+
+#HAI101 #ArtificialIntelligence #CognitiveScience #Philosophy #SocialScience #LSE
+
+
+=====================================================================
+OPTION B · THE IDEA FIRST
+=====================================================================
+
+The people who founded AI were not computer scientists. Herbert Simon was a political scientist
+with a Nobel in economics and psychology's top award. The perceptron was built by a psychologist.
+The newest "reasoning" models are described in the words of Daniel Kahneman.
+
+The disciplines that study humans have always been inside AI. HAI101 puts them back in the room.
+
+Human x Artificial Intelligence is a lecture series at LSE, hosted by the Centre for Philosophy
+of Natural and Social Science, asking what machines can teach us about minds, and what minds can
+teach the machines. Thirteen speakers over four Fridays:
+
+23 Oct · machines as learners and instruments — [Steven Feng], [Nick Oh], [Fernand Gobet], [Youngjin Yoo]
+6 Nov · machines examined as minds — [Helen Jin], [Megan Peters], [Maximilian Noichl], [Nicholas Bishop], [Matthia Sabatelli]
+13 Nov · what this does to science — [Jessica Thompson], [Akshay Jagadish], [Gabrielle Kaili-May Liu]
+27 Nov · Industry Day, the same questions asked by builders — [Benjamin Manning] and more
+
+Free and in person. Each Friday has its own ticket. If you have never met a neural network, we
+wrote the primer: Introduction to Transformers and LLMs.
+
+socialscience.ai
+
+Supported by Cookiy Labs, with the LSESU AI Society.
+
+#HAI101 #ArtificialIntelligence #CognitiveScience #Philosophy #SocialScience #LSE
+
+
+=====================================================================
+OPTION C · FOR THE COLLABORATIVE POST (speakers as co-authors)
+=====================================================================
+
+We are speaking at HAI101: Human x Artificial Intelligence, a lecture series at LSE this autumn.
+
+Between us we work on language models that learn like children, neural networks as stand-ins
+for human participants, what chess tells us about expertise in the age of AI, value creation at
+runtime, measuring understanding and testing for consciousness in machines, how models travel
+between sciences, bounded rationality at collective scale, cognitive-like learning in networks,
+behavioural clones as scientific instruments, whether LLMs are the beginning or end of cognitive
+science, and reliability through metacognition. One question runs through all of it: what can
+machines teach us about minds, and what can minds teach the machines?
+
+Four Fridays at LSE, hosted by the Centre for Philosophy of Natural and Social Science:
+
+• 23 Oct · [Steven Feng], [Nick Oh], [Fernand Gobet], [Youngjin Yoo]
+• 6 Nov · [Helen Jin], [Megan Peters], [Maximilian Noichl], [Nicholas Bishop], [Matthia Sabatelli]
+• 13 Nov · [Jessica Thompson], [Akshay Jagadish], [Gabrielle Kaili-May Liu]
+• 27 Nov · Industry Day — [Benjamin Manning] and more to come
+
+Free, in person, a ticket per Friday. Abstracts, bios and a primer on transformers for anyone
+new to neural networks: socialscience.ai
+
+Supported by Cookiy Labs, with the LSESU AI Society.
+
+#HAI101 #ArtificialIntelligence #CognitiveScience #Philosophy #SocialScience #LSE
+
+
+=====================================================================
+NOTES
+=====================================================================
+- LinkedIn collaborative posts: Create post → add image → click the collaborator icon (two
+  people) → add up to 25 collaborators; each must accept before it shows on their profile.
+  Option C is written in "we" for that; A and B read fine either way.
+- Mentions: type @ then the name; the brackets above mark where. Fernand Gobet, Youngjin Yoo and
+  LSE's CPNSS page can be mentioned as well as the speakers.
+- Keep the first two lines strong: LinkedIn truncates the post after about 210 characters
+  until "see more".
+- Hashtags: five or six is the sweet spot; drop #LSE if tagging the LSE page.

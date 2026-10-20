@@ -31,3 +31,6 @@ lecture-notes/transformers-src/main.pdf
 lecture-notes/transformers-src/build.log
 # downloaded reference material, not ours to publish
 lecture-notes/microgpt-src/
+
+# opening-talk slides and script: local working material
+opening/

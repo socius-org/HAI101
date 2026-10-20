@@ -332,18 +332,62 @@ export const industry = {
   ],
   speakers: [
     { ref: 'manning', company: 'Massachusetts Institute of Technology', logos: ['logos/mit.png'] },
+    {
+      id: 'li',
+      name: 'Dr. Xiaomin Li',
+      role: 'Affiliate Assistant Professor, University of Washington',
+      company: 'MatrAIx',
+      lab: 'Previously Google DeepMind and Microsoft CoreAI',
+      photo: 'speakers/li.jpg',
+      logos: ['logos/matraix.png', 'logos/uw.svg'],
+      previously: [
+        'Senior Research Scientist, Google DeepMind (GenAI)',
+        'Senior Research Scientist, Microsoft CoreAI (GitHub Copilot)',
+        'Research Associate, MIT',
+        'Ph.D., Applied Mathematics, Harvard University',
+        'B.S., Mathematics and Computer Science, University of Illinois Urbana-Champaign',
+        'Microsoft Research, Amazon, Meta and ByteDance',
+      ],
+    },
+    {
+      id: 'hao',
+      name: 'Dr. Yuexing Hao',
+      role: 'Co-Founder and COO',
+      company: 'MatrAIx',
+      lab: 'Previously Microsoft and MIT EECS',
+      photo: 'speakers/hao.jpg',
+      logos: ['logos/matraix.png', 'logos/mit.png'],
+      previously: [
+        'Researcher, Microsoft',
+        'Postdoctoral Researcher, MIT EECS',
+        'Ph.D., Computer Science, Cornell University',
+        'M.S., Computer Science, Tufts University',
+        'B.A., Computer Science, Rutgers University',
+        'Google Research, Mayo Clinic and Scale AI',
+      ],
+    },
   ],
   // Companies taking part, shown as a logo strip in the section; url is optional.
   // mark: true means the logo is a small symbol rather than a wordmark, so the name is set beside it.
   companies: [
     { name: 'Cookiy Labs', logo: 'logos/cookiy.svg', url: 'https://cookiylabs.com', mark: true },
+    { name: 'MatrAIx', logo: 'logos/matraix.png', url: 'https://matraix.ai' },
   ],
   slots: 6,
-  // Talks with abstracts, like days[].sessions; start/end are null until the programme is set.
-  // A speaker listed in `speakers` above keeps their bio there and the talk shows on their card.
+  // Talks with abstracts, like days[].sessions. Industry Day is the fourth column of the timetable; a
+  // session with start/end null is listed under the column as "time to be announced" until its slot is set.
+  // A speaker listed in `speakers` above keeps their bio there and the talk shows on their card; an academic
+  // speaker referenced here (`ref`) is shown on Industry Day only, not in the Main Session cards.
+  // A joint talk names its speakers in `speakers: [...]` instead of `speaker`.
   sessions: [
     {
-      start: null, end: null, speaker: 'manning', remote: true, title: 'Predicting and Understanding Human Behaviour with AI Simulations',
+      start: null, end: null, speakers: ['li', 'hao'],
+      title: 'MatrAIx: Simulating the World with 8.3 Billion Persona Agents',
+      abstract: 'MatrAIx (https://matraix.ai) is a startup studying persona-based agent evaluation and training. It began as an open-source research community building simulated-user evaluation infrastructure for digital products and AI systems, grounded in a population of 8.3 billion persona agents. The open-source project gained significant traction on launch: 5K+ posts on X within 10 hours, two features in Forbes, an invitation from Nature senior editors, media interviews, and invited talks at Stanford, Columbia, Nvidia, Amazon, Adobe, Microsoft, Netflix and DeepMind. The community includes researchers and engineers from OpenAI, Anthropic, Google DeepMind and xAI, with an advisory committee listed at https://matraix.ai/community/. The recent MatrAIx paper introduces the full infrastructure: Persona 8B, a population-scale persona dataset spanning 1,290 dimensions; interactive evaluation environments for surveys, AI chatbots, websites and apps; and 1,010 real-world evaluation tasks across 25+ domains. Across 18,189 evaluation trials, the work shows how persona agents can surface heterogeneous user responses to product changes and AI behaviour, with validation studies showing strong persona adherence and extraction quality.\n\nDemo: https://youtu.be/cNFkz9Wo1y4\nPaper: https://arxiv.org/abs/2608.04205\nCode: https://github.com/MatrAIx-ai/MatrAIx-Persona-8B',
+    },
+    {
+      start: '14:00', end: '15:00', speaker: 'manning', remote: true,
+      title: 'Predicting and Understanding Human Behaviour with AI Simulations',
       abstract: "Useful social science theory should predict behaviour in settings it was never built for, yet applying a theory to a new setting almost always requires ad hoc modification. I will argue that AI agents placed in simulations offer an alternative. They provide a way of carrying theory into novel environments, and a new instrument for asking how much structure human behaviour really has. First, I will show how “general” agents can be built from theory-grounded natural language instructions and small amounts of existing human data, validated across distinct but related settings rather than by a standard train-test split. On a pre-committed population of 883,200 novel strategic games, such agents predict human play better than off-the-shelf agents, a cognitive hierarchy model, and game-theoretic equilibria. Second, I will show how prompts themselves can serve as a fittable, interpretable model of a person. Language models are assigned “type vectors” of trait intensities, which are then optimised against 119,147 decisions from 78,657 subjects across ten classic economic games. Three dimensions, Risk Aversion, Strategic Sophistication, and Trust, closely match human behaviour, and the fitted types cluster into fewer than a dozen groups that predict play in held-out games. Together, these results suggest AI simulations are not only a prediction technology, but a tool for discovering how few moving parts a theory of behaviour might need.",
     },
   ],
@@ -352,7 +396,8 @@ export const industry = {
 // Industry Day roster with bios resolved (see industry.speakers above), in the shape the Speakers section uses.
 export const industryRoster = industry.speakers.map((s) => {
   const base = s.ref ? { ...speakerById[s.ref], id: s.ref, photo: `speakers/${s.ref}.jpg` } : {};
-  const merged = { ...base, ...s };
+  // Industry Day bios show "Previously" only: no interests or publications, even for a referenced academic.
+  const { interests, interestsTbc, publications, upcoming, ...merged } = { ...base, ...s };
   return { ...merged, id: merged.id || merged.name.toLowerCase().replace(/\W+/g, '-'), affiliation: merged.company };
 });
 export const industryById = Object.fromEntries(industryRoster.map((s) => [s.id, s]));
@@ -379,7 +424,7 @@ export const days = [
     sessions: [
       {
         start: '10:00', end: '10:15', speaker: 'oh', kind: 'intro', title: 'Introduction to HAI101',
-        abstract: 'A short welcome and an outline of the series: the question behind it, and how the three Fridays fit together.',
+        abstract: 'A short welcome and an outline of the series: the question behind it, and how the four Fridays fit together.',
       },
       {
         start: '10:30', end: '11:30', speaker: 'feng', remote: true, title: 'The Developing Language Model: How Experience Shapes Learning and Failure',
