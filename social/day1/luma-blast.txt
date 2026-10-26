@@ -1,0 +1,56 @@
+LUMA BLAST · HAI101 · SESSION DAY 1 · FRIDAY 23 OCTOBER
+Send to registered guests two days before (Wed 21 Oct). Paste into Luma's composer and apply its heading and bold styles where marked; "##" and "**" are markers, not text to send. Luma renders links on its own. Insert the Google Form link where marked. Paragraphs are single lines so they paste cleanly.
+
+
+=====================================================================
+THE MESSAGE
+=====================================================================
+
+Subject: HAI101 in 2 days · external guests: form due today
+
+Hi everyone,
+
+HAI101 starts in 2 days, Friday 23 October, at 10:00 in The LSE Lecture Theatre (CBG.G.01), Centre Building, 2 Houghton Street.
+
+## External (non-LSE) attendees: action required by TODAY
+
+Final call for all external participants (non-LSE). Under LSE security policy, we must submit details of all external participants in advance. **If you are not from LSE, please fill in this form [Open Google Form: INSERT LINK] by TODAY.** Unfortunately, we won't be able to admit anyone whose details we haven't received by the deadline.
+
+**If you're attending multiple days, you only need to fill in the form once**, since it asks which sessions you'll be joining. We'll send a similar update ahead of Day 2 and Day 3, and there's no need to resubmit.
+
+## The day
+
+10:00  Welcome and introduction · Nick Oh
+10:30  Steven Feng, Stanford · The Developing Language Model: How Experience Shapes Learning and Failure (live on screen)
+11:30  Lunch break (on your own)
+12:30  Nick Oh, LSE · Neural Networks as Behavioural and Cognitive Proxy
+13:45  Prof. Fernand Gobet, LSE · Impact of AI on Human Expertise: Canaries in the Coalmine
+15:00  Prof. Youngjin Yoo, LSE · The Runtime Economy: Designing for Generative Capacity
+
+Each talk is an hour, with Q&A inside it.
+
+## Lecture note
+
+Since most of the talks involve large language models, Steven and I have written a short lecture note, Introduction to Transformers and LLMs. If you have never studied a neural network, or would like a clearer picture of what happens inside a transformer, we think it is a good place to start. The note assumes little beyond elementary linear algebra and takes about 1.5 hours. 
+
+--
+
+See you on Friday!
+
+Nick Oh
+
+
+=====================================================================
+SUBJECT LINE OPTIONS
+=====================================================================
+- HAI101 in 2 days · external guests: form due today
+- HAI101 in 2 days · 10:00, The LSE Lecture Theatre (CBG.G.01)
+- Friday: HAI101 Day 1 · programme, lecture note, security form
+
+=====================================================================
+NOTES
+=====================================================================
+- The security form is the only action in the email and its deadline is today, so it sits first and in the subject line. Readers skim blasts.
+- Luma blasts go to everyone registered for this event only; the 6 Nov and 13 Nov events have their own guest lists.
+- If catering is arranged, replace "(on your own)" with where lunch is served.
+- Day-before version: "in 2 days" becomes "tomorrow" in the subject and first line, and the form deadline wording changes to match.

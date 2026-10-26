@@ -10,6 +10,11 @@ All images are 1080 px wide JPEGs: feed and carousel slides are 1080 x 1350 (4:5
 1080 x 1920 (9:16) with the top and bottom 250 px kept clear of copy for Instagram's overlays.
 Each folder has a `caption.txt` with ready-to-paste captions, hashtags and alt text.
 
+YouTube thumbnails (1280 x 720, one per recorded talk, Industry Day included) come from `social/build/thumbs.py`
+into `social/youtube/thumbs/a/` (split card, linen) and `social/youtube/thumbs/b/` (dark). Rebuild them the same
+way (`VARIANT=b` for one variant). The big words are the shorter half of an "A: B" title; `HOOKS` in the script
+overrides any talk.
+
 ## What is where
 
 | Folder | Files | Use |

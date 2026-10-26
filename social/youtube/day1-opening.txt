@@ -1,0 +1,128 @@
+YOUTUBE KIT - HAI101 OPENING LECTURE (Day 1, Friday 23 October 2026)
+Speaker: Nick Oh, LSE. Recorded in The LSE Lecture Theatre (CBG.G.01), Centre Building.
+Everything below is ready to paste. Pick one title, paste the description as is, then replace the
+chapter times with the real ones from your recording (they are estimates from the script timings).
+YouTube needs the first chapter at 00:00, at least three chapters, each at least 10 seconds long.
+
+
+=====================================================================
+TITLE (max 100 characters; pick one)
+=====================================================================
+1. Why Human x AI? How Economists, Psychologists and Philosophers Built AI | HAI101 Opening (LSE)
+2. The Decade AI Was Born Had No Computer Scientists | HAI101 Opening Lecture, LSE
+3. Hayek, Goodhart and the Perceptron: Two LSE Economists Inside the Machines | HAI101 Opening
+4. HAI101 Opening Lecture: What Machines Can Teach Us About Minds (Nick Oh, LSE)
+
+Recommended: 1. It states the argument, names the fields people search for, and carries the series tag.
+
+
+=====================================================================
+DESCRIPTION
+=====================================================================
+Opening lecture of HAI101: Human x Artificial Intelligence, a lecture series at the London School of Economics on what machines can teach us about minds, and what the study of minds can teach the machines. Recorded on Friday 23 October 2026 in The LSE Lecture Theatre.
+
+In fifteen minutes, one idea and one map. The idea: the people who founded AI were not computer scientists. In the decade from 1943 to 1956, a neurophysiologist and a logician built the first artificial neuron, an economist founded game theory and designed the computer, a political scientist showed that people satisfice rather than optimise, a psychologist proposed the learning rule, and a mathematician published the imitation game in a philosophy journal. AI and cognitive science were born in the same summer. The lecture follows that braid of five strands (social science, behavioural science, cognitive science, philosophy and AI) from Herbert Simon's EPAM and Chase and Simon's chess experiments, through Kahneman's System 1 and System 2 to today's reasoning models, and through two LSE economists: Friedrich Hayek, whose 1952 theory of mind is cited on page 388 of Rosenblatt's perceptron paper, and Charles Goodhart, whose law names the way reward models go wrong.
+
+The map: the four questions the series asks of its fourteen speakers. Machines as instruments, as learners, examined as minds, and as disruptors.
+
+Series programme, abstracts and bios: https://socialscience.ai
+Lecture note, Introduction to Transformers and LLMs (Oh & Feng, 2026): https://socialscience.ai/notes/HAI101-Introduction-to-Transformers-and-LLMs.pdf
+
+CHAPTERS
+00:00 Welcome: one idea, one map
+00:17 Why Human x AI?
+01:05 The decade before AI's birth
+02:55 Herbert Simon and EPAM
+03:30 Fernand Gobet and CHREST
+03:55 Daniel Kahneman and System-1/2 Thinking
+04:40 Two LSE economists inside the machines
+05:15 Rosenblatt's perceptron and Hayek
+06:55 Reward hacking and Goodhart's law
+07:58 Where HAI101 sits
+14:45 Introduction to Transformers and LLMs
+
+WORKS MENTIONED
+McCulloch & Pitts (1943), A logical calculus of the ideas immanent in nervous activity, Bull. Math. Biophysics 5.
+Von Neumann & Morgenstern (1944), Theory of Games and Economic Behavior. Von Neumann (1945), First Draft of a Report on the EDVAC.
+Simon (1947), Administrative Behavior. Hebb (1949), The Organization of Behavior. Turing (1950), Computing Machinery and Intelligence, Mind 59.
+Miller (2003), The cognitive revolution: a historical perspective, Trends in Cognitive Sciences 7(3).
+Feigenbaum & Simon (1962), Generalization of an elementary perceiving and memorizing machine. Chase & Simon (1973), Perception in chess, Cognitive Psychology 4.
+Gobet & Simon (1996, 1998); Gobet et al. (2001), Chunking mechanisms in human learning, TiCS 5.
+Hayek (1952), The Sensory Order. Rosenblatt (1958), The perceptron, Psychological Review 65(6), p. 388.
+Goodhart (1975), Problems of monetary management: the UK experience. Gao, Schulman & Hilton (2023), Scaling laws for reward model overoptimization, ICML.
+Tversky & Kahneman (1974), Science 185. Kahneman & Tversky (1979), Econometrica 47. Stanovich & West (2000), BBS 23. Kahneman (2011), Thinking, Fast and Slow.
+Bengio (2019), From System 1 Deep Learning to System 2 Deep Learning, NeurIPS. Wei et al. (2022), Chain-of-thought prompting, NeurIPS.
+OpenAI (2024), o1. Oh & Gobet (2024), System 1.5, NeurIPS System-2 Reasoning at Scale workshop. DeepSeek-AI (2025), arXiv 2501.12948. Chen et al. (2025), Reasoning models don't always say what they think, arXiv 2505.05410.
+
+HAI101 is hosted by the Centre for Philosophy of Natural and Social Science (CPNSS) at LSE, supported by Cookiy Labs, with MatrAIx taking part and the LSESU AI Society co-promoting. Four Fridays: 23 October, 6 November, 13 November, and Industry Day on 27 November 2026. Attendance is free; tickets on Luma via https://socialscience.ai
+
+#HAI101 #ArtificialIntelligence #CognitiveScience
+
+
+=====================================================================
+SHORT DESCRIPTION (the first two lines show before "more"; this is already the opening of the description above)
+=====================================================================
+Opening lecture of HAI101: Human x Artificial Intelligence, a lecture series at LSE on what machines can teach us about minds, and what the study of minds can teach the machines.
+
+
+=====================================================================
+TAGS (comma separated; 387 characters, under the 500 limit)
+=====================================================================
+HAI101, Human x AI, artificial intelligence, cognitive science, history of AI, LSE, London School of Economics, Herbert Simon, Friedrich Hayek, The Sensory Order, Frank Rosenblatt, perceptron, Goodhart's law, reward hacking, Kahneman, System 1 System 2, reasoning models, chain of thought, neural networks, philosophy of mind, behavioural science, social science, Nick Oh, lecture, CPNSS
+
+
+=====================================================================
+HASHTAGS (up to three appear above the title; keep the three at the end of the description)
+=====================================================================
+#HAI101 #ArtificialIntelligence #CognitiveScience
+Optional extras for the description body: #LSE #PhilosophyOfMind #HistoryOfAI #BehaviouralScience
+
+
+=====================================================================
+PINNED COMMENT
+=====================================================================
+Full programme, abstracts and speaker bios for all four Fridays: https://socialscience.ai
+If you have never met a neural network, Steven Feng and I wrote a short lecture note for this series, Introduction to Transformers and LLMs: https://socialscience.ai/notes/HAI101-Introduction-to-Transformers-and-LLMs.pdf
+Page 388 of Rosenblatt's perceptron paper, where he names Hebb and Hayek, is in Psychological Review 65(6), 1958. The Hayek quotations are from The Sensory Order (1952), sections 2.50 and 8.4.
+
+
+=====================================================================
+THUMBNAIL TEXT (two or three words, large; the braid frame or the Rosenblatt page works as the image)
+=====================================================================
+1. NO COMPUTER SCIENTISTS  (over the 1943-1956 decade slide)
+2. HEBB AND HAYEK  (over the highlighted page 388)
+3. WHY HUMAN x AI?  (over the braid)
+Add a small "HAI101 | LSE" lockup in a corner of every video in the series so the playlist reads as one set.
+
+
+=====================================================================
+UPLOAD SETTINGS
+=====================================================================
+Category: Education
+Audience: not made for kids
+Language: English (United Kingdom). Publish the auto captions, then correct the names (Hayek, Goodhart, Rosenblatt, Gobet, Feigenbaum, EPAM, CHREST, Stanovich)
+Recording date: 23 Oct 2026. Location: London School of Economics
+Playlist: HAI101 - Human x Artificial Intelligence (LSE, 2026)
+End screen: subscribe button plus "next video" (Steven Feng's talk when it is up; until then, the playlist)
+Cards: one at the Hayek section pointing to socialscience.ai for the lecture note; one at the groups section pointing to the playlist
+Comments: on, hold potentially inappropriate comments for review
+License: Standard YouTube licence (or Creative Commons BY if you want the talks reusable; decide once for the whole series)
+
+
+=====================================================================
+PLAYLIST TITLE AND DESCRIPTION
+=====================================================================
+Title: HAI101 - Human x Artificial Intelligence (LSE, 2026)
+
+Description:
+HAI101 is a lecture series at the London School of Economics spanning the social, behavioural and cognitive sciences, philosophy and AI. Fourteen speakers over four Fridays in autumn 2026 ask what machines can teach us about minds, and what the study of minds can teach the machines. Hosted by the Centre for Philosophy of Natural and Social Science (CPNSS), supported by Cookiy Labs. Programme, abstracts, bios and the lecture note at https://socialscience.ai
+
+
+=====================================================================
+ONE-LINERS FOR SHARING THE VIDEO (LinkedIn / X / Luma / Instagram caption)
+=====================================================================
+LinkedIn: The opening lecture of HAI101 is now on YouTube. Fifteen minutes on why the social, behavioural and cognitive sciences and philosophy were never apart from AI: the founding decade had no computer scientists, and two LSE economists, Hayek and Goodhart, are inside the machines we use today. [link]
+
+X: HAI101 opening lecture is up. The decade AI was born had no computer scientists, and Rosenblatt's perceptron paper cites an LSE economist. 15 min. [link] #HAI101
+
+Instagram: The opening lecture of HAI101 is on YouTube, link in bio. Why Human x AI? Because the fields were never apart. Fifteen minutes, from 1943 to this year's reasoning models.

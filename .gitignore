@@ -34,3 +34,7 @@ lecture-notes/microgpt-src/
 
 # opening-talk slides and script: local working material
 opening/
+
+# attendee data and other personal information: never publish
+private/
+__pycache__/
