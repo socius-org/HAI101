@@ -366,13 +366,57 @@ export const industry = {
         'Google Research, Mayo Clinic and Scale AI',
       ],
     },
+    {
+      id: 'vaid',
+      name: 'Dr. Sumer Vaid',
+      role: 'Co-Founder and CEO',
+      company: 'Emergent Science',
+      lab: 'Postdoctoral Fellow, Harvard Business School AI Institute',
+      photo: 'speakers/vaid.jpg',
+      logos: ['logos/emergent.png', 'logos/harvard.svg'],
+      previously: [
+        'Postdoctoral Fellow, AI Institute, Harvard Business School',
+        'Ph.D., Stanford University',
+        'Best Dissertation Award, Psychology of Technology Institute',
+        'Funded by the AI Institute at Harvard and the Stanford Institute for Human-Centered AI',
+        'Published in IEEE Transactions on Affective Computing, ACM IMWUT, Nature Reviews Psychology, JPSP and Harvard Business Review',
+      ],
+    },
+    {
+      id: 'levy',
+      name: 'Josh Levy',
+      role: 'Founder',
+      company: 'Resemblance Inc.',
+      lab: 'M.P.P., Harvard University',
+      photo: 'speakers/levy.jpg',
+      logos: ['logos/resemblance.png', 'logos/harvard.svg'],
+      previously: [
+        'M.P.P., Harvard University',
+        'B.Act., Statistics and Machine Learning, UNSW Sydney',
+        'B.Ec., Behavioural Game Theory (Honours), UNSW Sydney',
+        'B.Com., Finance, UNSW Sydney',
+      ],
+    },
   ],
   // Companies taking part, shown as a logo strip in the section; url is optional.
   // mark: true means the logo is a small symbol rather than a wordmark, so the name is set beside it.
+  // blurb: one or two sentences on what the company does. A speaker whose `company` matches `name` gets an
+  // "About <company>" block (logo, blurb, link) in their bio, so every Industry Day speaker's firm is introduced.
   companies: [
     { name: 'Cookiy Labs', logo: 'logos/cookiy.svg', url: 'https://cookiylabs.com', mark: true },
     // height (px, optional) sizes a wordmark to sit level with the marks beside it.
-    { name: 'MatrAIx', logo: 'logos/matraix.png', url: 'https://matraix.ai', height: 22 },
+    {
+      name: 'MatrAIx', logo: 'logos/matraix.png', url: 'https://matraix.ai', height: 22,
+      blurb: 'MatrAIx is a startup studying persona-based agent evaluation and training. It builds simulated-user evaluation infrastructure for digital products and AI systems, grounded in a population of 8.3 billion persona agents, and began as an open-source research community.',
+    },
+    {
+      name: 'Emergent Science', logo: 'logos/emergent.png', url: 'https://workcast.emergentscience.ai', height: 30,
+      blurb: 'Emergent Science is a research spinout building Workcast, a simulation test bed for organisational decisions. Workcast couples persona models of employees with world models of their workplaces, so organisations can compare proposed changes, such as AI adoption and deployment strategies, before implementation.',
+    },
+    {
+      name: 'Resemblance Inc.', logo: 'logos/resemblance.png', url: 'https://resemblanceinc.com', height: 26,
+      blurb: 'Resemblance Inc. is building an AI scientist for human behaviour: agents that reason about how people behave rather than imitate individuals.',
+    },
   ],
   slots: 6,
   // Talks with abstracts, like days[].sessions. Industry Day is the fourth column of the timetable; a
@@ -385,6 +429,16 @@ export const industry = {
       start: '17:00', end: '18:00', speakers: ['li', 'hao'], remote: true,   // 09:00 Pacific
       title: 'MatrAIx: Simulating the World with 8.3 Billion Persona Agents',
       abstract: 'MatrAIx (https://matraix.ai) is a startup studying persona-based agent evaluation and training. It began as an open-source research community building simulated-user evaluation infrastructure for digital products and AI systems, grounded in a population of 8.3 billion persona agents. The open-source project gained significant traction on launch: 5K+ posts on X within 10 hours, two features in Forbes, an invitation from Nature senior editors, media interviews, and invited talks at Stanford, Columbia, Nvidia, Amazon, Adobe, Microsoft, Netflix and DeepMind. The community includes researchers and engineers from OpenAI, Anthropic, Google DeepMind and xAI, with an advisory committee listed at https://matraix.ai/community/. The recent MatrAIx paper introduces the full infrastructure: Persona 8B, a population-scale persona dataset spanning 1,290 dimensions; interactive evaluation environments for surveys, AI chatbots, websites and apps; and 1,010 real-world evaluation tasks across 25+ domains. Across 18,189 evaluation trials, the work shows how persona agents can surface heterogeneous user responses to product changes and AI behaviour, with validation studies showing strong persona adherence and extraction quality.\n\nDemo: https://youtu.be/cNFkz9Wo1y4\nPaper: https://arxiv.org/abs/2608.04205\nCode: https://github.com/MatrAIx-ai/MatrAIx-Persona-8B',
+    },
+    {
+      start: null, end: null, speaker: 'vaid',   // time to be confirmed
+      title: 'N = 1: Building Digital Twins That Predict Individual Change',
+      abstract: 'Moving beyond population-level analyses, we are building digital twins around an n = 1 paradigm: predicting how a particular person thinks, feels, and behaves as circumstances change across days, weeks, and months. The objective is to learn how each individual changes over time, beyond what demographic profiles and population averages can explain.  I will present the architecture, training methods, and evaluation needed to build these systems.\n\nFirst, I will describe how persona models of individual traits and history are coupled with world models that generate the conditions of daily life, including meetings, deadlines, interactions with colleagues, and policy changes. This architecture allows a simulated person to encounter new circumstances, giving us a way to test how personal characteristics and environmental conditions jointly shape behaviour. Second, I will introduce Carmel, our open-weight model for n = 1 prediction, currently in training on longitudinal experience-sampling and workplace data. Our benchmarks identify specific targets for post-training: leading language models compress daily variability by roughly one third and produce within-person correlations near 0.05 where corresponding human estimates range from 0.20 to 0.70. Pilot post-training restored daily variability to observed human levels, demonstrating that training on longitudinal data can correct a measurable failure of general-purpose models.\n\nThird, I will outline how smartphone and wearable observations of sleep, activity, and social contact can support continual updating, allowing each twin to revise forecasts as new data arrive. The engineering goal is to make n = 1 prediction useful at two scales: a personal twin that forecasts changes in an individual’s daily experience, and a simulated organization assembled from individual twins, in which leaders can compare how proposed decisions affect different employees. I will outline the longer-term ambition of building personal foundation models for everyone, continually post-trained on individual experience to predict how thoughts, feelings, and behaviour change across circumstances and throughout life.',
+    },
+    {
+      start: null, end: null, speaker: 'levy',   // time to be confirmed
+      title: 'AI as a Behavioural Scientist',
+      abstract: 'As AI and robotics continue to rapidly advance, people will soon be able to build anything.\n\nTwo questions will become central: (1) what to build; (2) how to get people to use it. Both are fundamentally questions of human behaviour. To know what to build, you must know what people desire. To encourage use, you must anticipate what proposition resonates for whom.\n\nYet the science of human behaviour has stagnated. Since the behavioural economics revolution lost momentum in the early-2010s, progress has been meagre, and at times has gone backwards.\n\nLLMs are starting to change this. The prevailing approach uses them as digital twins, each agent imitating a single human. But this leads to mode collapse, and accuracy does not scale with model capability (LLMs are trained to make fewer mistakes, be less biased, and therefore less human).\n\nWe are pursuing a different path. Instead of imitating behaviour, we build agents to reason about behaviour (operating as scientists rather than actors). This does scale with model capability.\n\nI will discuss the two paradigms (imitation and reasoning), argue that the reasoning paradigm is strictly better, and explore the implications of pursuing this approach.',
     },
     {
       start: '14:00', end: '15:00', speaker: 'manning', remote: true,

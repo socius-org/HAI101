@@ -31,6 +31,8 @@ const SCHEDULE_DAYS = [...days, INDUSTRY_DAY];
 // A session's speaker, academic or Industry Day; the line under their name is the company on Industry Day.
 const bySpeaker = (id) => (id ? speakerById[id] || industryById[id] : null);
 const affil = (sp) => sp?.company || sp?.affiliation || 'Affiliation TBC';
+// The company entry (industry.companies) behind an Industry Day speaker, for the "About <company>" block in their bio.
+const companyOf = (sp) => (sp?.company ? industry.companies?.find((c) => c.name === sp.company) : null);
 // A session names one speaker (`speaker`) or several giving a joint talk (`speakers`).
 const speakerIds = (s) => s.speakers || (s.speaker ? [s.speaker] : []);
 const sessionSpeakers = (s) => speakerIds(s).map(bySpeaker).filter(Boolean);
@@ -166,6 +168,28 @@ function TalkDialog({ talk, onClose, onSpeaker }) {
   );
 }
 
+// Company bio inside an Industry Day speaker's detail: logo on a plate, what the company does, and its site.
+function Company({ c }) {
+  return (
+    <div className="cv-detail-block cv-detail-company">
+      <h4>About {c.name}</h4>
+      <div className="cv-detail-company-row">
+        <span className={`cv-detail-company-logo${c.mark ? ' is-mark' : ''}`}>
+          <img src={img(c.logo)} alt={c.name} loading="lazy" />
+        </span>
+        <div>
+          <p>{c.blurb}</p>
+          {c.url && (
+            <a className="cv-detail-company-link" href={c.url} target="_blank" rel="noreferrer">
+              {c.url.replace(/^https?:\/\//, '').replace(/\/$/, '')}
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Detail({ s }) {
   return (
     <div className="cv-detail" aria-live="polite">
@@ -175,6 +199,7 @@ function Detail({ s }) {
       {s.lab && <p className="cv-detail-lab">{s.lab}</p>}
       {TALKS[s.id] && <Talk talk={TALKS[s.id]} />}
       {HOSTING[s.id] && <Talk talk={HOSTING[s.id]} />}
+      {companyOf(s)?.blurb && <Company c={companyOf(s)} />}
       {s.upcoming && (
         <div className="cv-detail-block">
           <h4>Upcoming</h4>
