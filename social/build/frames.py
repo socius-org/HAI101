@@ -6,11 +6,15 @@ the talk's details beside them (the thumbnails' dark variant). Reuses thumbs.py 
     CAM=520 python social/build/frames.py         # a wider camera box (the slides box narrows by the same amount)
     SCALE=1 python social/build/frames.py         # 1920 x 1080 instead of the 3840 x 2160 default
 
+Talks given by video (`remote` in src/data.js) and every Industry Day talk also get a slides-only frame,
+day<N>-<speaker>-slides.png: no camera box, the slides box wider, the details in a narrower column beside it
+(the speaker arrives inside the shared screen, so there is no separate camera feed to place).
+
 The layout is designed at 1920 x 1080 and written out at SCALE times that (2 = 4K, so the frame stays sharp in a
 4K edit and on YouTube's 4K ladder, which also gets the better codec); type and rules are vector, and the LSE mark
 is cleaned to its two flat colours so no JPEG fringe survives. Each frame is a flat PNG for the bottom layer in
-OBS or the editor; the slides and the camera go on top, inside the two boxes, at the rects in frames/zones.txt
-(given at both sizes).
+OBS or the editor; the slides and the camera go on top, inside the boxes, at the rects in frames/zones.txt
+(given for both layouts at both sizes).
 """
 import os
 import sys
@@ -24,17 +28,27 @@ W, H = 1920, 1080                          # design size; the output is SCALE ti
 SCALE = int(os.environ.get("SCALE", 2))
 M, GAP = 32, 24                            # outer margin, gutter between the boxes
 CAM_W = int(os.environ.get("CAM", 488))    # camera width; the slides take the rest of the row
+COL_W = int(os.environ.get("COL", 440))    # slides-only frames: the details column; the slides take the rest
 OUT = os.environ.get("FRAME_OUT") or os.path.join(S.REPO, "social", "youtube", "frames")
 IDS = os.environ["IDS"].split(",") if os.environ.get("IDS") else None
 BOX = hexc("#111112")                      # inside the boxes: a shade darker than the ground
 
 
-def zones():
-    """{'slides': (x0, y0, x1, y1), 'camera': (...)} in output pixels. Both 16:9, slides vertically centred."""
-    sw = W - 2 * M - GAP - CAM_W
+def zones(solo=False):
+    """{'slides': (x0, y0, x1, y1), 'camera': (...)} in design pixels. Both 16:9, slides vertically centred.
+    solo: no camera; the slides take the row up to the details column."""
+    sw = W - 2 * M - GAP - (COL_W if solo else CAM_W)
     sh = round(sw * 9 / 16); ch = round(CAM_W * 9 / 16)
     y0 = round((H - sh) / 2)
-    return {"slides": (M, y0, M + sw, y0 + sh), "camera": (M + sw + GAP, y0, W - M, y0 + ch)}
+    z = {"slides": (M, y0, M + sw, y0 + sh)}
+    if not solo:
+        z["camera"] = (M + sw + GAP, y0, W - M, y0 + ch)
+    return z
+
+
+def solo(d, s):
+    """Slides-only talks: given by video, or on Industry Day (all of it is shared from the screen)."""
+    return bool(s.get("remote")) or d is T.INDUSTRY
 
 
 def lse_clean(size=1024):
@@ -58,16 +72,16 @@ def boxes(c, z, edge=2):
         c.rect(x0, y0, x1, y1, BOX)
 
 
-def frame(d, s, path):
+def frame(d, s, path, solo=False):
     c = Canvas((W, H))
     c.rect(0, 0, W, H, INK)
-    z = zones()
+    z = zones(solo)
     T.chip(c, M, 44, dark=True, size=26)
     T.lse_mark(c, W - M, 40, h=84, src=lse_clean())
     boxes(c, z)
-    x = z["camera"][0]; maxw = W - M - x
-    # kicker and title under the camera
-    y = z["camera"][3] + 62
+    x = z["slides"][2] + GAP; maxw = W - M - x
+    # kicker and title: under the camera, or at the top of the column when there is none
+    y = z["camera"][3] + 62 if "camera" in z else z["slides"][1] + 24
     kick = T.kicker_line(d, s)
     c.tw(x, y, kick, SANS_M, c.fit(kick, SANS_M, 18, maxw), OCHRE, tracking=0.12 * 18)
     y += 34 * 1.3
@@ -88,13 +102,17 @@ if __name__ == "__main__":
     z = zones()
     with open(os.path.join(OUT, "zones.txt"), "w", encoding="utf-8") as f:
         f.write(f"Layer positions: put the slides and the camera on top of the frame at these rects. The frames are "
-                f"{W * SCALE} x {H * SCALE} px; the second set is for a 1920 x 1080 canvas with the frame scaled to fit.\n")
-        for sc in sorted({SCALE, 1}, reverse=True):
-            f.write(f"\nat {W * sc} x {H * sc}\n")
-            f.write("\n".join(f"  {k}: x={x0 * sc} y={y0 * sc} w={(x1 - x0) * sc} h={(y1 - y0) * sc}"
-                              for k, (x0, y0, x1, y1) in z.items()) + "\n")
+                f"{W * SCALE} x {H * SCALE} px; the 1920 x 1080 sets are for a 1080p canvas with the frame scaled to fit.\n")
+        for label, zz in (("day<N>-<speaker>.png (slides and camera)", z), ("day<N>-<speaker>-slides.png (slides only)", zones(True))):
+            f.write(f"\n{label}\n")
+            for sc in sorted({SCALE, 1}, reverse=True):
+                f.write(f"  at {W * sc} x {H * sc}\n")
+                f.write("\n".join(f"    {k}: x={x0 * sc} y={y0 * sc} w={(x1 - x0) * sc} h={(y1 - y0) * sc}"
+                                  for k, (x0, y0, x1, y1) in zz.items()) + "\n")
     for d, s in T.talks():
         k = T.key_of(s)
         if IDS and k not in IDS:
             continue
         frame(d, s, os.path.join(OUT, f"day{T.day_num(d)}-{k}.png"))
+        if solo(d, s):
+            frame(d, s, os.path.join(OUT, f"day{T.day_num(d)}-{k}-slides.png"), solo=True)

@@ -22,7 +22,9 @@ they stay sharp in a 4K edit and on YouTube's 4K ladder; the layout is designed 
 writes that size instead. Put the frame at the bottom of the OBS scene or the edit (scaled to fit the canvas),
 then the slides and the camera on top at the rects in `frames/zones.txt`, which lists them for both sizes
 (at 1080p: slides 1344 x 756, camera 488 x 274). The two boxes share the width: `CAM=520` widens the camera box
-and narrows the slides box.
+and narrows the slides box. Talks given by video (`remote` in `src/data.js`) and every Industry Day talk also get
+`day<N>-<speaker>-slides.png`: no camera box, since the speaker arrives inside the shared screen, and a wider
+slides box (1392 x 783 at 1080p) beside a narrower details column.
 
 ## What is where
 
