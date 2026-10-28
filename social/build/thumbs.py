@@ -82,6 +82,7 @@ def logo_of(s):
 
 # hooks: the few words that carry the thumbnail. Default: the shorter half of an "A: B" title, the other half small.
 HOOKS = {"oh-intro": ("Why Human x AI?", "Opening lecture"),
+         "gobet": ("Impact of AI on Human Expertise", "Canaries in the Coalmine"),
          "li-hao": ("Simulating the World with 8.3 Billion Persona Agents", ""),
          "vaid": ("Building Digital Twins That Predict Individual Change", "N = 1"),
          "levy": ("AI as a Behavioural Scientist", "")}
