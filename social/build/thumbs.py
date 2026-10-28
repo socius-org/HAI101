@@ -140,8 +140,8 @@ def chip(c, x, y, dark=False, size=26):
     c.bars(x, y + SANS_M.ascender * size + 0.3 * size, [SERIES["code"]], SANS_M, size,
            PAPER if dark else INK, INK if dark else PAPER, padx=0.45, pady=0.3)
 
-def lse_mark(c, x1, y0, h=84):
-    c.img(LSE, (x1 - h, y0, x1, y0 + h))
+def lse_mark(c, x1, y0, h=84, src=LSE):
+    c.img(src, (x1 - h, y0, x1, y0 + h))
 
 def logo_plate(c, s, x1, y1, w=180, h=84):
     lp = logo_of(s)

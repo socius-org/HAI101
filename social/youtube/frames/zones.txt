@@ -1,3 +1,9 @@
-Layer positions (output 1920 x 1080): put the slides and the camera on top of the frame at these rects.
-slides: x=32 y=162 w=1344 h=756
-camera: x=1400 y=162 w=488 h=274
+Layer positions: put the slides and the camera on top of the frame at these rects. The frames are 3840 x 2160 px; the second set is for a 1920 x 1080 canvas with the frame scaled to fit.
+
+at 3840 x 2160
+  slides: x=64 y=324 w=2688 h=1512
+  camera: x=2800 y=324 w=976 h=548
+
+at 1920 x 1080
+  slides: x=32 y=162 w=1344 h=756
+  camera: x=1400 y=162 w=488 h=274

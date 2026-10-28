@@ -195,10 +195,11 @@ class Canvas:
         cx, cy = x1 - w / 2, y0 + h / 2
         self.img(lp, (cx - lw * sc / 2, cy - lh * sc / 2, cx + lw * sc / 2, cy + lh * sc / 2))
 
-    def save(self, path):
+    def save(self, path, scale=1):
+        """Write the image; scale=2 doubles the output pixels (the canvas units stay the same), still supersampled 2x."""
         os.makedirs(os.path.dirname(path), exist_ok=True)
-        pix = self.page.get_pixmap(dpi=144)
-        im = Image.frombytes("RGB", (pix.width, pix.height), pix.samples).resize((self.W, self.H), Image.LANCZOS)
+        pix = self.page.get_pixmap(dpi=144 * scale)
+        im = Image.frombytes("RGB", (pix.width, pix.height), pix.samples).resize((self.W * scale, self.H * scale), Image.LANCZOS)
         im.save(path, quality=92, subsampling=0, optimize=True)
         print("saved", os.path.relpath(path, REPO))
 
