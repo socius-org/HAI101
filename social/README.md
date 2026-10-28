@@ -15,6 +15,12 @@ into `social/youtube/thumbs/a/` (split card, linen) and `social/youtube/thumbs/b
 way (`VARIANT=b` for one variant). The big words are the shorter half of an "A: B" title; `HOOKS` in the script
 overrides any talk.
 
+Recording frames (1920 x 1080, the background under the slides and the camera in the talk videos) come from
+`social/build/frames.py` into `social/youtube/frames/`, one PNG per talk on the dark ground: an empty box for the
+slides (1344 x 756, left), one for the camera (488 x 274, top right), the title and the speaker below it. Put the
+frame at the bottom of the OBS scene or the edit, then the slides and the camera on top at the rects in
+`frames/zones.txt`. The two boxes share the width: `CAM=520` widens the camera box and narrows the slides box.
+
 ## What is where
 
 | Folder | Files | Use |
