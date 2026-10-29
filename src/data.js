@@ -410,7 +410,7 @@ export const industry = {
       blurb: 'MatrAIx is a startup studying persona-based agent evaluation and training. It builds simulated-user evaluation infrastructure for digital products and AI systems, grounded in a population of 8.3 billion persona agents, and began as an open-source research community.',
     },
     {
-      name: 'Emergent Science', logo: 'logos/emergent.png', url: 'https://workcast.emergentscience.ai', height: 30,
+      name: 'Emergent Science', logo: 'logos/emergent.png', url: 'https://workcast.emergentscience.ai', height: 40,
       blurb: 'Emergent Science is a research spinout building Workcast, a simulation test bed for organisational decisions. Workcast couples persona models of employees with world models of their workplaces, so organisations can compare proposed changes, such as AI adoption and deployment strategies, before implementation.',
     },
     {
