@@ -389,7 +389,7 @@ export const industry = {
       company: 'Resemblance Inc.',
       lab: 'M.P.P., Harvard University',
       photo: 'speakers/levy.jpg',
-      logos: ['logos/resemblance.png', 'logos/harvard.svg'],
+      logos: ['logos/resemblance_wordmark.png', 'logos/harvard.svg'],
       previously: [
         'M.P.P., Harvard University',
         'B.Act., Statistics and Machine Learning, UNSW Sydney',
@@ -414,7 +414,7 @@ export const industry = {
       blurb: 'Emergent Science is a research spinout building Workcast, a simulation test bed for organisational decisions. Workcast couples persona models of employees with world models of their workplaces, so organisations can compare proposed changes, such as AI adoption and deployment strategies, before implementation.',
     },
     {
-      name: 'Resemblance Inc.', logo: 'logos/resemblance.png', url: 'https://resemblanceinc.com', height: 26,
+      name: 'Resemblance Inc.', logo: 'logos/resemblance.png', url: 'https://resemblanceinc.com',
       blurb: 'Resemblance Inc. is building an AI scientist for human behaviour: agents that reason about how people behave rather than imitate individuals.',
     },
   ],
