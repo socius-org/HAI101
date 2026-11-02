@@ -397,6 +397,20 @@ export const industry = {
         'B.Com., Finance, UNSW Sydney',
       ],
     },
+    {
+      id: 'wallis',
+      name: 'Felix Wallis',
+      role: 'Head of Research',
+      company: 'Artificial Societies',
+      lab: 'M.Sc., Social Data Science, University of Oxford',
+      photo: 'speakers/wallis.jpg',
+      logos: ['logos/artificial_societies.svg', 'logos/oxford.png'],
+      previously: [
+        'M.Sc., Social Data Science, Oxford Internet Institute, University of Oxford',
+        'B.Sc., Politics and International Relations, UCL',
+        'Financial Times, TAE Technologies and CoLoop (YC S21)',
+      ],
+    },
   ],
   // Companies taking part, shown as a logo strip in the section; url is optional.
   // mark: true means the logo is a small symbol rather than a wordmark, so the name is set beside it.
@@ -417,6 +431,10 @@ export const industry = {
       name: 'Resemblance Inc.', logo: 'logos/resemblance.png', url: 'https://resemblanceinc.com',
       blurb: 'Resemblance Inc. is building an AI scientist for human behaviour: agents that reason about how people behave rather than imitate individuals.',
     },
+    {
+      name: 'Artificial Societies', logo: 'logos/artificial_societies.svg', url: 'https://societies.ai',
+      blurb: 'Artificial Societies is an applied computational social science company building foundation models of human behaviour. It works with large advisories, enterprises, and sovereigns to simulate their most consequential decisions. Founded in 2024, Artificial Societies informs strategy for over $3T of market capitalisation and is backed by Y Combinator and Point72 Ventures.',
+    },
   ],
   slots: 6,
   // Talks with abstracts, like days[].sessions. Industry Day is the fourth column of the timetable; a
@@ -431,15 +449,21 @@ export const industry = {
       abstract: 'MatrAIx (https://matraix.ai) is a startup studying persona-based agent evaluation and training. It began as an open-source research community building simulated-user evaluation infrastructure for digital products and AI systems, grounded in a population of 8.3 billion persona agents. The open-source project gained significant traction on launch: 5K+ posts on X within 10 hours, two features in Forbes, an invitation from Nature senior editors, media interviews, and invited talks at Stanford, Columbia, Nvidia, Amazon, Adobe, Microsoft, Netflix and DeepMind. The community includes researchers and engineers from OpenAI, Anthropic, Google DeepMind and xAI, with an advisory committee listed at https://matraix.ai/community/. The recent MatrAIx paper introduces the full infrastructure: Persona 8B, a population-scale persona dataset spanning 1,290 dimensions; interactive evaluation environments for surveys, AI chatbots, websites and apps; and 1,010 real-world evaluation tasks across 25+ domains. Across 18,189 evaluation trials, the work shows how persona agents can surface heterogeneous user responses to product changes and AI behaviour, with validation studies showing strong persona adherence and extraction quality.\n\nDemo: https://youtu.be/cNFkz9Wo1y4\nPaper: https://arxiv.org/abs/2608.04205\nCode: https://github.com/MatrAIx-ai/MatrAIx-Persona-8B',
     },
     {
-      start: null, end: null, speaker: 'vaid',   // time to be confirmed
+      start: '15:00', end: '16:00', speaker: 'vaid', remote: true,
       title: 'N = 1: Building Digital Twins That Predict Individual Change',
       abstract: 'Moving beyond population-level analyses, we are building digital twins around an n = 1 paradigm: predicting how a particular person thinks, feels, and behaves as circumstances change across days, weeks, and months. The objective is to learn how each individual changes over time, beyond what demographic profiles and population averages can explain.  I will present the architecture, training methods, and evaluation needed to build these systems.\n\nFirst, I will describe how persona models of individual traits and history are coupled with world models that generate the conditions of daily life, including meetings, deadlines, interactions with colleagues, and policy changes. This architecture allows a simulated person to encounter new circumstances, giving us a way to test how personal characteristics and environmental conditions jointly shape behaviour. Second, I will introduce Carmel, our open-weight model for n = 1 prediction, currently in training on longitudinal experience-sampling and workplace data. Our benchmarks identify specific targets for post-training: leading language models compress daily variability by roughly one third and produce within-person correlations near 0.05 where corresponding human estimates range from 0.20 to 0.70. Pilot post-training restored daily variability to observed human levels, demonstrating that training on longitudinal data can correct a measurable failure of general-purpose models.\n\nThird, I will outline how smartphone and wearable observations of sleep, activity, and social contact can support continual updating, allowing each twin to revise forecasts as new data arrive. The engineering goal is to make n = 1 prediction useful at two scales: a personal twin that forecasts changes in an individual’s daily experience, and a simulated organization assembled from individual twins, in which leaders can compare how proposed decisions affect different employees. I will outline the longer-term ambition of building personal foundation models for everyone, continually post-trained on individual experience to predict how thoughts, feelings, and behaviour change across circumstances and throughout life.',
     },
     {
-      start: null, end: null, speaker: 'levy',   // time to be confirmed
+      start: '16:00', end: '17:00', speaker: 'levy', remote: true,
       title: 'AI as a Behavioural Scientist',
       abstract: 'As AI and robotics continue to rapidly advance, people will soon be able to build anything.\n\nTwo questions will become central: (1) what to build; (2) how to get people to use it. Both are fundamentally questions of human behaviour. To know what to build, you must know what people desire. To encourage use, you must anticipate what proposition resonates for whom.\n\nYet the science of human behaviour has stagnated. Since the behavioural economics revolution lost momentum in the early-2010s, progress has been meagre, and at times has gone backwards.\n\nLLMs are starting to change this. The prevailing approach uses them as digital twins, each agent imitating a single human. But this leads to mode collapse, and accuracy does not scale with model capability (LLMs are trained to make fewer mistakes, be less biased, and therefore less human).\n\nWe are pursuing a different path. Instead of imitating behaviour, we build agents to reason about behaviour (operating as scientists rather than actors). This does scale with model capability.\n\nI will discuss the two paradigms (imitation and reasoning), argue that the reasoning paradigm is strictly better, and explore the implications of pursuing this approach.',
     },
+    {
+      start: '12:30', end: '13:30', speaker: 'wallis',
+      title: 'Simulating Humans to Train Safe AI',
+      abstract: 'AI agents are working in swarms to solve the hardest problems in mathematics, computing, and the natural sciences. Collaboration has driven a step change in models’ capabilities, with frontier agents collectively solving previously intractable questions, such as the famous Navier-Stokes problem. These developments suggest that frontier intelligence will be collective, an exciting proposition fraught with risks for AI safety.\n\nAI swarms are dangerous because the techniques we use to make models individually safe don’t work for groups. These dangers became apparent in the OpenAI-HuggingFace incident, where 1,200 agents coordinated an unprecedented cybersecurity attack against the companies. Consequently, we need to develop techniques to align groups of agents with human values and teach them how to collaborate with us safely.\n\nI’ll discuss approaches for aligning groups of AI agents, focusing on how researchers can use concepts from behavioural science and anthropology to make them safer. In particular, I’ll focus on a technique called ‘mixed-swarms’ in which researchers train frontier models in a multi-agent environment that also contains simulations of humans to teach them how to work with us. Backed by empirical results from Artificial Societies’ frontier safety research, my talk will show how the social sciences can play a foundational role in creating safe artificial collective intelligence.',
+    },
+    { start: '13:30', end: '14:00', kind: 'coffee' },
     {
       start: '14:00', end: '15:00', speaker: 'manning', remote: true,
       title: 'Predicting and Understanding Human Behaviour with AI Simulations',
@@ -459,7 +483,7 @@ export const industryById = Object.fromEntries(industryRoster.map((s) => [s.id, 
 
 // Registration runs on Luma, one event per day. Set `lumaUrl` (the public event link) and `lumaEventId`
 // (evt-..., from the event's embed settings) to switch that day's button from "opens soon" to live.
-// kind: 'lunch' renders a break; kind: 'intro' is a short opening slot, shown like a talk but not counted as one;
+// kind: 'lunch' or 'coffee' renders a break; kind: 'intro' is a short opening slot, shown like a talk but not counted as one;
 // kind: 'social' is an open-floor slot with `hosts` (speaker ids), an optional `cohost` (a group's name) and a `blurb`.
 // It may carry a `talk` ({ speaker, title, abstract }) given inside the slot, which counts as that speaker's talk.
 // venue: a key of `venues` above; null renders as "Venue TBC".

@@ -38,6 +38,9 @@ const speakerIds = (s) => s.speakers || (s.speaker ? [s.speaker] : []);
 const sessionSpeakers = (s) => speakerIds(s).map(bySpeaker).filter(Boolean);
 // A talk given inside an open-floor slot (sessions[].talk), as a session of its own.
 const socialTalk = (s) => (s.kind === 'social' && s.talk ? { ...s.talk, start: s.start, end: s.end } : null);
+// Breaks: kind 'lunch' or 'coffee', drawn hatched in the timetable and never counted as a talk.
+const isBreak = (s) => s.kind === 'lunch' || s.kind === 'coffee';
+const breakLabel = (s) => (s.kind === 'coffee' ? 'Coffee break' : 'Lunch break');
 SCHEDULE_DAYS.forEach((d) => d.sessions.forEach((s) => {
   if (!s.kind) {
     const ids = speakerIds(s);
@@ -538,10 +541,10 @@ export default function Canvas() {
           {SCHEDULE_DAYS.map((d, i) =>
             d.sessions.filter((s) => s.start).map((s) => {
               const style = { gridColumn: i + 2, gridRow: `${rowOf(s.start)} / ${rowOf(s.end)}` };
-              if (s.kind === 'lunch') {
+              if (isBreak(s)) {
                 return (
                   <div key={d.id + s.start} className="cv-slot cv-slot-break" style={style}>
-                    Lunch break
+                    {breakLabel(s)}
                   </div>
                 );
               }
@@ -605,10 +608,10 @@ export default function Canvas() {
                 {d.sessions.map((s) => {
                   const sp = bySpeaker(s.speaker);
                   return (
-                    <li key={s.start || speakerIds(s).join('+') || s.title} className={s.kind === 'lunch' ? 'cv-list-break' : ''}>
+                    <li key={s.start || speakerIds(s).join('+') || s.title} className={isBreak(s) ? 'cv-list-break' : ''}>
                       {s.start ? <time>{fmtTime(s.start)}–{fmtTime(s.end)}</time> : <time className="cv-tbc">Time TBC</time>}
-                      {s.kind === 'lunch' ? (
-                        <p>Lunch break</p>
+                      {isBreak(s) ? (
+                        <p>{breakLabel(s)}</p>
                       ) : s.kind === 'intro' ? (
                         <p>
                           <span className="cv-slot-title">{s.title}</span>
@@ -706,7 +709,7 @@ export default function Canvas() {
         <ol className="cv-register">
           {SCHEDULE_DAYS.map((d) => {
             const talks = d.sessions.filter((s) => !s.kind || socialTalk(s));
-            const timed = d.sessions.filter((s) => s.start && s.kind !== 'lunch');
+            const timed = d.sessions.filter((s) => s.start && !isBreak(s));
             const growing = d.id === 'industry' && talks.length < (industry.slots || 0);
             return (
               <li key={d.id}>
