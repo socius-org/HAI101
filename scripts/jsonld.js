@@ -88,6 +88,7 @@ export async function buildJsonLd(dataUrl) {
       name: 'socialscience.ai',
       alternateName: [series.code, `${series.code} | ${series.title}`],
       publisher: organizer,
+      author: person(speakers.find((sp) => sp.id === 'oh')),
     },
     {
       '@type': 'EventSeries',
