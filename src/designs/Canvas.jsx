@@ -26,8 +26,10 @@ const HOURS = Array.from({ length: (DAY_END - DAY_START) / 60 + 1 }, (_, i) => 9
 // Industry Day talks (industry.sessions) count too, so a speaker moved there keeps a talk on their card.
 const TALKS = {};
 const INDUSTRY_DAY = { ...industry, id: 'industry', label: industry.title, date: industry.date || industry.title, sessions: industry.sessions || [] };
-// The timetable's columns: the three academic Fridays and Industry Day.
-const SCHEDULE_DAYS = [...days, INDUSTRY_DAY];
+// The timetable's columns: the three academic Fridays and Industry Day. Sessions are put in time order
+// (untimed ones last) so the mobile list, which follows array order, matches the grid.
+const byStart = (a, b) => (a.start && b.start ? toMin(a.start) - toMin(b.start) : a.start ? -1 : b.start ? 1 : 0);
+const SCHEDULE_DAYS = [...days, INDUSTRY_DAY].map((d) => ({ ...d, sessions: [...d.sessions].sort(byStart) }));
 // A session's speaker, academic or Industry Day; the line under their name is the company on Industry Day.
 const bySpeaker = (id) => (id ? speakerById[id] || industryById[id] : null);
 const affil = (sp) => sp?.company || sp?.affiliation || 'Affiliation TBC';
@@ -90,10 +92,15 @@ const linkify = (text) =>
 const TBC_SPEAKER = { id: 'tbc', name: 'Speaker TBC', role: 'To be announced', affiliation: 'Affiliation TBC', noPhoto: true };
 
 // The paper plate under a card: one logo, two side by side (a split plate), or the affiliation as text.
-function LogoPlate({ srcs, alt }) {
+// scales (optional, by position) enlarge a logo on a split plate past its half share; see industry.speakers[].logoScale.
+function LogoPlate({ srcs, scales = [], alt }) {
+  const style = (i) => {
+    const k = scales[i];
+    return k && k !== 1 && srcs.length > 1 ? { maxWidth: `calc((50% - 6px) * ${k})`, maxHeight: `${32 * k}px` } : undefined;
+  };
   return (
     <span className={`cv-card-school${srcs.length > 1 ? ' is-split' : ''}`}>
-      {srcs.length ? srcs.map((src) => <img key={src} src={src} alt={alt} loading="lazy" />) : <span>{alt}</span>}
+      {srcs.length ? srcs.map((src, i) => <img key={src} src={src} alt={alt} loading="lazy" style={style(i)} />) : <span>{alt}</span>}
     </span>
   );
 }
@@ -127,6 +134,13 @@ function OnScreen() {
   return <span className="cv-onscreen">On screen</span>;
 }
 const onScreenNote = (where) => `Speaker joins live by video, shown on screen in ${where}. No live stream or public link.`;
+// Everyone else is in the room.
+function InPerson() {
+  return <span className="cv-inperson">In person</span>;
+}
+const inPersonNote = (where) => `Speaker presents in person in ${where}.`;
+// The badge for a talk: on screen if the speaker joins by video, in person otherwise.
+const Format = ({ s }) => (s.remote ? <OnScreen /> : <InPerson />);
 
 // Pop-up with a session's abstract, opened from the + on a schedule slot.
 function TalkDialog({ talk, onClose, onSpeaker }) {
@@ -152,11 +166,9 @@ function TalkDialog({ talk, onClose, onSpeaker }) {
           </p>
           <h3 id="cv-dialog-title" className={talk.title ? '' : 'cv-tbc'}>{talk.title || 'Title TBC'}</h3>
           <p className="cv-dialog-who"><Who s={talk} /></p>
-          {talk.remote && (
-            <p className="cv-dialog-onscreen">
-              <OnScreen /> {onScreenNote(talk.room || 'the room')}
-            </p>
-          )}
+          <p className="cv-dialog-onscreen">
+            <Format s={talk} /> {(talk.remote ? onScreenNote : inPersonNote)(talk.room || 'the room')}
+          </p>
           <p className={talk.abstract ? 'cv-dialog-abstract' : 'cv-dialog-abstract cv-tbc'}>
             {talk.abstract ? linkify(talk.abstract) : 'Abstract to be announced.'}
           </p>
@@ -479,7 +491,7 @@ export default function Canvas() {
                       )}
                     </span>
                   </span>
-                  <LogoPlate srcs={(s.logos || []).map(img)} alt={s.company} />
+                  <LogoPlate srcs={(s.logos || []).map(img)} scales={s.logoScale} alt={s.company} />
                 </button>
               );
             })}
@@ -587,7 +599,7 @@ export default function Canvas() {
                   <span className="cv-plus" aria-hidden="true" />
                   <span className="cv-slot-meta">
                     <time>{fmtTime(s.start)}–{fmtTime(s.end)}</time>
-                    {s.remote && <OnScreen />}
+                    <Format s={s} />
                   </span>
                   <span className={s.title ? 'cv-slot-title' : 'cv-slot-title cv-tbc'}>{s.title || 'Title TBC'}</span>
                   <span className="cv-slot-who"><Who s={s} /></span>
@@ -645,7 +657,7 @@ export default function Canvas() {
                           <span>
                             <span className={s.title ? 'cv-slot-title' : 'cv-slot-title cv-tbc'}>{s.title || 'Title TBC'}</span>
                             <span className="cv-slot-who"><Who s={s} /></span>
-                            {s.remote && <OnScreen />}
+                            <Format s={s} />
                           </span>
                           <span className="cv-plus" aria-hidden="true" />
                         </button>
@@ -659,6 +671,9 @@ export default function Canvas() {
         </div>
 
         <p className="cv-note">All times are UK time.</p>
+        <p className="cv-note cv-note-onscreen">
+          <InPerson /> {inPersonNote('the room')}
+        </p>
         {SCHEDULE_DAYS.some((d) => d.sessions.some((s) => s.remote)) && (
           <p className="cv-note cv-note-onscreen">
             <OnScreen /> {onScreenNote('the room')}
@@ -675,7 +690,7 @@ export default function Canvas() {
           <div>
             <ul className="cv-venues">
               {Object.entries(venues).map(([key, v]) => {
-                const when = days.filter((d) => d.venue === key).map((d) => d.date.replace(/^Fri /, ''));
+                const when = SCHEDULE_DAYS.filter((d) => d.venue === key).map((d) => d.date.replace(/^Fri /, ''));
                 return (
                   <li key={key}>
                     <strong>{v.label}</strong> · {when.join(' & ')}

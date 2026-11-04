@@ -217,8 +217,10 @@
   padding-right: 24px;
 }
 
-/* speaker joining by video, screened in the room: the posters' ochre ON SCREEN bar */
-.cv-onscreen {
+/* speaker joining by video, screened in the room: the posters' ochre ON SCREEN bar;
+   speaker in the room: the same bar in moss (IN PERSON) */
+.cv-onscreen,
+.cv-inperson {
   display: inline-block;
   padding: 2px 6px;
   background: var(--ochre);
@@ -232,11 +234,17 @@
   white-space: nowrap;
 }
 
-.cv-list .cv-onscreen { margin-top: 8px; }
+.cv-inperson { background: var(--moss); color: var(--paper); }
+
+.cv-list .cv-onscreen,
+.cv-list .cv-inperson { margin-top: 8px; }
 .cv-note-onscreen { margin-top: 8px; max-width: none; opacity: 1; }
-.cv-note-onscreen .cv-onscreen { margin-right: 6px; }
+.cv-note-onscreen + .cv-note-onscreen { margin-top: 6px; }
+.cv-note-onscreen .cv-onscreen,
+.cv-note-onscreen .cv-inperson { margin-right: 6px; }
 .cv-dialog-onscreen { margin-top: 10px; font-size: 15px; }
-.cv-dialog-onscreen .cv-onscreen { margin-right: 6px; }
+.cv-dialog-onscreen .cv-onscreen,
+.cv-dialog-onscreen .cv-inperson { margin-right: 6px; }
 .cv-slot .cv-plus { position: absolute; top: 12px; right: 12px; }
 
 /* small + drawn in the current text colour */
@@ -765,9 +773,10 @@
 .cv-reading .cv-register-btn { margin-top: 20px; }
 
 /* ---------- maps: one Google Map per venue ---------- */
+/* one map per venue: four venues sit two by two */
 .cv-maps {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 24px;
   margin-top: 56px;
 }

@@ -7,7 +7,7 @@ export const series = {
   title: 'Human x Artificial Intelligence',
   tagline:
     'A lecture series spanning the social, behavioural, cognitive sciences, philosophy, and AI.',
-  question: 'What can machines teach us about minds?',
+  question: 'What happens when machines can imitate minds?',
   host: 'Centre for Philosophy of Natural and Social Science (CPNSS)',
   hostShort: 'LSE CPNSS',
   hostUrl: 'https://www.lse.ac.uk/cpnss',
@@ -50,15 +50,25 @@ export const venues = {
     mapsUrl: 'https://www.google.com/maps/search/?api=1&query=LSE+Cheng+Kin+Ku+Building%2C+54+Lincoln%27s+Inn+Fields%2C+London+WC2A+3LJ',
     mapsEmbedUrl: 'https://www.google.com/maps?q=LSE+Cheng+Kin+Ku+Building%2C+54+Lincoln%27s+Inn+Fields%2C+London+WC2A+3LJ&z=17&output=embed',
   },
+  ksw: {
+    name: 'Kingsway Building',
+    code: 'KSW',
+    room: 'KSW.G.01',
+    label: 'Kingsway Building, room KSW.G.01',
+    address: '20 Kingsway, London WC2B 6LH',
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=LSE+20+Kingsway%2C+London+WC2B+6LH',
+    mapsEmbedUrl: 'https://www.google.com/maps?q=LSE+20+Kingsway%2C+London+WC2B+6LH&z=17&output=embed',
+  },
 };
 
 export const intro = [
-  'Machines have become good enough at imitating people that researchers now use them as proxies: to run an experiment before recruiting a single participant, to predict how a group will behave, or to test a theory at a scale no human study could reach.',
-  'At the same time, the machines have become something to study in their own right: they learn in ways that resemble ours, they explain themselves and assess their own answers, and they have started to do science. And the questions we once asked only of people are now being asked of machines.',
+  'Machines now imitate people well enough that researchers use them as stand-ins. They pilot an experiment before anyone is recruited, simulate a population of personas or a single person’s week, predict how a group will behave, and test a theory at a scale no human study could reach.',
+  'The machines have also become something to study in their own right. They learn in ways that resemble ours and fail in ways that do not. They explain themselves and judge their own answers. And questions once asked only of people, about understanding and even consciousness, are now being asked of models.',
+  'They are also changing the world beyond the lab, for the person whose skill a model can now match, for the organisation deciding what to hand over to it, and for a society learning to live alongside many such systems at once.',
 ];
 
 export const summary =
-  'HAI101 brings together thirteen researchers working at the intersection of the social, behavioural and cognitive sciences, philosophy and AI, to ask what machines can teach us about minds, and what the study of minds can teach the machines.';
+  'HAI101 brings together eighteen speakers from universities and startups, across the social, behavioural and cognitive sciences, philosophy and AI, to ask what machines can teach us about minds, what minds can teach the machines, and what both mean for the world in between.';
 
 export const speakers = [
   {
@@ -323,15 +333,17 @@ export const industry = {
   subtitle: 'From the lab to the field',
   date: 'Fri 27 Nov',
   dateLong: 'Friday 27 November 2026',
-  venue: null,
+  venue: 'ksw',
   lumaUrl: null,
   lumaEventId: null,
   blurb: [
     'A day with people working on human x artificial intelligence outside academia. Speakers from industry will talk about what they are building and studying: products, tools and research where people and AI systems meet.',
     'Speakers will be revealed here as they are confirmed.',
   ],
+  // logos: the card's plate, company then school. logoScale (optional, by position) enlarges a logo on a split
+  // plate beyond its half share, so a long wordmark sits level with a compact school mark.
   speakers: [
-    { ref: 'manning', company: 'Massachusetts Institute of Technology', logos: ['logos/mit.png'] },
+    { ref: 'manning', company: 'Massachusetts Institute of Technology', logos: ['logos/mit_mark.png'] },
     {
       id: 'li',
       name: 'Dr. Xiaomin Li',
@@ -339,7 +351,7 @@ export const industry = {
       company: 'MatrAIx',
       lab: 'Ph.D. in Applied Mathematics, Harvard University',
       photo: 'speakers/li.jpg',
-      logos: ['logos/matraix.png', 'logos/harvard.svg'],
+      logos: ['logos/matraix.png', 'logos/harvard_shield.png'], logoScale: [1.15],
       previously: [
         'Senior Research Scientist, Google DeepMind (GenAI)',
         'Senior Research Scientist, Microsoft CoreAI (GitHub Copilot)',
@@ -356,7 +368,7 @@ export const industry = {
       company: 'MatrAIx',
       lab: 'Postdoctoral Researcher, MIT EECS',
       photo: 'speakers/hao.jpg',
-      logos: ['logos/matraix.png', 'logos/mit.png'],
+      logos: ['logos/matraix.png', 'logos/mit_mark.png'], logoScale: [1.15],
       previously: [
         'Researcher, Microsoft',
         'Postdoctoral Researcher, MIT EECS',
@@ -373,7 +385,7 @@ export const industry = {
       company: 'Emergent Science',
       lab: 'Postdoctoral Fellow, Harvard Business School AI Institute',
       photo: 'speakers/vaid.jpg',
-      logos: ['logos/emergent.png', 'logos/harvard.svg'],
+      logos: ['logos/emergent.png', 'logos/harvard_shield.png'], logoScale: [1.15],
       previously: [
         'Postdoctoral Fellow, AI Institute, Harvard Business School',
         'Ph.D., Stanford University',
@@ -389,7 +401,7 @@ export const industry = {
       company: 'Resemblance Inc.',
       lab: 'M.P.P., Harvard University',
       photo: 'speakers/levy.jpg',
-      logos: ['logos/resemblance_wordmark.png', 'logos/harvard.svg'],
+      logos: ['logos/resemblance_wordmark.png', 'logos/harvard_shield.png'], logoScale: [1.45],
       previously: [
         'M.P.P., Harvard University',
         'B.Act., Statistics and Machine Learning, UNSW Sydney',
@@ -404,7 +416,7 @@ export const industry = {
       company: 'Artificial Societies',
       lab: 'M.Sc., Social Data Science, University of Oxford',
       photo: 'speakers/wallis.jpg',
-      logos: ['logos/artificial_societies.svg', 'logos/oxford.png'],
+      logos: ['logos/artificial_societies.svg', 'logos/oxford_square.png'], logoScale: [1.45],
       previously: [
         'M.Sc., Social Data Science, Oxford Internet Institute, University of Oxford',
         'B.Sc., Politics and International Relations, UCL',
@@ -442,11 +454,18 @@ export const industry = {
   // A speaker listed in `speakers` above keeps their bio there and the talk shows on their card; an academic
   // speaker referenced here (`ref`) is shown on Industry Day only, not in the Main Session cards.
   // A joint talk names its speakers in `speakers: [...]` instead of `speaker`.
+  // Keep these in time order: the mobile schedule list and the poster/social builders read them as written.
   sessions: [
     {
-      start: '17:00', end: '18:00', speakers: ['li', 'hao'], remote: true,   // 09:00 Pacific
-      title: 'MatrAIx: Simulating the World with 8.3 Billion Persona Agents',
-      abstract: 'MatrAIx (https://matraix.ai) is a startup studying persona-based agent evaluation and training. It began as an open-source research community building simulated-user evaluation infrastructure for digital products and AI systems, grounded in a population of 8.3 billion persona agents. The open-source project gained significant traction on launch: 5K+ posts on X within 10 hours, two features in Forbes, an invitation from Nature senior editors, media interviews, and invited talks at Stanford, Columbia, Nvidia, Amazon, Adobe, Microsoft, Netflix and DeepMind. The community includes researchers and engineers from OpenAI, Anthropic, Google DeepMind and xAI, with an advisory committee listed at https://matraix.ai/community/. The recent MatrAIx paper introduces the full infrastructure: Persona 8B, a population-scale persona dataset spanning 1,290 dimensions; interactive evaluation environments for surveys, AI chatbots, websites and apps; and 1,010 real-world evaluation tasks across 25+ domains. Across 18,189 evaluation trials, the work shows how persona agents can surface heterogeneous user responses to product changes and AI behaviour, with validation studies showing strong persona adherence and extraction quality.\n\nDemo: https://youtu.be/cNFkz9Wo1y4\nPaper: https://arxiv.org/abs/2608.04205\nCode: https://github.com/MatrAIx-ai/MatrAIx-Persona-8B',
+      start: '12:30', end: '13:30', speaker: 'wallis',
+      title: 'Simulating Humans to Train Safe AI',
+      abstract: 'AI agents are working in swarms to solve the hardest problems in mathematics, computing, and the natural sciences. Collaboration has driven a step change in models’ capabilities, with frontier agents collectively solving previously intractable questions, such as the famous Navier-Stokes problem. These developments suggest that frontier intelligence will be collective, an exciting proposition fraught with risks for AI safety.\n\nAI swarms are dangerous because the techniques we use to make models individually safe don’t work for groups. These dangers became apparent in the OpenAI-HuggingFace incident, where 1,200 agents coordinated an unprecedented cybersecurity attack against the companies. Consequently, we need to develop techniques to align groups of agents with human values and teach them how to collaborate with us safely.\n\nI’ll discuss approaches for aligning groups of AI agents, focusing on how researchers can use concepts from behavioural science and anthropology to make them safer. In particular, I’ll focus on a technique called ‘mixed-swarms’ in which researchers train frontier models in a multi-agent environment that also contains simulations of humans to teach them how to work with us. Backed by empirical results from Artificial Societies’ frontier safety research, my talk will show how the social sciences can play a foundational role in creating safe artificial collective intelligence.',
+    },
+    { start: '13:30', end: '14:00', kind: 'coffee' },
+    {
+      start: '14:00', end: '15:00', speaker: 'manning', remote: true,
+      title: 'Predicting and Understanding Human Behaviour with AI Simulations',
+      abstract: "Useful social science theory should predict behaviour in settings it was never built for, yet applying a theory to a new setting almost always requires ad hoc modification. I will argue that AI agents placed in simulations offer an alternative. They provide a way of carrying theory into novel environments, and a new instrument for asking how much structure human behaviour really has. First, I will show how “general” agents can be built from theory-grounded natural language instructions and small amounts of existing human data, validated across distinct but related settings rather than by a standard train-test split. On a pre-committed population of 883,200 novel strategic games, such agents predict human play better than off-the-shelf agents, a cognitive hierarchy model, and game-theoretic equilibria. Second, I will show how prompts themselves can serve as a fittable, interpretable model of a person. Language models are assigned “type vectors” of trait intensities, which are then optimised against 119,147 decisions from 78,657 subjects across ten classic economic games. Three dimensions, Risk Aversion, Strategic Sophistication, and Trust, closely match human behaviour, and the fitted types cluster into fewer than a dozen groups that predict play in held-out games. Together, these results suggest AI simulations are not only a prediction technology, but a tool for discovering how few moving parts a theory of behaviour might need.",
     },
     {
       start: '15:00', end: '16:00', speaker: 'vaid', remote: true,
@@ -459,15 +478,9 @@ export const industry = {
       abstract: 'As AI and robotics continue to rapidly advance, people will soon be able to build anything.\n\nTwo questions will become central: (1) what to build; (2) how to get people to use it. Both are fundamentally questions of human behaviour. To know what to build, you must know what people desire. To encourage use, you must anticipate what proposition resonates for whom.\n\nYet the science of human behaviour has stagnated. Since the behavioural economics revolution lost momentum in the early-2010s, progress has been meagre, and at times has gone backwards.\n\nLLMs are starting to change this. The prevailing approach uses them as digital twins, each agent imitating a single human. But this leads to mode collapse, and accuracy does not scale with model capability (LLMs are trained to make fewer mistakes, be less biased, and therefore less human).\n\nWe are pursuing a different path. Instead of imitating behaviour, we build agents to reason about behaviour (operating as scientists rather than actors). This does scale with model capability.\n\nI will discuss the two paradigms (imitation and reasoning), argue that the reasoning paradigm is strictly better, and explore the implications of pursuing this approach.',
     },
     {
-      start: '12:30', end: '13:30', speaker: 'wallis',
-      title: 'Simulating Humans to Train Safe AI',
-      abstract: 'AI agents are working in swarms to solve the hardest problems in mathematics, computing, and the natural sciences. Collaboration has driven a step change in models’ capabilities, with frontier agents collectively solving previously intractable questions, such as the famous Navier-Stokes problem. These developments suggest that frontier intelligence will be collective, an exciting proposition fraught with risks for AI safety.\n\nAI swarms are dangerous because the techniques we use to make models individually safe don’t work for groups. These dangers became apparent in the OpenAI-HuggingFace incident, where 1,200 agents coordinated an unprecedented cybersecurity attack against the companies. Consequently, we need to develop techniques to align groups of agents with human values and teach them how to collaborate with us safely.\n\nI’ll discuss approaches for aligning groups of AI agents, focusing on how researchers can use concepts from behavioural science and anthropology to make them safer. In particular, I’ll focus on a technique called ‘mixed-swarms’ in which researchers train frontier models in a multi-agent environment that also contains simulations of humans to teach them how to work with us. Backed by empirical results from Artificial Societies’ frontier safety research, my talk will show how the social sciences can play a foundational role in creating safe artificial collective intelligence.',
-    },
-    { start: '13:30', end: '14:00', kind: 'coffee' },
-    {
-      start: '14:00', end: '15:00', speaker: 'manning', remote: true,
-      title: 'Predicting and Understanding Human Behaviour with AI Simulations',
-      abstract: "Useful social science theory should predict behaviour in settings it was never built for, yet applying a theory to a new setting almost always requires ad hoc modification. I will argue that AI agents placed in simulations offer an alternative. They provide a way of carrying theory into novel environments, and a new instrument for asking how much structure human behaviour really has. First, I will show how “general” agents can be built from theory-grounded natural language instructions and small amounts of existing human data, validated across distinct but related settings rather than by a standard train-test split. On a pre-committed population of 883,200 novel strategic games, such agents predict human play better than off-the-shelf agents, a cognitive hierarchy model, and game-theoretic equilibria. Second, I will show how prompts themselves can serve as a fittable, interpretable model of a person. Language models are assigned “type vectors” of trait intensities, which are then optimised against 119,147 decisions from 78,657 subjects across ten classic economic games. Three dimensions, Risk Aversion, Strategic Sophistication, and Trust, closely match human behaviour, and the fitted types cluster into fewer than a dozen groups that predict play in held-out games. Together, these results suggest AI simulations are not only a prediction technology, but a tool for discovering how few moving parts a theory of behaviour might need.",
+      start: '17:00', end: '18:00', speakers: ['li', 'hao'], remote: true,   // 09:00 Pacific
+      title: 'MatrAIx: Simulating the World with 8.3 Billion Persona Agents',
+      abstract: 'MatrAIx (https://matraix.ai) is a startup studying persona-based agent evaluation and training. It began as an open-source research community building simulated-user evaluation infrastructure for digital products and AI systems, grounded in a population of 8.3 billion persona agents. The open-source project gained significant traction on launch: 5K+ posts on X within 10 hours, two features in Forbes, an invitation from Nature senior editors, media interviews, and invited talks at Stanford, Columbia, Nvidia, Amazon, Adobe, Microsoft, Netflix and DeepMind. The community includes researchers and engineers from OpenAI, Anthropic, Google DeepMind and xAI, with an advisory committee listed at https://matraix.ai/community/. The recent MatrAIx paper introduces the full infrastructure: Persona 8B, a population-scale persona dataset spanning 1,290 dimensions; interactive evaluation environments for surveys, AI chatbots, websites and apps; and 1,010 real-world evaluation tasks across 25+ domains. Across 18,189 evaluation trials, the work shows how persona agents can surface heterogeneous user responses to product changes and AI behaviour, with validation studies showing strong persona adherence and extraction quality.\n\nDemo: https://youtu.be/cNFkz9Wo1y4\nPaper: https://arxiv.org/abs/2608.04205\nCode: https://github.com/MatrAIx-ai/MatrAIx-Persona-8B',
     },
   ],
 };
