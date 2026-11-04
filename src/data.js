@@ -70,13 +70,21 @@ export const intro = [
 export const summary =
   'HAI101 brings together eighteen speakers from universities and startups, across the social, behavioural and cognitive sciences, philosophy and AI, to ask what machines can teach us about minds, what minds can teach the machines, and what both mean for the world in between.';
 
+// url: the speaker's own site, shown as a link line under the lab line in the bio panel. profile: their
+// institution's page about them, not shown but given as the person's sameAs in the structured data
+// (scripts/jsonld.js), so search engines can tie the speaker to it. links: a map from a phrase in the
+// lab line (a lab or an advisor's name, exactly as written there) to its page; the phrase becomes a link.
+// Prefer pages on the university's own domain. The lab text itself stays plain for the poster/social builders.
 export const speakers = [
   {
     id: 'feng',
     name: 'Steven Feng',
+    url: 'https://styfeng.github.io/',
+    profile: 'https://profiles.stanford.edu/steven-feng',
     role: 'PhD Candidate, Dept. of Computer Science',
     affiliation: 'Stanford University',
     lab: 'Language & Cognition Lab (PI: Prof. Michael Frank); Computation & Cognition Lab (PI: Prof. Noah Goodman)',
+    links: { 'Language & Cognition Lab': 'https://langcog.stanford.edu/', 'Prof. Michael Frank': 'https://profiles.stanford.edu/michael-frank', 'Computation & Cognition Lab': 'https://cocolab.stanford.edu/', 'Prof. Noah Goodman': 'https://profiles.stanford.edu/noah-goodman' },
     previously: [
       'Anthropic Research Fellow',
       'MLT (Master of Language Technologies), Carnegie Mellon University',
@@ -92,9 +100,11 @@ export const speakers = [
   {
     id: 'oh',
     name: 'Nick Oh',
+    url: 'https://nick-sh-oh.github.io',
     role: 'Researcher, CPNSS',
     affiliation: 'London School of Economics',
     lab: 'Advisor: Prof. Fernand Gobet',
+    links: { 'Prof. Fernand Gobet': 'https://scholar.google.com/citations?user=jeJqwKsAAAAJ&hl=en' },
     previously: [
       'MSc Data Science and Artificial Intelligence, University of London',
       'BSc Politics and Economics, London School of Economics',
@@ -108,6 +118,7 @@ export const speakers = [
   {
     id: 'gobet',
     name: 'Prof. Fernand Gobet',
+    url: 'https://scholar.google.com/citations?user=jeJqwKsAAAAJ&hl=en',
     role: 'Professorial Research Fellow, CPNSS',
     affiliation: 'London School of Economics',
     publications: [
@@ -122,6 +133,8 @@ export const speakers = [
   {
     id: 'yoo',
     name: 'Prof. Youngjin Yoo',
+    url: 'https://youngjinyoo.com/',
+    profile: 'https://www.lse.ac.uk/management/people/academic-staff/youngjin-yoo',
     role: 'Professor of Information Systems and Innovation, Dept. of Management',
     affiliation: 'London School of Economics',
     lab: 'Academic Director, LSE Lifelong Learning Digital & Innovation',
@@ -137,9 +150,12 @@ export const speakers = [
   {
     id: 'manning',
     name: 'Benjamin Manning',
+    url: 'https://benjaminmanning.io',
+    profile: 'https://mitsloan.mit.edu/programs/phd/benjamin-manning',
     role: 'PhD Candidate, Management Science & Information Technology',
     affiliation: 'Massachusetts Institute of Technology',
     lab: 'Information Technology Group',
+    links: { 'Information Technology Group': 'https://mitsloan.mit.edu/faculty/academic-groups/information-technology' },
     previously: [
       'S.M., Management Research, MIT',
       'M.P.P., Economic & Social Policy, Harvard University',
@@ -154,9 +170,11 @@ export const speakers = [
   {
     id: 'jin',
     name: 'Helen Jin',
+    url: 'https://helenjin.github.io/',
     role: 'PhD Candidate, Dept. of Computer and Information Science',
     affiliation: 'University of Pennsylvania',
     lab: 'Penn NLP + Brachio Lab (PI: Prof. Eric Wong)',
+    links: { 'Penn NLP': 'https://nlp.cis.upenn.edu/', 'Brachio Lab': 'https://brachiolab.github.io/', 'Prof. Eric Wong': 'https://www.cis.upenn.edu/~exwong/' },
     previously: [
       'M.S.E., Computer and Information Science, University of Pennsylvania',
       'B.A., Mathematics and Computer Science, Columbia University',
@@ -171,6 +189,8 @@ export const speakers = [
   {
     id: 'peters',
     name: 'Prof. Megan Peters',
+    url: 'https://meganakpeters.org/',
+    profile: 'https://profiles.ucl.ac.uk/104962-megan-peters',
     role: 'Associate Professor, Dept. of Experimental Psychology',
     affiliation: 'University College London',
     publications: [
@@ -186,6 +206,8 @@ export const speakers = [
   {
     id: 'noichl',
     name: 'Maximilian Noichl',
+    url: 'https://maxnoichl.eu/',
+    profile: 'https://research-portal.uu.nl/en/persons/maximilian-noichl',
     role: 'PhD Candidate, Theoretical Philosophy',
     affiliation: 'Utrecht University',
     previously: [
@@ -201,9 +223,12 @@ export const speakers = [
   {
     id: 'bishop',
     name: 'Dr. Nicholas Bishop',
+    url: 'https://www.nickbishop.net/',
+    profile: 'https://www.cs.ox.ac.uk/people/nicholas.bishop/',
     role: 'Postdoctoral Researcher, Dept. of Computer Science',
     affiliation: 'University of Oxford',
     lab: 'Large Agent Collider (LAC) project (PIs: Prof. Michael Wooldridge, Prof. Ani Calinescu & Prof. Doyne Farmer)',
+    links: { 'Large Agent Collider (LAC) project': 'https://largeagentcollider.github.io', 'Prof. Michael Wooldridge': 'https://www.cs.ox.ac.uk/people/michael.wooldridge/', 'Prof. Ani Calinescu': 'https://www.cs.ox.ac.uk/people/ani.calinescu/', 'Prof. Doyne Farmer': 'https://www.inet.ox.ac.uk/people/j-doyne-farmer' },
     previously: ['PhD, Mechanism Design & Machine Learning, University of Southampton'],
     interests: [
       'ML methods to rapidly calibrate, analyse and validate agent-based models (ABMs) of large-scale complex systems',
@@ -215,6 +240,8 @@ export const speakers = [
   {
     id: 'sabatelli',
     name: 'Prof. Matthia Sabatelli',
+    url: 'https://paintception.github.io/',
+    profile: 'https://www.rug.nl/staff/m.sabatelli/',
     role: 'Assistant Professor, Faculty of Science and Engineering',
     affiliation: 'University of Groningen',
     publications: [
@@ -228,9 +255,11 @@ export const speakers = [
   {
     id: 'thompson',
     name: 'Dr. Jessica Thompson',
+    url: 'https://thompsonj.github.io/',
     role: 'Postdoctoral Researcher, Dept. of Experimental Psychology',
     affiliation: 'University of Oxford',
     lab: 'Human Information Processing Lab (PI: Prof. Christopher Summerfield)',
+    links: { 'Human Information Processing Lab': 'https://humaninformationprocessing.com/', 'Prof. Christopher Summerfield': 'https://www.wadham.ox.ac.uk/people/christopher-summerfield' },
     previously: [
       'PhD, Cognitive Science and Neuropsychology, University of Montréal (supervised by Marc Schönwiesner and Yoshua Bengio)',
       'Quebec Artificial Intelligence Institute (Mila)',
@@ -244,9 +273,11 @@ export const speakers = [
   {
     id: 'jagadish',
     name: 'Dr. Akshay Jagadish',
+    url: 'http://akshaykjagadish.com/about',
     role: 'Peretsman Scully Postdoctoral Fellow',
     affiliation: 'Princeton University',
     lab: 'Independent researcher in the Natural and Artificial Minds programme at the Princeton AI Lab',
+    links: { 'Natural and Artificial Minds': 'https://nam.ai.princeton.edu/' },
     previously: [
       'PhD, Computer Science, University of Tübingen; Max Planck Institute for Biological Cybernetics',
       'MSc, Computational Neuroscience, University of Tübingen; Max Planck Institute for Biological Cybernetics',
@@ -260,9 +291,11 @@ export const speakers = [
   {
     id: 'liu',
     name: 'Gabrielle Kaili-May Liu (Kaili)',
+    url: 'https://pybeebee.com/',
     role: 'PhD Candidate, Dept. of Computer Science',
     affiliation: 'Yale University',
     lab: 'Yale NLP Lab (PI: Prof. Arman Cohan)',
+    links: { 'Yale NLP Lab': 'https://nlp.cs.yale.edu/', 'Prof. Arman Cohan': 'https://engineering.yale.edu/research-and-faculty/faculty-directory/arman-cohan' },
     previously: [
       'S.B., Mathematics with Computer Science and S.B., Brain and Cognitive Sciences, MIT',
       'Google Research, HLTCOE (Human Language Technology Center of Excellence) at Johns Hopkins University, National Taiwan University',
@@ -347,6 +380,7 @@ export const industry = {
     {
       id: 'li',
       name: 'Dr. Xiaomin Li',
+      url: 'https://xiaominli1998.github.io/',
       role: 'Co-Founder and CEO',
       company: 'MatrAIx',
       lab: 'Ph.D. in Applied Mathematics, Harvard University',
@@ -364,6 +398,7 @@ export const industry = {
     {
       id: 'hao',
       name: 'Dr. Yuexing Hao',
+      url: 'https://yuexinghao.github.io/Yuexing-Hao',
       role: 'Co-Founder and COO',
       company: 'MatrAIx',
       lab: 'Postdoctoral Researcher, MIT EECS',
@@ -381,6 +416,7 @@ export const industry = {
     {
       id: 'vaid',
       name: 'Dr. Sumer Vaid',
+      url: 'https://sumervaid.com/',
       role: 'Co-Founder and CEO',
       company: 'Emergent Science',
       lab: 'Postdoctoral Fellow, Harvard Business School AI Institute',
@@ -412,6 +448,7 @@ export const industry = {
     {
       id: 'wallis',
       name: 'Felix Wallis',
+      url: 'https://www.oii.ox.ac.uk/people/profiles/felix-wallis/',
       role: 'Head of Research',
       company: 'Artificial Societies',
       lab: 'M.Sc., Social Data Science, University of Oxford',

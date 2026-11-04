@@ -89,6 +89,28 @@ const linkify = (text) =>
     )
   );
 
+// The lab line with its named labs and advisors linked (speakers[].links: phrase -> page).
+const linkPhrases = (text, links) => {
+  if (!links) return text;
+  const keys = Object.keys(links).filter((k) => text.includes(k)).sort((a, b) => text.indexOf(a) - text.indexOf(b));
+  const out = [];
+  let rest = text;
+  keys.forEach((k, i) => {
+    const [before, after] = [rest.slice(0, rest.indexOf(k)), rest.slice(rest.indexOf(k) + k.length)];
+    out.push(before, <a key={i} href={links[k]} target="_blank" rel="noreferrer">{k}</a>);
+    rest = after;
+  });
+  out.push(rest);
+  return out;
+};
+
+// "profiles.stanford.edu", "sumervaid.com", "Google Scholar": how a speaker's page reads on the link line.
+const siteLabel = (url) => {
+  const host = url.replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0];
+  return host === 'scholar.google.com' ? 'Google Scholar' : host;
+};
+const siteLinks = (s) => [].concat(s.url || []);
+
 const TBC_SPEAKER = { id: 'tbc', name: 'Speaker TBC', role: 'To be announced', affiliation: 'Affiliation TBC', noPhoto: true };
 
 // The paper plate under a card: one logo, two side by side (a split plate), or the affiliation as text.
@@ -211,7 +233,17 @@ function Detail({ s }) {
       <p className="cv-kicker">{s.affiliation}</p>
       <h3>{s.name}</h3>
       <p className="cv-detail-role">{s.role}</p>
-      {s.lab && <p className="cv-detail-lab">{s.lab}</p>}
+      {s.lab && <p className="cv-detail-lab">{linkPhrases(s.lab, s.links)}</p>}
+      {siteLinks(s).length > 0 && (
+        <p className="cv-detail-sites">
+          {siteLinks(s).map((u, i) => (
+            <span key={u}>
+              {i > 0 && ' · '}
+              <a href={u} target="_blank" rel="noreferrer">{siteLabel(u)}</a>
+            </span>
+          ))}
+        </p>
+      )}
       {TALKS[s.id] && <Talk talk={TALKS[s.id]} />}
       {HOSTING[s.id] && <Talk talk={HOSTING[s.id]} />}
       {companyOf(s)?.blurb && <Company c={companyOf(s)} />}
@@ -767,6 +799,8 @@ export default function Canvas() {
             <a href={series.hostUrl} target="_blank" rel="noreferrer">{series.host}</a>
             <br />
             {series.institution}
+            <br />
+            <a href="https://socialscience.ai/">socialscience.ai</a>
           </p>
         </div>
         <p className="cv-footer-org">

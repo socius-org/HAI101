@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+# Unlisted poster downloads page
+Disallow: /posters/
+
+Sitemap: https://socialscience.ai/sitemap.xml

@@ -2,6 +2,8 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { createReadStream, readdirSync, statSync, mkdirSync, copyFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
+import { buildJsonLd } from './scripts/jsonld.js';
 
 const POSTER_DIR = resolve(__dirname, 'poster');
 const listPosters = () =>
@@ -39,9 +41,24 @@ const posterFiles = () => ({
   },
 });
 
+// Schema.org JSON-LD for the home page (events, organiser, site name), generated from src/data.js so it
+// tracks the schedule. Only the main page gets it; the unlisted posters page is noindex.
+const seoJsonLd = () => ({
+  name: 'seo-jsonld',
+  transformIndexHtml: {
+    order: 'pre',
+    async handler(html, ctx) {
+      const file = ctx.filename.replace(/\\/g, '/');
+      if (!file.endsWith('/index.html') || file.endsWith('/posters/index.html')) return html;
+      const json = await buildJsonLd(pathToFileURL(resolve(__dirname, 'src/data.js')).href);
+      return html.replace('</head>', `    <script type="application/ld+json">${json}</script>\n  </head>`);
+    },
+  },
+});
+
 // Relative base so the build works both at socius-org.github.io/HAI101/ and on a custom domain.
 export default defineConfig({
-  plugins: [react(), posterFiles()],
+  plugins: [react(), posterFiles(), seoJsonLd()],
   base: './',
   build: {
     rollupOptions: {

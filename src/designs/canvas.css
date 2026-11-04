@@ -590,6 +590,13 @@
 .cv-detail h3 { font-size: clamp(30px, 3.4vw, 48px); margin-top: 10px; }
 .cv-detail-role { margin-top: 12px; font-size: 18px; font-weight: 500; }
 .cv-detail-lab { margin-top: 6px; font-size: 15px; opacity: 0.65; }
+/* labs and advisors linked inside the lab line (speakers[].links in data.js) */
+.cv-detail-lab a { color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
+.cv-detail-lab a:hover { color: var(--ochre); }
+/* the speaker's own page(s) as a link line: "styfeng.github.io · profiles.stanford.edu" (speakers[].url) */
+.cv-detail-sites { margin-top: 8px; font-size: 14px; font-weight: 500; }
+.cv-detail-sites a { color: var(--ochre); text-decoration: none; border-bottom: 1px solid currentColor; }
+.cv-detail-sites a:hover { color: var(--paper); }
 
 .cv-detail-talk {
   margin-top: 24px;
