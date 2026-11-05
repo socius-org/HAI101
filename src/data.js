@@ -17,6 +17,10 @@ export const series = {
   location: 'LSE, London',
   format: 'In person',
   registration: 'Registration will open on Luma.',
+  // The day the Luma registration links went live (ISO date). Structured data only: it is the
+  // `validFrom` of each day's offer, which Search Console asks for. A day or Industry Day can
+  // override it with its own `registrationFrom`.
+  registrationFrom: '2026-09-24',
 };
 
 // Venues, keyed by building code. days[].venue below names the key for each day.
@@ -369,6 +373,9 @@ export const industry = {
   venue: 'ksw',
   lumaUrl: null,
   lumaEventId: null,
+  // ISO date registration opens (or opened) for Industry Day; null while it is not yet known.
+  // Structured data only, see series.registrationFrom.
+  registrationFrom: null,
   blurb: [
     'A day with people working on human x artificial intelligence outside academia. Speakers from industry will talk about what they are building and studying: products, tools and research where people and AI systems meet.',
     'Speakers will be revealed here as they are confirmed.',
