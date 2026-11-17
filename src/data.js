@@ -362,9 +362,11 @@ export const reading = {
 // date and dateLong follow the same format as the days ("Fri 27 Nov", "Friday 27 November 2026").
 // speakers: confirmed speakers, each with the fields of the academic roster (id, name, role, previously, interests,
 // publications) plus `company` in place of `affiliation`, `photo` (a path under img/) and `logos` (two split the plate).
+// `logoWord` sets the company name beside a logo that is only a symbol, making the full lockup (mark and wordmark).
 // `ref: '<academic id>'` reuses that speaker's bio and photo; the industry entry's own fields override it.
 // Kept apart from `speakers` so they get their own section rather than joining the academic roster.
-// slots: how many cards the section shows; any not filled by `speakers` read "To be revealed".
+// slots: how many cards the section shows; any not filled by `speakers` read "To be revealed", and the
+// section says "more to follow" until every slot is filled.
 export const industry = {
   title: 'Industry Day',
   subtitle: 'From the lab to the field',
@@ -378,12 +380,73 @@ export const industry = {
   registrationFrom: null,
   blurb: [
     'A day with people working on human x artificial intelligence outside academia. Speakers from industry will talk about what they are building and studying: products, tools and research where people and AI systems meet.',
-    'Speakers will be revealed here as they are confirmed.',
   ],
+  // Listed in speaking order (see sessions below).
   // logos: the card's plate, company then school. logoScale (optional, by position) enlarges a logo on a split
   // plate beyond its half share, so a long wordmark sits level with a compact school mark.
   speakers: [
+    {
+      id: 'dong',
+      name: 'Davin YC Dong',
+      url: 'https://www.linkedin.com/in/ycd/',
+      role: 'Founder',
+      company: 'Cookiy Labs',
+      photo: 'speakers/dong.jpg',
+      logos: ['logos/cookiy.svg'], logoWord: 'Cookiy Labs',
+      previously: [
+        'Engineering and research at Meta, TikTok and Tencent',
+        'Ph.D. studies in Computer Science, University of Michigan (left to build products)',
+      ],
+    },
+    {
+      id: 'wallis',
+      name: 'Felix Wallis',
+      url: 'https://www.oii.ox.ac.uk/people/profiles/felix-wallis/',
+      role: 'Head of Research',
+      company: 'Artificial Societies',
+      lab: 'M.Sc., Social Data Science, University of Oxford',
+      photo: 'speakers/wallis.jpg',
+      logos: ['logos/artificial_societies.svg', 'logos/oxford_square.png'], logoScale: [1.45],
+      previously: [
+        'M.Sc., Social Data Science, Oxford Internet Institute, University of Oxford',
+        'B.Sc., Politics and International Relations, UCL',
+        'Financial Times, TAE Technologies and CoLoop (YC S21)',
+      ],
+    },
     { ref: 'manning', company: 'Massachusetts Institute of Technology', logos: ['logos/mit_mark.png'] },
+    {
+      id: 'vaid',
+      name: 'Dr. Sumer Vaid',
+      url: 'https://sumervaid.com/',
+      role: 'Co-Founder and CEO',
+      company: 'Emergent Science',
+      lab: 'Postdoctoral Fellow, Harvard Business School AI Institute',
+      photo: 'speakers/vaid.jpg',
+      logos: ['logos/emergent.png', 'logos/harvard_shield.png'], logoScale: [1.15],
+      previously: [
+        'Postdoctoral Fellow, AI Institute, Harvard Business School',
+        'Ph.D., Stanford University',
+        'Best Dissertation Award, Psychology of Technology Institute',
+        'Funded by the AI Institute at Harvard and the Stanford Institute for Human-Centered AI',
+        'Published in IEEE Transactions on Affective Computing, ACM IMWUT, Nature Reviews Psychology, JPSP and Harvard Business Review',
+      ],
+    },
+    {
+      id: 'levy',
+      name: 'Josh Levy',
+      url: 'https://www.linkedin.com/in/joshua-levy-352347144/',
+      role: 'Founder',
+      company: 'Resemblance Inc.',
+      lab: 'M.P.P., Harvard University',
+      photo: 'speakers/levy.jpg',
+      logos: ['logos/resemblance_wordmark.png', 'logos/harvard_shield.png'], logoScale: [1.45],
+      previously: [
+        'M.P.P., Harvard University',
+        'B.Act., Statistics and Machine Learning, UNSW Sydney',
+        'B.Ec., Behavioural Game Theory (Honours), UNSW Sydney',
+        'B.Com., Finance, UNSW Sydney',
+      ],
+    },
     {
       id: 'li',
       name: 'Dr. Xiaomin Li',
@@ -420,79 +483,35 @@ export const industry = {
         'Google Research, Mayo Clinic and Scale AI',
       ],
     },
-    {
-      id: 'vaid',
-      name: 'Dr. Sumer Vaid',
-      url: 'https://sumervaid.com/',
-      role: 'Co-Founder and CEO',
-      company: 'Emergent Science',
-      lab: 'Postdoctoral Fellow, Harvard Business School AI Institute',
-      photo: 'speakers/vaid.jpg',
-      logos: ['logos/emergent.png', 'logos/harvard_shield.png'], logoScale: [1.15],
-      previously: [
-        'Postdoctoral Fellow, AI Institute, Harvard Business School',
-        'Ph.D., Stanford University',
-        'Best Dissertation Award, Psychology of Technology Institute',
-        'Funded by the AI Institute at Harvard and the Stanford Institute for Human-Centered AI',
-        'Published in IEEE Transactions on Affective Computing, ACM IMWUT, Nature Reviews Psychology, JPSP and Harvard Business Review',
-      ],
-    },
-    {
-      id: 'levy',
-      name: 'Josh Levy',
-      role: 'Founder',
-      company: 'Resemblance Inc.',
-      lab: 'M.P.P., Harvard University',
-      photo: 'speakers/levy.jpg',
-      logos: ['logos/resemblance_wordmark.png', 'logos/harvard_shield.png'], logoScale: [1.45],
-      previously: [
-        'M.P.P., Harvard University',
-        'B.Act., Statistics and Machine Learning, UNSW Sydney',
-        'B.Ec., Behavioural Game Theory (Honours), UNSW Sydney',
-        'B.Com., Finance, UNSW Sydney',
-      ],
-    },
-    {
-      id: 'wallis',
-      name: 'Felix Wallis',
-      url: 'https://www.oii.ox.ac.uk/people/profiles/felix-wallis/',
-      role: 'Head of Research',
-      company: 'Artificial Societies',
-      lab: 'M.Sc., Social Data Science, University of Oxford',
-      photo: 'speakers/wallis.jpg',
-      logos: ['logos/artificial_societies.svg', 'logos/oxford_square.png'], logoScale: [1.45],
-      previously: [
-        'M.Sc., Social Data Science, Oxford Internet Institute, University of Oxford',
-        'B.Sc., Politics and International Relations, UCL',
-        'Financial Times, TAE Technologies and CoLoop (YC S21)',
-      ],
-    },
   ],
   // Companies taking part, shown as a logo strip in the section; url is optional.
   // mark: true means the logo is a small symbol rather than a wordmark, so the name is set beside it.
   // blurb: one or two sentences on what the company does. A speaker whose `company` matches `name` gets an
   // "About <company>" block (logo, blurb, link) in their bio, so every Industry Day speaker's firm is introduced.
   companies: [
-    { name: 'Cookiy Labs', logo: 'logos/cookiy.svg', url: 'https://cookiylabs.com', mark: true },
     // height (px, optional) sizes a wordmark to sit level with the marks beside it.
     {
-      name: 'MatrAIx', logo: 'logos/matraix.png', url: 'https://matraix.ai', height: 22,
-      blurb: 'MatrAIx is a startup studying persona-based agent evaluation and training. It builds simulated-user evaluation infrastructure for digital products and AI systems, grounded in a population of 8.3 billion persona agents, and began as an open-source research community.',
+      name: 'Artificial Societies', logo: 'logos/artificial_societies.svg', url: 'https://societies.ai',
+      blurb: 'Artificial Societies is an applied computational social science company building foundation models of human behaviour. It works with large advisories, enterprises, and sovereigns to simulate their most consequential decisions. Founded in 2024, Artificial Societies informs strategy for over $3T of market capitalisation and is backed by Y Combinator and Point72 Ventures.',
+    },
+    {
+      name: 'Cookiy Labs', logo: 'logos/cookiy.svg', url: 'https://cookiylabs.com', mark: true,
+      blurb: 'Cookiy Labs builds AI interviewers that talk with real people at scale, and is running 1M Voices (https://1mvoices.com), an open project to interview one million people worldwide in their own language.',
     },
     {
       name: 'Emergent Science', logo: 'logos/emergent.png', url: 'https://workcast.emergentscience.ai', height: 40,
       blurb: 'Emergent Science is a research spinout building Workcast, a simulation test bed for organisational decisions. Workcast couples persona models of employees with world models of their workplaces, so organisations can compare proposed changes, such as AI adoption and deployment strategies, before implementation.',
     },
     {
+      name: 'MatrAIx', logo: 'logos/matraix.png', url: 'https://matraix.ai', height: 22,
+      blurb: 'MatrAIx is a startup studying persona-based agent evaluation and training. It builds simulated-user evaluation infrastructure for digital products and AI systems, grounded in a population of 8.3 billion persona agents, and began as an open-source research community.',
+    },
+    {
       name: 'Resemblance Inc.', logo: 'logos/resemblance.png', url: 'https://resemblanceinc.com',
       blurb: 'Resemblance Inc. is building an AI scientist for human behaviour: agents that reason about how people behave rather than imitate individuals.',
     },
-    {
-      name: 'Artificial Societies', logo: 'logos/artificial_societies.svg', url: 'https://societies.ai',
-      blurb: 'Artificial Societies is an applied computational social science company building foundation models of human behaviour. It works with large advisories, enterprises, and sovereigns to simulate their most consequential decisions. Founded in 2024, Artificial Societies informs strategy for over $3T of market capitalisation and is backed by Y Combinator and Point72 Ventures.',
-    },
   ],
-  slots: 6,
+  slots: 7,
   // Talks with abstracts, like days[].sessions. Industry Day is the fourth column of the timetable; a
   // session with start/end null is listed under the column as "time to be announced" until its slot is set.
   // A speaker listed in `speakers` above keeps their bio there and the talk shows on their card; an academic
@@ -500,6 +519,12 @@ export const industry = {
   // A joint talk names its speakers in `speakers: [...]` instead of `speaker`.
   // Keep these in time order: the mobile schedule list and the poster/social builders read them as written.
   sessions: [
+    {
+      start: '10:30', end: '11:30', speaker: 'dong', remote: true,
+      title: 'One Million Real People: The Ground Truth Layer for Simulated Humans',
+      abstract: 'Simulated people are now cheap: models can produce a persona, a population or a focus group in seconds. But every simulation is only as good as the real human data it is built and checked against, and that data is scarce. Surveys capture what people choose, not why; interviews capture why, but have never scaled.\n\nAt Cookiy Labs we have run about 200,000 AI-moderated interviews for companies, and seen how those conversations shape real product and marketing decisions. Now we are opening this up: 1M Voices aims to interview one million people around the world, each speaking with an AI interviewer by voice or video in their own language, and to make the de-identified data available to researchers.\n\nI’ll share what we’ve learned so far: where real people diverge from simulated ones, what an AI interviewer changes about how people answer, and the open methodological questions we would love to study with the social science community. I’ll end with a live demo and show how LSE students and staff can run their own studies or contribute questions to 1M Voices.',
+    },
+    { start: '11:30', end: '12:30', kind: 'lunch' },
     {
       start: '12:30', end: '13:30', speaker: 'wallis',
       title: 'Simulating Humans to Train Safe AI',

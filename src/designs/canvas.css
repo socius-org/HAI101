@@ -571,6 +571,11 @@
   object-fit: contain;
 }
 
+/* a symbol with the company name set beside it as the wordmark */
+.cv-card-school.has-word { gap: 9px; }
+.cv-card-school.has-word img { max-height: 24px; flex: none; }
+.cv-card-school-word { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap; }
+
 /* two affiliations: the plate splits down the middle, one logo each side */
 .cv-card-school.is-split { gap: 12px; }
 .cv-card-school.is-split img { max-width: calc(50% - 6px); max-height: 32px; }
@@ -944,7 +949,7 @@
   color: var(--ochre);
 }
 
-.cv-industry-cards { grid-template-columns: repeat(3, 1fr); }
+/* Industry Day cards use the main session grid (.cv-cards): four to a row, fewer on narrow screens */
 
 /* the cards + bio row, below the pitch and facts */
 .cv-industry-speakers { margin-top: 48px; }
@@ -1024,7 +1029,6 @@
 
 @media (max-width: 520px) {
   .cv-cards { grid-template-columns: repeat(2, 1fr); }
-  .cv-industry-cards { grid-template-columns: repeat(2, 1fr); }
   .cv-industry-facts div { grid-template-columns: 90px 1fr; }
   .cv-nav nav { gap: 6px; }
   .cv-bar { padding: 6px 9px; font-size: 13px; }

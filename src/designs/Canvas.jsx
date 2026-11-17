@@ -104,10 +104,10 @@ const linkPhrases = (text, links) => {
   return out;
 };
 
-// "profiles.stanford.edu", "sumervaid.com", "Google Scholar": how a speaker's page reads on the link line.
+// "profiles.stanford.edu", "sumervaid.com", "Google Scholar", "LinkedIn": how a speaker's page reads on the link line.
 const siteLabel = (url) => {
   const host = url.replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0];
-  return host === 'scholar.google.com' ? 'Google Scholar' : host;
+  return host === 'scholar.google.com' ? 'Google Scholar' : host === 'linkedin.com' ? 'LinkedIn' : host;
 };
 const siteLinks = (s) => [].concat(s.url || []);
 
@@ -115,14 +115,16 @@ const TBC_SPEAKER = { id: 'tbc', name: 'Speaker TBC', role: 'To be announced', a
 
 // The paper plate under a card: one logo, two side by side (a split plate), or the affiliation as text.
 // scales (optional, by position) enlarge a logo on a split plate past its half share; see industry.speakers[].logoScale.
-function LogoPlate({ srcs, scales = [], alt }) {
+// word (optional) is set beside a symbol-only logo as its wordmark; see industry.speakers[].logoWord.
+function LogoPlate({ srcs, scales = [], alt, word }) {
   const style = (i) => {
     const k = scales[i];
     return k && k !== 1 && srcs.length > 1 ? { maxWidth: `calc((50% - 6px) * ${k})`, maxHeight: `${32 * k}px` } : undefined;
   };
   return (
-    <span className={`cv-card-school${srcs.length > 1 ? ' is-split' : ''}`}>
-      {srcs.length ? srcs.map((src, i) => <img key={src} src={src} alt={alt} loading="lazy" style={style(i)} />) : <span>{alt}</span>}
+    <span className={`cv-card-school${srcs.length > 1 ? ' is-split' : ''}${word ? ' has-word' : ''}`}>
+      {srcs.length ? srcs.map((src, i) => <img key={src} src={src} alt={word ? '' : alt} loading="lazy" style={style(i)} />) : <span>{alt}</span>}
+      {word && <span className="cv-card-school-word">{word}</span>}
     </span>
   );
 }
@@ -215,7 +217,7 @@ function Company({ c }) {
           <img src={img(c.logo)} alt={c.name} loading="lazy" />
         </span>
         <div>
-          <p>{c.blurb}</p>
+          <p>{linkify(c.blurb)}</p>
           {c.url && (
             <a className="cv-detail-company-link" href={c.url} target="_blank" rel="noreferrer">
               {c.url.replace(/^https?:\/\//, '').replace(/\/$/, '')}
@@ -454,7 +456,7 @@ export default function Canvas() {
               <div>
                 <dt>Speakers</dt>
                 <dd className={industryRoster.length ? '' : 'cv-tbc'}>
-                  {industryRoster.length ? `${industryRoster.length} confirmed · more to follow` : 'To be confirmed'}
+                  {industryRoster.length ? `${industryRoster.length} confirmed${industryRoster.length < (industry.slots || 0) ? ' · more to follow' : ''}` : 'To be confirmed'}
                 </dd>
               </div>
             </dl>
@@ -523,7 +525,7 @@ export default function Canvas() {
                       )}
                     </span>
                   </span>
-                  <LogoPlate srcs={(s.logos || []).map(img)} scales={s.logoScale} alt={s.company} />
+                  <LogoPlate srcs={(s.logos || []).map(img)} scales={s.logoScale} alt={s.company} word={s.logoWord} />
                 </button>
               );
             })}
@@ -757,7 +759,7 @@ export default function Canvas() {
           {SCHEDULE_DAYS.map((d) => {
             const talks = d.sessions.filter((s) => !s.kind || socialTalk(s));
             const timed = d.sessions.filter((s) => s.start && !isBreak(s));
-            const growing = d.id === 'industry' && talks.length < (industry.slots || 0);
+            const growing = d.id === 'industry' && industryRoster.length < (industry.slots || 0);
             return (
               <li key={d.id}>
                 <h3>{d.dateLong}</h3>
