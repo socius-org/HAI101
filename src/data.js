@@ -373,11 +373,11 @@ export const industry = {
   date: 'Fri 27 Nov',
   dateLong: 'Friday 27 November 2026',
   venue: 'ksw',
-  lumaUrl: null,
-  lumaEventId: null,
+  lumaUrl: 'https://luma.com/xv0ygdx2',
+  lumaEventId: 'evt-8h4QhVwUqklYwWQ',
   // ISO date registration opens (or opened) for Industry Day; null while it is not yet known.
   // Structured data only, see series.registrationFrom.
-  registrationFrom: null,
+  registrationFrom: '2026-11-17',
   blurb: [
     'A day with people working on human x artificial intelligence outside academia. Speakers from industry will talk about what they are building and studying: products, tools and research where people and AI systems meet.',
   ],
