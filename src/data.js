@@ -108,7 +108,7 @@ export const speakers = [
     role: 'Researcher, CPNSS',
     affiliation: 'London School of Economics',
     lab: 'Advisor: Prof. Fernand Gobet',
-    links: { 'Prof. Fernand Gobet': 'https://scholar.google.com/citations?user=jeJqwKsAAAAJ&hl=en' },
+    links: { 'Prof. Fernand Gobet': 'https://fernandgobet.com' },
     previously: [
       'MSc Data Science and Artificial Intelligence, University of London',
       'BSc Politics and Economics, London School of Economics',
@@ -122,7 +122,7 @@ export const speakers = [
   {
     id: 'gobet',
     name: 'Prof. Fernand Gobet',
-    url: 'https://scholar.google.com/citations?user=jeJqwKsAAAAJ&hl=en',
+    url: 'https://fernandgobet.com',
     role: 'Professorial Research Fellow, CPNSS',
     affiliation: 'London School of Economics',
     publications: [
